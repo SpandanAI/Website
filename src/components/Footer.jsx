@@ -24,22 +24,22 @@ export default function Footer() {
           decoding="async"
           variants={staggerItem}
         />
-        <motion.p className="mt-4 text-2xl font-bold tracking-tight text-ink" variants={staggerItem}>
+        <motion.p className="mt-4 text-2xl font-semibold tracking-[-0.02em] text-ink" variants={staggerItem}>
           SpandanAI
         </motion.p>
-        <motion.p className="mt-4 text-sm text-muted" variants={staggerItem}>
+        <motion.p className="mt-4 text-sm leading-[1.65] text-muted" variants={staggerItem}>
           © 2026 SpandanAI. All rights reserved.
         </motion.p>
 
         <motion.p
-          className="mt-5 text-sm font-semibold uppercase tracking-[0.24em] text-blue-600"
+          className="mt-5 text-sm font-semibold uppercase tracking-[0.18em] text-blue-600"
           variants={staggerItem}
         >
           Email
         </motion.p>
         <motion.a
           href="mailto:spandanai.sard@gmail.com"
-          className="mt-2 inline-flex text-base text-muted transition-[color,transform] duration-200 ease-out hover:-translate-y-[2px] hover:text-blue-700"
+          className="mt-2 inline-flex select-text text-base text-muted transition-[color,transform] duration-200 ease-out hover:-translate-y-[2px] hover:text-blue-700"
           variants={staggerItem}
         >
           spandanai.sard@gmail.com

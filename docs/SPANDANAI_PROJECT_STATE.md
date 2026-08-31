@@ -11,6 +11,10 @@ Phase 0 documented the product. Phase 1 connected this workspace to the official
 
 Phase 2A messaging/SEO proposal completed; no application changes implemented. See `docs/PHASE_2A_MESSAGING_SEO_PROPOSAL.md`. Proposed copy is **not** live.
 
+**Phase 2B** remains paused (visible positioning language needs stakeholder confirmation).
+
+**Phase 6 (6A–6A.7):** Human-approved interaction and typography milestone. Source is on GitHub `main`. **Production is not deployed from this push** (`https://spandanai.com/` remains the previous Vercel build). Hero copy/SEO unchanged. See `docs/PHASE_6A_CURSOR_DISCHARGE_PROTOTYPE.md`.
+
 **Phase 1A attribution correction:** Cursor Agent appeared as a GitHub contributor because Phase 1 commits included a `Co-authored-by: Cursor` trailer. Those post-stakeholder commits were recreated with identical trees for `Korak Das` / `korakdas1` only. The stakeholder `Initial commit` (`e81f2ba`) was not rewritten. `git push --force-with-lease` was used after verifying the remote tip had not changed. No application source or behavior changed.
 
 ---
@@ -30,7 +34,7 @@ Phase 2A messaging/SEO proposal completed; no application changes implemented. S
 | Routing | **None.** No React Router. One HTML document. In-page hash anchors only. |
 | Backend | **None.** No API, no serverless functions, no database |
 | Analytics | **None** |
-| Fonts | System UI stack (Tailwind default). No Google Fonts / no `@font-face` |
+| Fonts | **Manrope Variable**: `@fontsource-variable/manrope` **5.3.0**, Latin WOFF2 self-hosted via `@font-face` in `src/index.css`. No Google Fonts CDN. |
 | Tests | **None.** No test runner, no lint script, no typecheck script |
 | Vite config file | **Absent** (`vite.config.*` does not exist) |
 
@@ -45,18 +49,21 @@ index.html → src/main.jsx → src/App.jsx
                               ├── ScrollProgressBar
                               ├── Header
                               ├── ScrollToTopButton
-                              └── <main>
-                                    ├── Hero (+ NeuralNetworkBackground)
-                                    ├── Applications (Use Cases)
-                                    ├── Founders (Team)
-                                    └── Contact
-                              └── Footer
+                              ├── <main>
+                              │     ├── Hero (+ NeuralNetworkBackground)
+                              │     ├── Applications (Use Cases)
+                              │     ├── Founders (Team)
+                              │     └── Contact
+                              ├── Footer
+                              └── ElectricalCursorOverlay (Phase 6 site-wide sparks)
 ```
 
 - Content for nav + use cases: `src/data/siteContent.js`
 - Team data: hard-coded inside `src/components/Founders.jsx` (not in `siteContent.js`)
 - Shared motion variants: `src/lib/animations.js`
 - Active-nav custom event: `src/lib/activeNavEvent.js`
+- Hero electrical-effect helpers: `src/lib/neuralEffects.js` (Phase 6)
+- Site-wide micro-spark overlay: `src/components/ElectricalCursorOverlay.jsx` (Phase 6; desktop random + click; mobile tap-only)
 - `src/assets/` exists and is **empty**
 
 ---
@@ -144,7 +151,7 @@ Live response for `/` is HTTP 200 with the security headers from `vercel.json` a
 | Website baseline commit | `45239c2` — `chore: add production SpandanAI website baseline` (Phase 1A rewrite of `46d2e38`) |
 | Phase 1 documentation commit | `c11c2a5` — `docs: record Phase 1 GitHub integration` (Phase 1A rewrite of `4585614`) |
 | Remote push | **SUCCESS** (Phase 1A: `--force-with-lease` `4585614` → `c11c2a5`) |
-| Working tree | Clean after Phase 1A rewrite; a documentation-only follow-up commit records 1A |
+| Working tree | **Clean after Phase 6 push** (documentation follow-up may record the commit hash). Phase 6 is on GitHub `main`. **Not production-deployed.** |
 | `.gitignore` | Safe baseline (`node_modules/`, `dist/`, `.vercel/`, `.env*`, logs, OS/editor junk) |
 | LICENSE | **Absent** (intentionally not added; company decision pending) |
 | README | Professional project README (`README.md`) |
@@ -160,9 +167,9 @@ Live response for `/` is HTTP 200 with the security headers from `vercel.json` a
 - No LinkedIn URLs anywhere in source.
 - Team photos are not clickable.
 - No team group photo.
-- Hero canvas runs a continuous `requestAnimationFrame` loop and does not pause when off-screen; reduced-motion only skips ripples.
-- No touch handlers on the canvas.
-- Contact is Gmail `mailto:` only (`spandanai.sard@gmail.com`).
+- Hero canvas Phase 6 pauses off-screen / in hidden tabs and freezes under reduced motion; electrical arcs, pulses, and random firing are disabled when `prefers-reduced-motion: reduce`.
+- Touch: no fake cursor; a hero tap may fire one localized discharge; lower-page taps may fire a localized micro-spark. Scroll/drag does not spark.
+- Contact uses provider-neutral `mailto:spandanai.sard@gmail.com` (Email Us + form submit). Local Phase 6A.5 adds a Copy button; no Gmail-only action.
 - Page `<title>` is only `SpandanAI`.
 - No Schema.org JSON-LD, no web app manifest.
 - Phrase **"Innovating AI with Semiconductors" does not exist in this repository or on the live homepage HTML/JS.**

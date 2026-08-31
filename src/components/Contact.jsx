@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import SectionHeading from "./SectionHeading";
 import {
@@ -9,8 +9,56 @@ import {
   viewportOnce
 } from "../lib/animations";
 
+const CONTACT_EMAIL = "spandanai.sard@gmail.com";
+const COPY_FEEDBACK_MS = 1500;
+
+async function copyText(value) {
+  try {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(value);
+      return true;
+    }
+  } catch {
+    /* fall through to execCommand */
+  }
+
+  try {
+    const field = document.createElement("textarea");
+    field.value = value;
+    field.setAttribute("readonly", "");
+    field.style.position = "fixed";
+    field.style.left = "-9999px";
+    field.style.userSelect = "text";
+    document.body.appendChild(field);
+    field.select();
+    const ok = document.execCommand("copy");
+    document.body.removeChild(field);
+    return ok;
+  } catch {
+    return false;
+  }
+}
+
 export default function Contact() {
   const shouldReduceMotion = useReducedMotion();
+  const [copyStatus, setCopyStatus] = useState("idle");
+  const copyResetRef = useRef(0);
+
+  useEffect(
+    () => () => {
+      window.clearTimeout(copyResetRef.current);
+    },
+    []
+  );
+
+  const handleCopyEmail = async () => {
+    const ok = await copyText(CONTACT_EMAIL);
+    setCopyStatus(ok ? "copied" : "failed");
+    window.clearTimeout(copyResetRef.current);
+    copyResetRef.current = window.setTimeout(() => {
+      setCopyStatus("idle");
+    }, COPY_FEEDBACK_MS);
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -30,8 +78,10 @@ export default function Contact() {
         .join("\n")
     );
 
-    window.location.href = `mailto:spandanai.sard@gmail.com?subject=${subject}&body=${body}`;
+    window.location.href = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
   };
+
+  const copyLabel = copyStatus === "copied" ? "Copied ✓" : copyStatus === "failed" ? "Copy failed" : "Copy";
 
   return (
     <motion.section
@@ -53,7 +103,7 @@ export default function Contact() {
             title="Engage with SpandanAI."
             description="Connect with the team for partnerships, technical collaboration, and program discussions."
           />
-          <p className="mt-4 text-[15px] leading-6 font-medium text-muted">
+          <p className="mt-4 text-[15px] leading-[1.65] font-medium text-muted">
             We typically respond within 1-2 business days.
           </p>
 
@@ -63,19 +113,36 @@ export default function Contact() {
               variants={staggerItem}
             >
               <p className="text-sm font-semibold text-ink">Email</p>
-              <a
-                href="mailto:spandanai.sard@gmail.com"
-                className="mt-2 inline-flex text-muted transition-colors duration-200 ease-out hover:text-blue-700"
-              >
-                spandanai.sard@gmail.com
-              </a>
+              <p className="mt-2 text-muted">{CONTACT_EMAIL}</p>
+              <div className="mt-4 flex flex-wrap gap-3">
+                <a
+                  href={`mailto:${CONTACT_EMAIL}`}
+                  className="inline-flex min-h-11 items-center justify-center rounded-full bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-100"
+                >
+                  Email Us
+                </a>
+                <button
+                  type="button"
+                  onClick={handleCopyEmail}
+                  className="inline-flex min-h-11 min-w-[5.5rem] items-center justify-center rounded-full border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-ink transition hover:border-blue-600 hover:text-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-100"
+                >
+                  {copyLabel}
+                </button>
+              </div>
+              <p className="sr-only" aria-live="polite">
+                {copyStatus === "copied"
+                  ? `${CONTACT_EMAIL} copied to clipboard`
+                  : copyStatus === "failed"
+                    ? "Unable to copy email address"
+                    : ""}
+              </p>
             </motion.div>
             <motion.div
               className="rounded-3xl border border-slate-200 bg-slate-50 p-5 transition-[transform,box-shadow] duration-200 ease-out hover:-translate-y-[2px] hover:shadow-[0_14px_30px_rgba(15,23,42,0.1)]"
               variants={staggerItem}
             >
               <p className="text-sm font-semibold text-ink">Focus Areas</p>
-              <p className="mt-2 text-[15px] leading-7 text-muted">
+              <p className="mt-2 text-[15px] leading-[1.7] text-muted">
                 Edge AI inference silicon
                 <br />
                 Analog wireless communication
@@ -146,7 +213,7 @@ export default function Contact() {
             Contact Team
           </motion.button>
 
-          <p className="mt-4 text-sm leading-6 text-muted">
+          <p className="mt-4 text-sm leading-[1.65] text-muted">
             We respect your privacy. Your information will only be used to
             respond to your inquiry.
           </p>

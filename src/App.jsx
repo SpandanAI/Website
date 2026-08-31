@@ -1,6 +1,7 @@
 import React from "react";
 import Applications from "./components/Applications";
 import Contact from "./components/Contact";
+import ElectricalCursorOverlay from "./components/ElectricalCursorOverlay";
 import Footer from "./components/Footer";
 import Founders from "./components/Founders";
 import Header from "./components/Header";
@@ -21,6 +22,7 @@ export default function App() {
         <Contact />
       </main>
       <Footer />
+      <ElectricalCursorOverlay />
     </div>
   );
 }

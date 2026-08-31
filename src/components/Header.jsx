@@ -20,13 +20,22 @@ function getNavbarScrollOffset() {
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState(null);
+  const [activeSection, setActiveSection] = useState(() => {
+    if (typeof window === "undefined") return "home";
+    const hash = window.location.hash.replace("#", "");
+    return NAV_SECTION_IDS.includes(hash) ? hash : "home";
+  });
   const [isScrolled, setIsScrolled] = useState(false);
   const shouldReduceMotion = useReducedMotion();
   const pendingNavSectionRef = useRef(null);
   const intersectionRatiosRef = useRef({});
 
   const closeMenu = () => setIsOpen(false);
+
+  const markNavIntent = useCallback((id) => {
+    pendingNavSectionRef.current = id;
+    setActiveSection(id);
+  }, []);
 
   const computeActiveSectionFromIntersection = useCallback(() => {
     let bestId = null;
@@ -39,7 +48,7 @@ export default function Header() {
       }
     }
     if (bestId) return bestId;
-    if (typeof window === "undefined" || window.scrollY < 80) return null;
+    if (typeof window === "undefined" || window.scrollY < 80) return "home";
     return null;
   }, []);
 
@@ -49,8 +58,12 @@ export default function Header() {
     if (intent) {
       const el = document.getElementById(intent);
       const offset = getNavbarScrollOffset();
-      if (el && el.getBoundingClientRect().top <= offset) {
+      const rect = el?.getBoundingClientRect();
+      const inViewAtNav = Boolean(rect && rect.top <= offset && rect.bottom > offset);
+      const arrivedHome = intent === "home" && window.scrollY < 80;
+      if (next === intent || inViewAtNav || arrivedHome) {
         pendingNavSectionRef.current = null;
+        if (arrivedHome) next = "home";
       } else {
         next = intent;
       }
@@ -123,6 +136,7 @@ export default function Header() {
       scrollRafId = 0;
       const y = window.scrollY;
       setIsScrolled(y > 10);
+      flushActiveSection();
     };
 
     const handleScroll = () => {
@@ -141,7 +155,7 @@ export default function Header() {
       window.removeEventListener("load", flushScroll);
       window.cancelAnimationFrame(scrollRafId);
     };
-  }, []);
+  }, [flushActiveSection]);
 
   return (
     <header className={`header-shell sticky top-0 z-50 ${isScrolled ? "scrolled" : ""}`}>
@@ -157,7 +171,14 @@ export default function Header() {
         className="relative z-50 mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-6 lg:px-8"
         aria-label="Primary navigation"
       >
-        <a href="#home" className="flex items-center gap-3" onClick={closeMenu}>
+        <a
+          href="#home"
+          className="flex items-center gap-3"
+          onClick={() => {
+            closeMenu();
+            markNavIntent("home");
+          }}
+        >
           <img
             src="/images/logo-light.webp"
             alt="SpandanAI"
@@ -166,13 +187,13 @@ export default function Header() {
             decoding="async"
           />
           <span
-            className={`text-base font-semibold tracking-tight ${isScrolled ? "text-ink" : "text-white"}`}
+            className={`text-base font-semibold tracking-[-0.01em] ${isScrolled ? "text-ink" : "text-white"}`}
           >
             SpandanAI
           </span>
         </a>
 
-        <div className="hidden items-center gap-8 md:flex">
+        <div className="hidden items-center gap-7 md:flex lg:gap-8">
           {navigationLinks.map((link) => {
             const linkSection = link.href.replace("#", "");
             const isActive = activeSection === linkSection;
@@ -181,11 +202,13 @@ export default function Header() {
               <a
                 key={link.href}
                 href={link.href}
+                aria-current={isActive ? "location" : undefined}
                 className={`nav-link rounded-md text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/60 ${
                   isScrolled
                     ? "text-slate-600 hover:text-ink focus-visible:ring-offset-white"
                     : "text-white/85 hover:text-white focus-visible:ring-offset-slate-900"
                 } ${isActive ? "active" : ""}`}
+                onClick={() => markNavIntent(linkSection)}
               >
                 {link.label}
               </a>
@@ -196,6 +219,7 @@ export default function Header() {
         <motion.a
           href="#contact"
           className="hidden rounded-full bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 md:inline-flex"
+          onClick={() => markNavIntent("contact")}
           whileHover={shouldReduceMotion ? undefined : buttonHover}
           whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
           transition={{ duration: 0.2, ease: "easeOut" }}
@@ -232,10 +256,14 @@ export default function Header() {
                 <a
                   key={link.href}
                   href={link.href}
+                  aria-current={isActive ? "location" : undefined}
                   className={`nav-link rounded-xl px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/60 focus-visible:ring-offset-2 ${
                     isActive ? "active" : ""
                   }`}
-                  onClick={closeMenu}
+                  onClick={() => {
+                    closeMenu();
+                    markNavIntent(linkSection);
+                  }}
                 >
                   {link.label}
                 </a>
@@ -244,7 +272,10 @@ export default function Header() {
             <motion.a
               href="#contact"
               className="rounded-full bg-blue-600 px-5 py-3 text-center text-sm font-semibold text-white"
-              onClick={closeMenu}
+              onClick={() => {
+                closeMenu();
+                markNavIntent("contact");
+              }}
               whileHover={shouldReduceMotion ? undefined : buttonHover}
               whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
               transition={{ duration: 0.2, ease: "easeOut" }}

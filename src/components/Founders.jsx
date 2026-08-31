@@ -56,8 +56,8 @@ export default function Founders() {
               ) : (
                 <div className="mx-auto h-44 w-44 rounded-3xl bg-slate-200" aria-hidden="true" />
               )}
-              <p className="mt-5 text-xl font-semibold text-ink">{founder.name}</p>
-              <p className="mt-2 text-[15px] leading-6 font-medium text-muted">{founder.role}</p>
+              <p className="mt-5 text-xl font-semibold tracking-[-0.015em] text-ink">{founder.name}</p>
+              <p className="mt-2 text-[15px] leading-[1.6] font-medium text-muted">{founder.role}</p>
             </motion.article>
           ))}
         </motion.div>

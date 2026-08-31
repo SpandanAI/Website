@@ -86,7 +86,7 @@ export default function Hero() {
         }}
       />
       <div
-        className="absolute inset-0 z-[1]"
+        className="pointer-events-none absolute inset-0 z-[1]"
         style={{
           backgroundImage:
             "radial-gradient(circle at center, rgba(0,0,0,0) 40%, rgba(0,0,0,0.25) 100%)"
@@ -106,20 +106,20 @@ export default function Hero() {
         }}
       />
       <motion.div
-        className="relative z-[1] mx-auto flex min-h-screen max-w-7xl items-center px-5 py-20 sm:px-6 lg:px-8 lg:py-24"
+        className="pointer-events-none relative z-[1] mx-auto flex min-h-screen max-w-7xl items-center px-5 py-20 sm:px-6 lg:px-8 lg:py-24"
         variants={staggerContainer}
       >
-        <motion.div variants={staggerItem}>
-          <p className="inline-flex rounded-full border border-blue-200 bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-900/70">
+        <motion.div className="pointer-events-auto" variants={staggerItem}>
+          <p className="inline-flex rounded-full border border-blue-200 bg-blue-50 px-4 py-2 text-sm font-semibold tracking-[0.01em] text-blue-900/70">
             Analog-Native AI and Communication Silicon
           </p>
           <h1
-            className="mt-8 max-w-4xl text-5xl font-semibold tracking-tight text-white sm:text-6xl lg:text-7xl"
+            className="mt-8 max-w-4xl text-5xl font-[650] tracking-[-0.03em] text-white sm:text-6xl lg:text-7xl"
           >
             SpandanAI
           </h1>
           <p
-            className="mt-6 max-w-2xl text-lg leading-8 text-[rgba(255,255,255,0.92)]"
+            className="mt-6 max-w-2xl text-lg leading-[1.7] text-[rgba(255,255,255,0.92)]"
           >
             Analog-native AI silicon for edge inference and wireless systems.
           </p>

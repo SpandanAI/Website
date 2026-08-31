@@ -13,8 +13,8 @@ Paths are relative to the repository root.
 | HTML document, SEO meta, favicons, OG/Twitter tags, canonical | `index.html` |
 | React mount | `src/main.jsx` |
 | Page composition (section order) | `src/App.jsx` |
-| Global CSS, CSS variables, reduced-motion, header/scroll-button styles | `src/index.css` |
-| Tailwind theme (colors, shadow) | `tailwind.config.js` |
+| Global CSS, CSS variables, reduced-motion, header/scroll-button styles, Manrope `@font-face`, selection highlight, body `user-select: none` with form exceptions | `src/index.css` |
+| Tailwind theme (colors, shadow, Manrope `fontFamily.sans`) | `tailwind.config.js` |
 | PostCSS | `postcss.config.cjs` |
 | npm scripts and dependencies | `package.json` |
 | Locked versions | `package-lock.json` |
@@ -26,11 +26,11 @@ Paths are relative to the repository root.
 | Feature | File(s) |
 |---------|---------|
 | Sticky navbar, mobile drawer, active-section highlighting, “Partner With Us” | `src/components/Header.jsx` |
-| Nav link labels and hrefs | `src/data/siteContent.js` (`navigationLinks`) |
+| Nav link labels and hrefs (Home, Use Cases, Team, Contact) | `src/data/siteContent.js` (`navigationLinks`) |
 | Custom event that forces active nav after CTA click | `src/lib/activeNavEvent.js` |
 | Top scroll progress bar | `src/components/ScrollProgressBar.jsx` |
 | Floating scroll-to-top button | `src/components/ScrollToTopButton.jsx` |
-| Footer logo, copyright, email | `src/components/Footer.jsx` |
+| Footer logo, copyright, mailto email (selectable; no Copy UI) | `src/components/Footer.jsx` |
 | Shared section title block (eyebrow / h2 / description) | `src/components/SectionHeading.jsx` |
 | Shared Framer Motion variants | `src/lib/animations.js` |
 
@@ -41,7 +41,10 @@ Paths are relative to the repository root.
 | Feature | File(s) |
 |---------|---------|
 | Hero layout, H1, badge, subtitle, “Explore Use Cases” CTA, parallax layer, overlays | `src/components/Hero.jsx` |
-| Interactive node-network canvas (the landing animation) | `src/components/NeuralNetworkBackground.jsx` |
+| Interactive node-network canvas (landing animation, including Phase 6 cursor discharge) | `src/components/NeuralNetworkBackground.jsx` |
+| Electrical-arc / targeting / micro-spark helpers used by the hero canvas and global overlay | `src/lib/neuralEffects.js` |
+| Site-wide micro-spark overlay (Phase 6; desktop random + click; mobile tap-only) | `src/components/ElectricalCursorOverlay.jsx` |
+| App shell composition (mounts overlay) | `src/App.jsx` |
 | Hero photographic background | `public/images/wave-background.png` (referenced from `Hero.jsx`) |
 | Header/footer brand mark actually used | `public/images/logo-light.webp` |
 
@@ -51,7 +54,7 @@ Paths are relative to the repository root.
 
 | Feature | File(s) |
 |---------|---------|
-| Section UI (grid of cards) | `src/components/Applications.jsx` |
+| Section UI (grid of cards); card body copy **16px** | `src/components/Applications.jsx` |
 | **Use-case data (title + description)** | `src/data/siteContent.js` (`applicationTabs`) |
 
 To add a fifth use case later, the data change belongs in `src/data/siteContent.js`. Layout of 5 cards is controlled by the grid classes in `Applications.jsx`.
@@ -76,8 +79,8 @@ There is **no** LinkedIn field, no clickable photo, and **no group photo file**.
 
 | Feature | File(s) |
 |---------|---------|
-| Contact copy, email card, focus-areas card, form, mailto submit | `src/components/Contact.jsx` |
-| Footer mailto (duplicate of same address) | `src/components/Footer.jsx` |
+| Contact copy, email card (Email Us + Copy), focus-areas card, form, mailto submit | `src/components/Contact.jsx` |
+| Footer mailto (same address; no duplicate Copy UI) | `src/components/Footer.jsx` |
 
 Destination address (hard-coded in both files): `spandanai.sard@gmail.com`
 
@@ -121,6 +124,7 @@ Destination address (hard-coded in both files): `spandanai.sard@gmail.com`
 | `docs/SPANDANAI_FILE_MAP.md` | This file |
 | `docs/PHASE_1_COMPLETION_REPORT.md` | Phase 1 GitHub integration report |
 | `docs/PHASE_2A_MESSAGING_SEO_PROPOSAL.md` | Phase 2A messaging/SEO proposal (not implemented) |
+| `docs/PHASE_6A_CURSOR_DISCHARGE_PROTOTYPE.md` | Phase 6A–6A.7 interaction/typography history and final acceptance |
 
 ---
 
@@ -143,5 +147,5 @@ Destination address (hard-coded in both files): `spandanai.sard@gmail.com`
 | New Cryo-CMOS use case | `src/data/siteContent.js`, possibly `src/components/Applications.jsx` (grid) |
 | GitHub upload prep | `.gitignore`, `README.md`, new git repo (none exists), `package.json` |
 | Clickable LinkedIn photos | `src/components/Founders.jsx`, ideally also `src/data/siteContent.js` |
-| Neuron-firing hero | `src/components/NeuralNetworkBackground.jsx`, possibly `src/components/Hero.jsx` |
+| Neuron-firing hero | `src/components/NeuralNetworkBackground.jsx`, `src/lib/neuralEffects.js` (Phase 6 electrical network shipped on GitHub; not a full biological neuron model) |
 | Team group photo | New asset under `public/images/`, `src/components/Founders.jsx` and/or `src/App.jsx` |

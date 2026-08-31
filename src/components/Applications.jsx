@@ -32,8 +32,8 @@ export default function Applications() {
               className="rounded-2xl border border-slate-200 bg-slate-50 px-5 py-[1.375rem]"
               variants={staggerItem}
             >
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-blue-600">{tab.label}</p>
-              <p className="mt-4 text-[15px] leading-7 text-muted">{tab.description}</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-blue-600">{tab.label}</p>
+              <p className="mt-4 text-base leading-[1.7] text-muted">{tab.description}</p>
             </motion.article>
           ))}
         </motion.div>
