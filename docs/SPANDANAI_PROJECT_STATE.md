@@ -9,6 +9,8 @@ This snapshot supersedes stale items in the July 2026 root reports (`PRE_LAUNCH_
 
 Phase 0 documented the product. Phase 1 connected this workspace to the official public GitHub repository without changing the website UI.
 
+**Phase 1A attribution correction:** Cursor Agent appeared as a GitHub contributor because Phase 1 commits included a `Co-authored-by: Cursor` trailer. Those post-stakeholder commits were recreated with identical trees for `Korak Das` / `korakdas1` only. The stakeholder `Initial commit` (`e81f2ba`) was not rewritten. `git push --force-with-lease` was used after verifying the remote tip had not changed. No application source or behavior changed.
+
 ---
 
 ## Stack
@@ -136,10 +138,11 @@ Live response for `/` is HTTP 200 with the security headers from `vercel.json` a
 | Official remote | `https://github.com/SpandanAI/Website.git` (`origin`) |
 | Branch | `main` (tracks `origin/main`) |
 | Repository visibility | **Public** |
-| Original stakeholder commit | `e81f2ba` — `Initial commit` (README only) |
-| Website baseline commit | `46d2e38` — `chore: add production SpandanAI website baseline` |
-| Remote push | **SUCCESS** (`e81f2ba..46d2e38` on `main`) |
-| Working tree | Clean when Phase 1 documentation commit is pushed |
+| Original stakeholder commit | `e81f2ba` — `Initial commit` (README only; hash unchanged through Phase 1A) |
+| Website baseline commit | `45239c2` — `chore: add production SpandanAI website baseline` (Phase 1A rewrite of `46d2e38`) |
+| Phase 1 documentation commit | `c11c2a5` — `docs: record Phase 1 GitHub integration` (Phase 1A rewrite of `4585614`) |
+| Remote push | **SUCCESS** (Phase 1A: `--force-with-lease` `4585614` → `c11c2a5`) |
+| Working tree | Clean after Phase 1A rewrite; a documentation-only follow-up commit records 1A |
 | `.gitignore` | Safe baseline (`node_modules/`, `dist/`, `.vercel/`, `.env*`, logs, OS/editor junk) |
 | LICENSE | **Absent** (intentionally not added; company decision pending) |
 | README | Professional project README (`README.md`) |

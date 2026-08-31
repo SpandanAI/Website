@@ -270,3 +270,23 @@ Not started in Phase 1:
 - Production deployment / connecting GitHub as the Vercel source
 
 LICENSE remains unadded pending company decision.
+
+---
+
+## Phase 1A attribution correction
+
+Cursor Agent attribution was detected after the initial Phase 1 push. Author and committer on those commits were already `Korak Das` with the GitHub noreply identity for `korakdas1`. GitHub still listed Cursor Agent because both Phase 1 commits included a `Co-authored-by: Cursor <cursoragent@cursor.com>` trailer.
+
+Post-stakeholder Phase 1 commits were recreated with the same trees, parents, messages (without the Cursor trailer), author/committer identity, and original timestamps.
+
+| Role | Hash before 1A | Hash after 1A |
+|------|----------------|---------------|
+| Stakeholder `Initial commit` | `e81f2ba` | `e81f2ba` (unchanged) |
+| Website baseline | `46d2e38` | `45239c2` |
+| Phase 1 documentation | `4585614` | `c11c2a5` |
+
+- Stakeholder initial commit remained unchanged (same hash, author, committer, tree, timestamps).
+- Project file tree at the documentation tip remained identical (`b1ed6ded2903fc57a4a3d123ac947c18338620fa`) before this Phase 1A note.
+- `git push --force-with-lease origin main` was used only after confirming `origin/main` still pointed at `4585614`.
+- No application/source behavior changed.
+- Local backup ref: `backup/phase1-before-attribution-fix` (not pushed).
