@@ -1,12 +1,13 @@
 # SpandanAI — Project State Snapshot
 
-**Snapshot date:** 31 August 2026  
+**Snapshot date:** 31 August 2026 (updated after Phase 1)  
 **Production URL:** https://spandanai.com/  
 **Workspace:** local website source directory (absolute filesystem path omitted for the public GitHub repository)  
-
 **Scope:** Factual state of the repository *today*. No recommendations.
 
 This snapshot supersedes stale items in the July 2026 root reports (`PRE_LAUNCH_AUDIT_REPORT.md`, `PRE_LAUNCH_IMPLEMENTATION_REPORT.md`, `TYPOGRAPHY_REVIEW_REPORT.md`) where the code has since changed.
+
+Phase 0 documented the product. Phase 1 connected this workspace to the official public GitHub repository without changing the website UI.
 
 ---
 
@@ -15,9 +16,9 @@ This snapshot supersedes stale items in the July 2026 root reports (`PRE_LAUNCH_
 | Item | Value |
 |------|--------|
 | Site type | Client-rendered single-page app (SPA) |
-| UI library | React **19.2.5** (from `package-lock.json`; `package.json` says `"latest"`) |
+| UI library | React **19.2.5** (pinned in `package.json` and lockfile) |
 | Language | JavaScript / JSX — **not TypeScript** |
-| Build tool | Vite **8.0.10** (from lockfile; `package.json` says `"latest"`) |
+| Build tool | Vite **8.0.10** (pinned in `package.json` and lockfile) |
 | Package manager | npm (`package-lock.json` present) |
 | CSS | Tailwind CSS **3.4.19** + `src/index.css` |
 | PostCSS | `postcss.config.cjs` — Tailwind only; no Autoprefixer |
@@ -29,7 +30,7 @@ This snapshot supersedes stale items in the July 2026 root reports (`PRE_LAUNCH_
 | Tests | **None.** No test runner, no lint script, no typecheck script |
 | Vite config file | **Absent** (`vite.config.*` does not exist) |
 
-`package.json` name is still `neutral-ai-landing-page`.
+`package.json` name is `spandanai-website` (`private: true`). Dependencies are pinned to the Phase 0 working versions (not `"latest"`).
 
 ---
 
@@ -131,20 +132,26 @@ Live response for `/` is HTTP 200 with the security headers from `vercel.json` a
 
 | Item | Value |
 |------|--------|
-| Git repository? | **No.** `fatal: not a git repository` |
-| Branch | N/A |
-| Commits | N/A |
-| Remote | N/A |
-| Working tree | N/A |
-| `.gitignore` | Contains only `.vercel` |
-| LICENSE | **Absent** |
-| README | Present, minimal (`README.md`) |
+| Git repository? | **Yes** |
+| Official remote | `https://github.com/SpandanAI/Website.git` (`origin`) |
+| Branch | `main` (tracks `origin/main`) |
+| Repository visibility | **Public** |
+| Original stakeholder commit | `e81f2ba` — `Initial commit` (README only) |
+| Website baseline commit | `46d2e38` — `chore: add production SpandanAI website baseline` |
+| Remote push | **SUCCESS** (`e81f2ba..46d2e38` on `main`) |
+| Working tree | Clean when Phase 1 documentation commit is pushed |
+| `.gitignore` | Safe baseline (`node_modules/`, `dist/`, `.vercel/`, `.env*`, logs, OS/editor junk) |
+| LICENSE | **Absent** (intentionally not added; company decision pending) |
+| README | Professional project README (`README.md`) |
+| Package | `spandanai-website` |
+| Dependencies | Pinned / reproducible |
+| Build | `npm run build` **pass** (same bundle hashes as pre-Phase-1: `index-DKRU34Cm.js`, `index-Ht0_vUWf.css`) |
 
 ---
 
 ## Known issues (observed, not fixed)
 
-- Folder is not a Git repository; `.gitignore` would not ignore `node_modules/` or `dist/` if Git were initialized carelessly.
+- GitHub integration is complete; remaining product issues below are unchanged from Phase 0.
 - No LinkedIn URLs anywhere in source.
 - Team photos are not clickable.
 - No team group photo.
@@ -155,7 +162,7 @@ Live response for `/` is HTTP 200 with the security headers from `vercel.json` a
 - No Schema.org JSON-LD, no web app manifest.
 - Phrase **"Innovating AI with Semiconductors" does not exist in this repository or on the live homepage HTML/JS.**
 - Brand name **SpandanAI** is repeated in title, H1, header text, footer text, and two `alt` attributes.
-- `package.json` pins React/Vite as `"latest"`.
+- React/Vite are now pinned; do not treat `"latest"` as current.
 - No tests / lint / typecheck.
 - Use-case hover variant `cardHover` is defined and unused.
 - Empty `src/assets/` directory.
@@ -172,3 +179,4 @@ Live response for `/` is HTTP 200 with the security headers from `vercel.json` a
 - Canvas hero is already the interaction surface; replacing it with WebGL/Three.js is not required for the neuron idea.
 - Prior July 2026 reports are partially stale (favicons, OG, robots, sitemap, headers, team photos, compressed logos are now present).
 - Production is already live. Changes will affect the public site on the next Vercel deploy.
+- GitHub is **not** wired to Vercel in Phase 1. Do not assume a GitHub push deploys production.
