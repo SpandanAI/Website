@@ -125,6 +125,7 @@ Destination address (hard-coded in both files): `spandanai.sard@gmail.com`
 | `docs/PHASE_1_COMPLETION_REPORT.md` | Phase 1 GitHub integration report |
 | `docs/PHASE_2A_MESSAGING_SEO_PROPOSAL.md` | Phase 2A messaging/SEO proposal (not implemented) |
 | `docs/PHASE_6A_CURSOR_DISCHARGE_PROTOTYPE.md` | Phase 6A–6A.7 interaction/typography history and final acceptance |
+| `docs/PHASE_6_COMPLETION_REPORT.md` | Phase 6 GitHub landing report (committed/pushed; not deployed) |
 
 ---
 
