@@ -4,6 +4,14 @@ import SectionHeading from "./SectionHeading";
 import { applicationTabs } from "../data/siteContent";
 import { fadeInOnScroll, staggerContainer, staggerItem, viewportOnce } from "../lib/animations";
 
+const USE_CASE_CARD_PLACEMENT = [
+  "md:col-span-2 lg:col-span-2",
+  "md:col-span-2 lg:col-span-2",
+  "md:col-span-2 lg:col-span-2",
+  "md:col-span-2 lg:col-span-2 lg:col-start-2",
+  "md:col-span-2 md:col-start-2 lg:col-span-2 lg:col-start-4"
+];
+
 export default function Applications() {
   return (
     <motion.section
@@ -23,16 +31,18 @@ export default function Applications() {
         />
 
         <motion.div
-          className="mx-auto mt-10 grid max-w-5xl gap-4 sm:grid-cols-2 lg:grid-cols-4"
+          className="mx-auto mt-10 grid grid-cols-1 gap-4 md:grid-cols-4 md:gap-5 lg:grid-cols-6"
           variants={staggerContainer}
         >
-          {applicationTabs.map((tab) => (
+          {applicationTabs.map((tab, index) => (
             <motion.article
               key={tab.id}
-              className="rounded-2xl border border-slate-200 bg-slate-50 px-5 py-[1.375rem]"
+              className={`flex h-full flex-col rounded-2xl border border-slate-200 bg-slate-50 px-5 py-[1.375rem] ${USE_CASE_CARD_PLACEMENT[index] ?? "md:col-span-2 lg:col-span-2"}`}
               variants={staggerItem}
             >
-              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-blue-600">{tab.label}</p>
+              <p className="text-xs font-semibold uppercase leading-[1.45] tracking-[0.14em] text-blue-600">
+                {tab.label}
+              </p>
               <p className="mt-4 text-base leading-[1.7] text-muted">{tab.description}</p>
             </motion.article>
           ))}

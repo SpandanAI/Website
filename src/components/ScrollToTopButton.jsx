@@ -4,14 +4,18 @@ export default function ScrollToTopButton() {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsVisible(window.scrollY > 600);
+    const updateVisibility = () => {
+      setIsVisible(window.scrollY > window.innerHeight * 1.1);
     };
 
-    handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
+    updateVisibility();
+    window.addEventListener("scroll", updateVisibility, { passive: true });
+    window.addEventListener("resize", updateVisibility);
 
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", updateVisibility);
+      window.removeEventListener("resize", updateVisibility);
+    };
   }, []);
 
   const scrollToTop = () => {
@@ -25,9 +29,9 @@ export default function ScrollToTopButton() {
   return (
     <button
       type="button"
-      aria-label="Scroll to top"
+      aria-label="Back to top"
       onClick={scrollToTop}
-      className={`scroll-top-button ${isVisible ? "visible" : ""}`}
+      className={`scroll-top-button md:hidden ${isVisible ? "visible" : ""}`}
     >
       ↑
     </button>

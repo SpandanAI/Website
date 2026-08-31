@@ -25,5 +25,10 @@ export const applicationTabs = [
     id: "embedded-inference",
     label: "Embedded Inference",
     description: "Low-latency inference pathways for power-limited deployed systems."
+  },
+  {
+    id: "cryo-cmos",
+    label: "Cryo-CMOS for AI assisted Quantum circuits",
+    description: "Addressing the tight power budget in cryogenic refrigerators requires unique IC design"
   }
 ];
