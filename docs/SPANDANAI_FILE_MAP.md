@@ -29,7 +29,7 @@ Paths are relative to the repository root.
 | Nav link labels and hrefs (Home, Use Cases, Team, Contact) | `src/data/siteContent.js` (`navigationLinks`) |
 | Custom event that forces active nav after CTA click | `src/lib/activeNavEvent.js` |
 | Top scroll progress bar | `src/components/ScrollProgressBar.jsx` |
-| Floating scroll-to-top button | `src/components/ScrollToTopButton.jsx` |
+| Floating scroll-to-top button (hamburger-mode only; `scrollY > innerHeight * 1.1`) | `src/components/ScrollToTopButton.jsx`, `.scroll-top-button` in `src/index.css` |
 | Footer logo, copyright, mailto email (selectable; no Copy UI) | `src/components/Footer.jsx` |
 | Shared section title block (eyebrow / h2 / description) | `src/components/SectionHeading.jsx` |
 | Shared Framer Motion variants | `src/lib/animations.js` |
@@ -54,10 +54,10 @@ Paths are relative to the repository root.
 
 | Feature | File(s) |
 |---------|---------|
-| Section UI (grid of cards); card body copy **16px** | `src/components/Applications.jsx` |
-| **Use-case data (title + description)** | `src/data/siteContent.js` (`applicationTabs`) |
+| Section UI (five-card CSS Grid: 1-col / 2+2+1 / 3+2); card body copy **16px** | `src/components/Applications.jsx` |
+| **Use-case data (title + description)** — five-card Use Cases including Cryo-CMOS | `src/data/siteContent.js` (`applicationTabs`) |
 
-To add a fifth use case later, the data change belongs in `src/data/siteContent.js`. Layout of 5 cards is controlled by the grid classes in `Applications.jsx`.
+To add or edit a use case, the data change belongs in `src/data/siteContent.js`. Five-card placement is controlled by the grid classes in `Applications.jsx`.
 
 ---
 
@@ -126,6 +126,8 @@ Destination address (hard-coded in both files): `spandanai.sard@gmail.com`
 | `docs/PHASE_2A_MESSAGING_SEO_PROPOSAL.md` | Phase 2A messaging/SEO proposal (not implemented) |
 | `docs/PHASE_6A_CURSOR_DISCHARGE_PROTOTYPE.md` | Phase 6A–6A.7 interaction/typography history and final acceptance |
 | `docs/PHASE_6_COMPLETION_REPORT.md` | Phase 6 GitHub landing report (committed/pushed; not deployed) |
+| `docs/PHASE_3_CRYO_CMOS_PROTOTYPE.md` | Phase 3 Cryo-CMOS + five-card layout history and final acceptance |
+| `docs/PHASE_3_COMPLETION_REPORT.md` | Phase 3 GitHub landing report (committed/pushed; not deployed) |
 
 ---
 

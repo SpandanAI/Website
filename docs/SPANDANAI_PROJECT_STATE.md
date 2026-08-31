@@ -1,6 +1,6 @@
 # SpandanAI — Project State Snapshot
 
-**Snapshot date:** 1 September 2026 (updated after Phase 6 GitHub landing)  
+**Snapshot date:** 1 September 2026 (updated after Phase 3 GitHub landing)  
 **Production URL:** https://spandanai.com/  
 **Workspace:** local website source directory (absolute filesystem path omitted for the public GitHub repository)  
 **Scope:** Factual state of the repository *today*. No recommendations.
@@ -13,7 +13,9 @@ Phase 2A messaging/SEO proposal completed; no application changes implemented. S
 
 **Phase 2B** remains paused (visible positioning language needs stakeholder confirmation).
 
-**Phase 6 (6A–6A.7):** Approved. Git: committed (`5b8bf35`). GitHub: pushed to `origin/main`. Production: **NOT deployed.** Working tree: clean after the documentation follow-up. Hero copy/SEO unchanged. Phase 2B remains paused pending stakeholder wording confirmation. See `docs/PHASE_6A_CURSOR_DISCHARGE_PROTOTYPE.md` and `docs/PHASE_6_COMPLETION_REPORT.md`.
+**Phase 3:** APPROVED. Feature commit `410d66e` (`feat: add Cryo-CMOS use case and responsive card layout`). GitHub: **PUSHED** to `origin/main`. Production: **NOT DEPLOYED.** Cryo-CMOS fifth Use Case, 3+2 / 2+2+1 / 1-column layout, 16px descriptions, mobile-only Back-to-Top (`md:hidden`, threshold `1.1 × innerHeight`). See `docs/PHASE_3_CRYO_CMOS_PROTOTYPE.md` and `docs/PHASE_3_COMPLETION_REPORT.md`.
+
+**Phase 6 (6A–6A.7):** Approved. Git: committed (`5b8bf35`). GitHub: pushed to `origin/main`. Production: **NOT deployed.** Hero copy/SEO unchanged. Phase 2B remains paused pending stakeholder wording confirmation. See `docs/PHASE_6A_CURSOR_DISCHARGE_PROTOTYPE.md` and `docs/PHASE_6_COMPLETION_REPORT.md`.
 
 **Phase 1A attribution correction:** Cursor Agent appeared as a GitHub contributor because Phase 1 commits included a `Co-authored-by: Cursor` trailer. Those post-stakeholder commits were recreated with identical trees for `Korak Das` / `korakdas1` only. The stakeholder `Initial commit` (`e81f2ba`) was not rewritten. `git push --force-with-lease` was used after verifying the remote tip had not changed. No application source or behavior changed.
 
@@ -86,7 +88,7 @@ There is **no** `/about`, `/technology`, `/products`, `/team` page, `/blog`, or 
 
 1. Sticky header / primary nav
 2. Hero / landing (`#home`)
-3. Use Cases (`#use-cases`) — 4 cards
+3. Use Cases (`#use-cases`) — **5 cards** including Cryo-CMOS (on GitHub `main`; production still has 4 until the next Vercel deploy)
 4. Leadership Team (`#team`) — 4 people
 5. Contact (`#contact`) — mailto form
 6. Footer
@@ -152,14 +154,15 @@ Live response for `/` is HTTP 200 with the security headers from `vercel.json` a
 | Phase 1 documentation commit | `c11c2a5` — `docs: record Phase 1 GitHub integration` (Phase 1A rewrite of `4585614`) |
 | Phase 2A documentation commit | `c040b66` — `docs: propose Phase 2 messaging and SEO` |
 | Phase 6 feature commit | `5b8bf35` — `feat: add interactive electrical experience and UI polish` |
-| Remote push | **SUCCESS** (Phase 6: normal fast-forward `c040b66` → `5b8bf35`; no force) |
-| Working tree | **Clean.** Phase 6 is on GitHub `main`. **Not production-deployed.** |
+| Phase 3 feature commit | `410d66e` — `feat: add Cryo-CMOS use case and responsive card layout` |
+| Remote push | **SUCCESS** (Phase 3 feature: normal fast-forward `6808462` → `410d66e`; no force). GitHub is **not** automatically connected to Vercel. |
+| Working tree | **Clean after the Phase 3 documentation commit.** Phase 3 is on GitHub `main`. **Not production-deployed.** |
 | `.gitignore` | Safe baseline (`node_modules/`, `dist/`, `.vercel/`, `.env*`, logs, OS/editor junk) |
 | LICENSE | **Absent** (intentionally not added; company decision pending) |
 | README | Professional project README (`README.md`) |
 | Package | `spandanai-website` |
-| Dependencies | Pinned / reproducible |
-| Build | `npm run build` **pass** (Phase 6 hashes: `index-Ce7nfKzN.js`, `index-hclAQGFl.css`, Manrope WOFF2 `manrope-latin-wght-normal-DHIcAJRg.woff2`) |
+| Dependencies | Pinned / reproducible (no Phase 3 dependency additions) |
+| Build | `npm run build` **pass** (Phase 3 hashes: `index-t7tdd00u.js` 352.81 kB, `index-qxWK6X7a.css` 18.17 kB, Manrope WOFF2 `manrope-latin-wght-normal-DHIcAJRg.woff2` 24.83 kB) |
 
 ---
 
