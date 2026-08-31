@@ -120,6 +120,7 @@ Destination address (hard-coded in both files): `spandanai.sard@gmail.com`
 | `docs/SPANDANAI_REQUIREMENTS.md` | Stakeholder requirements vs suggestions |
 | `docs/SPANDANAI_FILE_MAP.md` | This file |
 | `docs/PHASE_1_COMPLETION_REPORT.md` | Phase 1 GitHub integration report |
+| `docs/PHASE_2A_MESSAGING_SEO_PROPOSAL.md` | Phase 2A messaging/SEO proposal (not implemented) |
 
 ---
 

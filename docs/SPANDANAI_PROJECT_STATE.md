@@ -9,6 +9,8 @@ This snapshot supersedes stale items in the July 2026 root reports (`PRE_LAUNCH_
 
 Phase 0 documented the product. Phase 1 connected this workspace to the official public GitHub repository without changing the website UI.
 
+Phase 2A messaging/SEO proposal completed; no application changes implemented. See `docs/PHASE_2A_MESSAGING_SEO_PROPOSAL.md`. Proposed copy is **not** live.
+
 **Phase 1A attribution correction:** Cursor Agent appeared as a GitHub contributor because Phase 1 commits included a `Co-authored-by: Cursor` trailer. Those post-stakeholder commits were recreated with identical trees for `Korak Das` / `korakdas1` only. The stakeholder `Initial commit` (`e81f2ba`) was not rewritten. `git push --force-with-lease` was used after verifying the remote tip had not changed. No application source or behavior changed.
 
 ---
