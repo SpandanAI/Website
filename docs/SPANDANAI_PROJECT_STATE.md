@@ -1,6 +1,6 @@
 # SpandanAI — Project State Snapshot
 
-**Snapshot date:** 1 September 2026 (updated after Phase 7B GitHub landing)  
+**Snapshot date:** 1 September 2026 (updated after Phase 6B GitHub landing; production remains undeployed)  
 **Production URL:** https://spandanai.com/  
 **Workspace:** local website source directory (absolute filesystem path omitted for the public GitHub repository)  
 **Scope:** Factual state of the repository *today*. No recommendations.
@@ -25,7 +25,7 @@ Phase 2A messaging/SEO proposal completed; no application changes implemented. S
 
 **Phase 7B / 7B.1:** COMPLETE / HUMAN APPROVED. Feature commit `bc97490` (`feat: improve website accessibility`). GitHub: **PUSHED** to `origin/main`. Production: **NOT DEPLOYED.** Skip link, Back-to-Top keyboard hiding, dark-header active-nav `#60a5fa`, mobile menu Escape/focus, placeholder contrast, header logo `alt=""`, 44×44 hamburger, mobile `<nav id="mobile-navigation">` landmark. A11Y-07 deferred. See `docs/PHASE_7B_ACCESSIBILITY_PROTOTYPE.md` and `docs/PHASE_7B_COMPLETION_REPORT.md`.
 
-**Phase 6B:** NOT STARTED. Requested later: polish non-Hero click electricity. Do not start automatically.
+**Phase 6B / 6B.1 / 6B.2:** COMPLETE / HUMAN MOTION REVIEW PASS. Feature commit `7e13358` (`feat: polish global electrical interactions`). GitHub: **PUSHED** to `origin/main`. Production: **NOT DEPLOYED.** Dedicated non-Hero click/tap discharge, jagged/asymmetric geometry, primary/secondary/tertiary visual hierarchy. Hero canvas and ambient random sparks unchanged. No 6B.3. See `docs/PHASE_6B_GLOBAL_ELECTRICAL_POLISH_PROTOTYPE.md`.
 
 **Phase 1A attribution correction:** Cursor Agent appeared as a GitHub contributor because Phase 1 commits included a `Co-authored-by: Cursor` trailer. Those post-stakeholder commits were recreated with identical trees for `Korak Das` / `korakdas1` only. The stakeholder `Initial commit` (`e81f2ba`) was not rewritten. `git push --force-with-lease` was used after verifying the remote tip had not changed. No application source or behavior changed.
 
@@ -74,8 +74,8 @@ index.html → src/main.jsx (BrowserRouter) → src/App.jsx
 - Shared member card: `src/components/TeamMemberCard.jsx`
 - Shared motion variants: `src/lib/animations.js`
 - Active-nav custom event: `src/lib/activeNavEvent.js`
-- Hero electrical-effect helpers: `src/lib/neuralEffects.js` (Phase 6)
-- Site-wide micro-spark overlay: `src/components/ElectricalCursorOverlay.jsx` (Phase 6; desktop random + click; mobile tap-only)
+- Hero electrical-effect helpers: `src/lib/neuralEffects.js` (Phase 6; Phase 6B `generateClickDischarge`; 6B.1 jagged geometry; 6B.2 path levels/weights — Hero helpers unchanged)
+- Site-wide electrical overlay: `src/components/ElectricalCursorOverlay.jsx` (Phase 6 random/tap/click; Phase 6B approved click/tap discharge with hierarchy drawing)
 - `src/assets/` exists and is **empty**
 
 ---
@@ -169,14 +169,15 @@ Live response for `/` is HTTP 200 with the security headers from `vercel.json` a
 | Phase 3 feature commit | `410d66e` — `feat: add Cryo-CMOS use case and responsive card layout` |
 | Phase 5.5 feature commit | `c12e926` — `feat: add dedicated team page and routing` |
 | Phase 7B feature commit | `bc97490` — `feat: improve website accessibility` |
-| Remote push | **SUCCESS** (Phase 7B feature: normal fast-forward `ac24ca9` → `bc97490`; no force). GitHub is **not** automatically connected to Vercel. |
-| Working tree | **Clean after the Phase 7 documentation commit.** Phase 7A audit docs and Phase 7B completion are on GitHub `main`. **Not production-deployed.** |
+| Phase 6B feature commit | `7e13358` — `feat: polish global electrical interactions` |
+| Remote push | **SUCCESS** (Phase 6B: normal fast-forward from `8a4e4b8`; no force). GitHub is **not** automatically connected to Vercel. |
+| Working tree | **Clean after the Phase 6B documentation commit.** Phase 6B is on GitHub `main`. **Not production-deployed.** |
 | `.gitignore` | Safe baseline (`node_modules/`, `dist/`, `.vercel/`, `.env*`, logs, OS/editor junk) |
 | LICENSE | **Absent** (intentionally not added; company decision pending) |
 | README | Professional project README (`README.md`) |
 | Package | `spandanai-website` |
 | Dependencies | Pinned / reproducible. Phase 5.5 added only `react-router-dom` **7.18.3**. |
-| Build | `npm run build` **pass** (Phase 7B: `index-DYq3JvYF.js` 401.86 kB, `index-DwcHyqYN.css` 19.43 kB, Manrope WOFF2 `manrope-latin-wght-normal-DHIcAJRg.woff2` 24.83 kB) |
+| Build | `npm run build` **pass** (Phase 6B: `index-Uk72Fn2K.js` 407.82 kB gzip 130.41 kB, `index-DwcHyqYN.css` 19.43 kB, Manrope WOFF2 `manrope-latin-wght-normal-DHIcAJRg.woff2` 24.83 kB). |
 
 ---
 
@@ -200,7 +201,7 @@ Live response for `/` is HTTP 200 with the security headers from `vercel.json` a
 - Team data for extra members lives in `src/data/teamContent.js` (`teamMembers` is currently empty). Leadership data was moved out of `Founders.jsx`.
 - Filenames with spaces (`K. Dharanidhar G.jpg`, etc.).
 
-**Pending engineering (not defects of this landing):** Phase 7C responsive, Phase 7D images, Phase 7E dead assets, Phase 7F tests, Phase 7G technical SEO, A11Y-07 footer focus, Phase 6B global click electricity polish (not started).
+**Pending engineering (not defects of this landing):** Phase 7C responsive, Phase 7D images, Phase 7E dead assets, Phase 7F tests, Phase 7G technical SEO, A11Y-07 footer focus.
 
 **Pending stakeholder input:** LinkedIn URLs, extra team members, group photo, Phase 2B wording.
 

@@ -2,7 +2,7 @@
 
 Derived from `docs/PHASE_7A_ENGINEERING_QUALITY_AUDIT.md`.
 
-**Status:** Phase 7B COMPLETE / HUMAN APPROVED / PUSHED (`bc97490`). Later engineering phases and Phase 6B are not started.  
+**Status:** Phase 7B COMPLETE / HUMAN APPROVED / PUSHED (`bc97490`). Phase 6B COMPLETE / HUMAN APPROVED / PUSHED (`7e13358`). Phases 7C–7G are not started.  
 **Production:** NOT DEPLOYED.
 
 This is a small semiconductor marketing SPA. Do not migrate to Next.js, Redux, Three.js, a design-system package, or a large E2E estate unless a later audit shows a concrete need.
@@ -61,23 +61,25 @@ Cursor autonomy on those: **0%** until assets/copy arrive.
 
 ## Phase 6B — Global Electrical Interaction Polish
 
-**Status:** NOT STARTED. Design/interaction request recorded after Phase 7B human review.
+**Status:** COMPLETE / HUMAN MOTION REVIEW PASS / PUSHED (`7e13358`, `feat: polish global electrical interactions`). Includes 6B.1 jagged/asymmetric polish and 6B.2 primary/secondary/tertiary hierarchy. Production: **NOT DEPLOYED.**
 
 **Objective:** Improve the visual quality of click-triggered electrical discharges **outside the Hero**, while keeping the Hero clearly more sophisticated and preserving accessibility, reduced-motion, interactive-target suppression, and performance safeguards.
 
-**Do not implement in the same pass as image, SEO, or responsive work unless explicitly requested.**
+See `docs/PHASE_6B_GLOBAL_ELECTRICAL_POLISH_PROTOTYPE.md`.
 
-**Expected files (later):** `src/components/ElectricalCursorOverlay.jsx`, possibly `src/lib/neuralEffects.js`. Do not retune Hero canvas unless a later brief says so.
+Do not mix with image, SEO, or responsive work unless explicitly requested. Hero canvas was not retuned.
+
+**Files:** `src/components/ElectricalCursorOverlay.jsx`, `src/lib/neuralEffects.js` (`generateClickDischarge`; Hero helpers unchanged).
 
 **Risk:** Medium (approved Phase 6 look must not regress).
 
-**Cursor autonomy:** TBD after a written visual brief.
+**Cursor autonomy:** Implemented from the written visual brief. Human motion review approved.
 
-**Human testing required:** YES — desktop click outside Hero, mobile tap, reduced motion, no sparks on controls.
+**Human testing required:** YES — completed. Desktop click, mobile tap, reduced motion, no sparks on controls.
 
-**Stakeholder involvement:** NO for engineering; YES for visual approval.
+**Stakeholder involvement:** NO for engineering; YES for visual approval (received).
 
-**Senior required:** YES for look-and-feel.
+**Senior required:** YES for look-and-feel (approved).
 
 ---
 
@@ -238,7 +240,7 @@ Cursor autonomy on those: **0%** until assets/copy arrive.
 
 ## Suggested order after Phase 7B
 
-1. **6B** — Global electrical click polish outside the Hero (requested; not started).
+1. **6B** — Global electrical click polish outside the Hero (**COMPLETE** / pushed `7e13358`; not production-deployed).
 2. **7D** — photos (highest remaining performance win, very safe).
 3. **7C** — 768 / landscape (visual).
 4. **7E** — cleanup.
@@ -252,7 +254,7 @@ Cursor autonomy on those: **0%** until assets/copy arrive.
 | Phase | Cursor | Human | Senior |
 |-------|--------|-------|--------|
 | 7B Accessibility | 85% | 15% keyboard/visual | Visual check of nav color — **done** |
-| 6B Global click polish | TBD | Visual | Yes |
+| 6B Global click polish | Implemented | Motion review **PASS** | Yes — **done** |
 | 7C Responsive | 80% | 20% visual | Only if Hero looks wrong |
 | 7D Images | 90% | 10% photo QA | No |
 | 7E Dead assets | 95% | 5% smoke | No |

@@ -48,8 +48,8 @@ Paths are relative to the repository root.
 |---------|---------|
 | Hero layout, H1, badge, subtitle, “Explore Use Cases” CTA, parallax layer, overlays | `src/components/Hero.jsx` |
 | Interactive node-network canvas (landing animation, including Phase 6 cursor discharge) | `src/components/NeuralNetworkBackground.jsx` |
-| Electrical-arc / targeting / micro-spark helpers used by the hero canvas and global overlay | `src/lib/neuralEffects.js` |
-| Site-wide micro-spark overlay (Phase 6; desktop random + click; mobile tap-only) | `src/components/ElectricalCursorOverlay.jsx` |
+| Electrical-arc / targeting / micro-spark helpers used by the hero canvas and global overlay; Phase 6B `generateClickDischarge` with 6B.1 jagged geometry and 6B.2 branch levels/weights | `src/lib/neuralEffects.js` |
+| Site-wide electrical overlay (Phase 6 random sparks; Phase 6B approved click/tap discharge with visual hierarchy) | `src/components/ElectricalCursorOverlay.jsx` |
 | App shell composition (mounts overlay) | `src/App.jsx` |
 | Hero photographic background | `public/images/wave-background.png` (referenced from `Hero.jsx`) |
 | Header/footer brand mark actually used | `public/images/logo-light.webp` |
@@ -146,6 +146,7 @@ Destination address (hard-coded in both files): `spandanai.sard@gmail.com`
 | `docs/PHASE_7_ENGINEERING_ROADMAP.md` | Follow-on implementation phases derived from the 7A audit |
 | `docs/PHASE_7B_ACCESSIBILITY_PROTOTYPE.md` | Phase 7B accessibility prototype history |
 | `docs/PHASE_7B_COMPLETION_REPORT.md` | Phase 7B GitHub landing report (committed/pushed; not deployed) |
+| `docs/PHASE_6B_GLOBAL_ELECTRICAL_POLISH_PROTOTYPE.md` | Phase 6B / 6B.1 / 6B.2 global click/tap discharge history and final approval (committed/pushed; not deployed) |
 
 ---
 
