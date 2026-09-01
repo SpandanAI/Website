@@ -13,9 +13,10 @@ Paths are relative to the repository root.
 | HTML document, SEO meta, favicons, OG/Twitter tags, canonical | `index.html` |
 | React mount | `src/main.jsx` (`BrowserRouter`) |
 | Shared application shell | `src/App.jsx` |
-| Homepage composition | `src/pages/HomePage.jsx` |
-| Team page composition (`/team`) | `src/pages/TeamPage.jsx` |
-| Client unmatched-route fallback | `src/pages/NotFoundPage.jsx` |
+| Skip to main content (shared) | `src/App.jsx` (`.skip-link` in `src/index.css`) |
+| Homepage composition | `src/pages/HomePage.jsx` (`#main-content` skip target) |
+| Team page composition (`/team`) | `src/pages/TeamPage.jsx` (`#main-content` skip target) |
+| Client unmatched-route fallback | `src/pages/NotFoundPage.jsx` (`#main-content` skip target) |
 | Route change scroll (top unless hash) | `src/components/RouteScrollManager.jsx` |
 | Global CSS, CSS variables, reduced-motion, header/scroll-button styles, Manrope `@font-face`, selection highlight, body `user-select: none` with form exceptions | `src/index.css` |
 | Tailwind theme (colors, shadow, Manrope `fontFamily.sans`) | `tailwind.config.js` |
@@ -29,12 +30,12 @@ Paths are relative to the repository root.
 
 | Feature | File(s) |
 |---------|---------|
-| Sticky navbar, mobile drawer, active-section highlighting, route-aware `/team` links, “Partner With Us” | `src/components/Header.jsx` |
+| Sticky navbar, mobile drawer (`<nav id="mobile-navigation">`), desktop primary nav landmark, route-aware `/team` links, “Partner With Us”, mobile Escape/focus cycle, `aria-controls` | `src/components/Header.jsx` |
 | Nav link labels and hash hrefs (Home, Use Cases, Team, Contact) | `src/data/siteContent.js` (`navigationLinks`) |
 | Resolve homepage vs `/team` destinations | `src/lib/navHrefs.js` |
 | Custom event that forces active nav after CTA click | `src/lib/activeNavEvent.js` |
 | Top scroll progress bar | `src/components/ScrollProgressBar.jsx` |
-| Floating scroll-to-top button (hamburger-mode only; `scrollY > innerHeight * 1.1`) | `src/components/ScrollToTopButton.jsx`, `.scroll-top-button` in `src/index.css` |
+| Floating scroll-to-top button (hamburger-mode only; `scrollY > innerHeight * 1.1`; `inert` / not tabbable when hidden) | `src/components/ScrollToTopButton.jsx`, `.scroll-top-button` in `src/index.css` |
 | Footer logo, copyright, mailto email (selectable; no Copy UI) | `src/components/Footer.jsx` |
 | Shared section title block (eyebrow / h2 / description) | `src/components/SectionHeading.jsx` |
 | Shared Framer Motion variants | `src/lib/animations.js` |
@@ -141,6 +142,10 @@ Destination address (hard-coded in both files): `spandanai.sard@gmail.com`
 | `docs/PHASE_5_5_TEAM_PAGE_PROTOTYPE.md` | Phase 5.5 Team page + router history and final acceptance |
 | `docs/PHASE_5_5_COMPLETION_REPORT.md` | Phase 5.5 GitHub landing report (committed/pushed; not deployed) |
 | `docs/TEAM_CONTENT_GUIDE.md` | How to add real members / photos later |
+| `docs/PHASE_7A_ENGINEERING_QUALITY_AUDIT.md` | Phase 7A accessibility / responsive / performance / code-quality audit (historical findings; 7B addressed listed A11Y items) |
+| `docs/PHASE_7_ENGINEERING_ROADMAP.md` | Follow-on implementation phases derived from the 7A audit |
+| `docs/PHASE_7B_ACCESSIBILITY_PROTOTYPE.md` | Phase 7B accessibility prototype history |
+| `docs/PHASE_7B_COMPLETION_REPORT.md` | Phase 7B GitHub landing report (committed/pushed; not deployed) |
 
 ---
 

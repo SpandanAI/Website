@@ -1,6 +1,6 @@
 # SpandanAI — Project State Snapshot
 
-**Snapshot date:** 1 September 2026 (updated after Phase 5.5 GitHub landing)  
+**Snapshot date:** 1 September 2026 (updated after Phase 7B GitHub landing)  
 **Production URL:** https://spandanai.com/  
 **Workspace:** local website source directory (absolute filesystem path omitted for the public GitHub repository)  
 **Scope:** Factual state of the repository *today*. No recommendations.
@@ -18,6 +18,14 @@ Phase 2A messaging/SEO proposal completed; no application changes implemented. S
 **Phase 3:** APPROVED. Feature commit `410d66e` (`feat: add Cryo-CMOS use case and responsive card layout`). GitHub: **PUSHED** to `origin/main`. Production: **NOT DEPLOYED.** Cryo-CMOS fifth Use Case, 3+2 / 2+2+1 / 1-column layout, 16px descriptions, mobile-only Back-to-Top (`md:hidden`, threshold `1.1 × innerHeight`). See `docs/PHASE_3_CRYO_CMOS_PROTOTYPE.md` and `docs/PHASE_3_COMPLETION_REPORT.md`.
 
 **Phase 6 (6A–6A.7):** Approved. Git: committed (`5b8bf35`). GitHub: pushed to `origin/main`. Production: **NOT deployed.** Hero copy/SEO unchanged. Phase 2B remains paused pending stakeholder wording confirmation. See `docs/PHASE_6A_CURSOR_DISCHARGE_PROTOTYPE.md` and `docs/PHASE_6_COMPLETION_REPORT.md`.
+
+**Phase 7A:** COMPLETE. Engineering quality audit. No product changes in the audit itself. See `docs/PHASE_7A_ENGINEERING_QUALITY_AUDIT.md` and `docs/PHASE_7_ENGINEERING_ROADMAP.md`. GitHub: **PUSHED** (documentation commit). Production: **NOT DEPLOYED.**
+
+**Phase 7A.1:** Temporary local audit helper `/tmp/spandan-audit.py` (not in the repository, not part of the product) was removed after review.
+
+**Phase 7B / 7B.1:** COMPLETE / HUMAN APPROVED. Feature commit `bc97490` (`feat: improve website accessibility`). GitHub: **PUSHED** to `origin/main`. Production: **NOT DEPLOYED.** Skip link, Back-to-Top keyboard hiding, dark-header active-nav `#60a5fa`, mobile menu Escape/focus, placeholder contrast, header logo `alt=""`, 44×44 hamburger, mobile `<nav id="mobile-navigation">` landmark. A11Y-07 deferred. See `docs/PHASE_7B_ACCESSIBILITY_PROTOTYPE.md` and `docs/PHASE_7B_COMPLETION_REPORT.md`.
+
+**Phase 6B:** NOT STARTED. Requested later: polish non-Hero click electricity. Do not start automatically.
 
 **Phase 1A attribution correction:** Cursor Agent appeared as a GitHub contributor because Phase 1 commits included a `Co-authored-by: Cursor` trailer. Those post-stakeholder commits were recreated with identical trees for `Korak Das` / `korakdas1` only. The stakeholder `Initial commit` (`e81f2ba`) was not rewritten. `git push --force-with-lease` was used after verifying the remote tip had not changed. No application source or behavior changed.
 
@@ -160,14 +168,15 @@ Live response for `/` is HTTP 200 with the security headers from `vercel.json` a
 | Phase 6 feature commit | `5b8bf35` — `feat: add interactive electrical experience and UI polish` |
 | Phase 3 feature commit | `410d66e` — `feat: add Cryo-CMOS use case and responsive card layout` |
 | Phase 5.5 feature commit | `c12e926` — `feat: add dedicated team page and routing` |
-| Remote push | **SUCCESS** (Phase 5.5 feature: normal fast-forward `cbb56de` → `c12e926`; no force). GitHub is **not** automatically connected to Vercel. |
-| Working tree | **Clean after the Phase 5.5 documentation commit.** Phase 5.5 is on GitHub `main`. **Not production-deployed.** |
+| Phase 7B feature commit | `bc97490` — `feat: improve website accessibility` |
+| Remote push | **SUCCESS** (Phase 7B feature: normal fast-forward `ac24ca9` → `bc97490`; no force). GitHub is **not** automatically connected to Vercel. |
+| Working tree | **Clean after the Phase 7 documentation commit.** Phase 7A audit docs and Phase 7B completion are on GitHub `main`. **Not production-deployed.** |
 | `.gitignore` | Safe baseline (`node_modules/`, `dist/`, `.vercel/`, `.env*`, logs, OS/editor junk) |
 | LICENSE | **Absent** (intentionally not added; company decision pending) |
 | README | Professional project README (`README.md`) |
 | Package | `spandanai-website` |
 | Dependencies | Pinned / reproducible. Phase 5.5 added only `react-router-dom` **7.18.3**. |
-| Build | `npm run build` **pass** (Phase 5.5: `index-BD4RNRl7.js` 400.26 kB, `index-DrMLXFnk.css` 18.83 kB, Manrope WOFF2 `manrope-latin-wght-normal-DHIcAJRg.woff2` 24.83 kB) |
+| Build | `npm run build` **pass** (Phase 7B: `index-DYq3JvYF.js` 401.86 kB, `index-DwcHyqYN.css` 19.43 kB, Manrope WOFF2 `manrope-latin-wght-normal-DHIcAJRg.woff2` 24.83 kB) |
 
 ---
 
@@ -180,16 +189,20 @@ Live response for `/` is HTTP 200 with the security headers from `vercel.json` a
 - Hero canvas Phase 6 pauses off-screen / in hidden tabs and freezes under reduced motion; electrical arcs, pulses, and random firing are disabled when `prefers-reduced-motion: reduce`.
 - Touch: no fake cursor; a hero tap may fire one localized discharge; lower-page taps may fire a localized micro-spark. Scroll/drag does not spark.
 - Contact uses provider-neutral `mailto:spandanai.sard@gmail.com` (Email Us + form submit + Copy). No Gmail-only action.
-- Page `<title>` is only `SpandanAI`.
+- Page `<title>` is `SpandanAI` on the homepage; `/team` sets `Team | SpandanAI` in JavaScript. Canonical/OG remain homepage-global.
 - No Schema.org JSON-LD, no web app manifest.
 - Phrase **"Innovating AI with Semiconductors" does not exist in this repository or on the live homepage HTML/JS.**
-- Brand name **SpandanAI** is repeated in title, H1, header text, footer text, and two `alt` attributes.
+- Brand name **SpandanAI** appears in the title, H1, header text, and footer text. The header logo image is decorative (`alt=""`). The footer logo image still uses `alt="SpandanAI"`.
 - React/Vite are now pinned; do not treat `"latest"` as current.
 - No tests / lint / typecheck.
 - Use-case hover variant `cardHover` is defined and unused.
 - Empty `src/assets/` directory.
 - Team data for extra members lives in `src/data/teamContent.js` (`teamMembers` is currently empty). Leadership data was moved out of `Founders.jsx`.
 - Filenames with spaces (`K. Dharanidhar G.jpg`, etc.).
+
+**Pending engineering (not defects of this landing):** Phase 7C responsive, Phase 7D images, Phase 7E dead assets, Phase 7F tests, Phase 7G technical SEO, A11Y-07 footer focus, Phase 6B global click electricity polish (not started).
+
+**Pending stakeholder input:** LinkedIn URLs, extra team members, group photo, Phase 2B wording.
 
 ---
 
