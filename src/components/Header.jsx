@@ -1,13 +1,17 @@
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { motion, useReducedMotion } from "framer-motion";
 import { navigationLinks } from "../data/siteContent";
 import { SET_ACTIVE_NAV_EVENT } from "../lib/activeNavEvent";
 import { buttonHover } from "../lib/animations";
+import { getLogoTo, getNavTo, getPartnerTo, getSectionId } from "../lib/navHrefs";
 
 const NAV_SECTION_IDS = navigationLinks.map((link) => link.href.replace("#", ""));
 
 const INTERSECTION_THRESHOLDS = [0, 0.1, 0.2, 0.3, 0.4, 0.45, 0.5, 0.55, 0.6, 0.7, 0.8, 0.9, 1];
 const ACTIVE_RATIO_MIN = 0.45;
+
+const MotionLink = motion(Link);
 
 function getNavbarScrollOffset() {
   if (typeof document === "undefined") return 96;
@@ -19,9 +23,12 @@ function getNavbarScrollOffset() {
 }
 
 export default function Header() {
+  const location = useLocation();
+  const isTeamRoute = location.pathname === "/team";
   const [isOpen, setIsOpen] = useState(false);
   const [activeSection, setActiveSection] = useState(() => {
     if (typeof window === "undefined") return "home";
+    if (window.location.pathname === "/team") return "team";
     const hash = window.location.hash.replace("#", "");
     return NAV_SECTION_IDS.includes(hash) ? hash : "home";
   });
@@ -53,6 +60,8 @@ export default function Header() {
   }, []);
 
   const resolveActiveSection = useCallback(() => {
+    if (location.pathname === "/team") return "team";
+
     let next = computeActiveSectionFromIntersection();
     const intent = pendingNavSectionRef.current;
     if (intent) {
@@ -69,11 +78,18 @@ export default function Header() {
       }
     }
     return next;
-  }, [computeActiveSectionFromIntersection]);
+  }, [computeActiveSectionFromIntersection, location.pathname]);
 
   const flushActiveSection = useCallback(() => {
     setActiveSection(resolveActiveSection());
   }, [resolveActiveSection]);
+
+  const scrollToTop = useCallback(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: shouldReduceMotion ? "auto" : "smooth"
+    });
+  }, [shouldReduceMotion]);
 
   useLayoutEffect(() => {
     const sync = () => {
@@ -83,7 +99,7 @@ export default function Header() {
     };
     sync();
     requestAnimationFrame(sync);
-  }, [flushActiveSection]);
+  }, [flushActiveSection, location.pathname]);
 
   useEffect(() => {
     const onSetActiveNav = (event) => {
@@ -98,6 +114,11 @@ export default function Header() {
   }, []);
 
   useEffect(() => {
+    if (location.pathname !== "/") {
+      intersectionRatiosRef.current = {};
+      return undefined;
+    }
+
     const offset = getNavbarScrollOffset();
     const rootMargin = `-${offset}px 0px 0px 0px`;
 
@@ -125,7 +146,7 @@ export default function Header() {
     flushActiveSection();
 
     return () => observer.disconnect();
-  }, [flushActiveSection]);
+  }, [flushActiveSection, location.pathname]);
 
   useEffect(() => {
     let scrollRafId = 0;
@@ -157,6 +178,34 @@ export default function Header() {
     };
   }, [flushActiveSection]);
 
+  const handleNavClick = (sectionId) => {
+    closeMenu();
+
+    if (isTeamRoute) {
+      if (sectionId === "team") {
+        scrollToTop();
+        pendingNavSectionRef.current = null;
+        setActiveSection("team");
+        return;
+      }
+      markNavIntent(sectionId);
+      return;
+    }
+
+    if (sectionId === "home") {
+      scrollToTop();
+    }
+    markNavIntent(sectionId);
+  };
+
+  const handleLogoClick = () => {
+    closeMenu();
+    markNavIntent("home");
+    if (!isTeamRoute) {
+      scrollToTop();
+    }
+  };
+
   return (
     <header className={`header-shell sticky top-0 z-50 ${isScrolled ? "scrolled" : ""}`}>
       {isOpen && (
@@ -171,13 +220,10 @@ export default function Header() {
         className="relative z-50 mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-6 lg:px-8"
         aria-label="Primary navigation"
       >
-        <a
-          href="#home"
+        <Link
+          to={getLogoTo(location.pathname)}
           className="flex items-center gap-3"
-          onClick={() => {
-            closeMenu();
-            markNavIntent("home");
-          }}
+          onClick={handleLogoClick}
         >
           <img
             src="/images/logo-light.webp"
@@ -191,41 +237,41 @@ export default function Header() {
           >
             SpandanAI
           </span>
-        </a>
+        </Link>
 
         <div className="hidden items-center gap-7 md:flex lg:gap-8">
           {navigationLinks.map((link) => {
-            const linkSection = link.href.replace("#", "");
-            const isActive = activeSection === linkSection;
+            const linkSection = getSectionId(link.href);
+            const isActive = isTeamRoute ? linkSection === "team" : activeSection === linkSection;
 
             return (
-              <a
+              <Link
                 key={link.href}
-                href={link.href}
-                aria-current={isActive ? "location" : undefined}
+                to={getNavTo(link.href, location.pathname)}
+                aria-current={isActive ? (isTeamRoute ? "page" : "location") : undefined}
                 className={`nav-link rounded-md text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/60 ${
                   isScrolled
                     ? "text-slate-600 hover:text-ink focus-visible:ring-offset-white"
                     : "text-white/85 hover:text-white focus-visible:ring-offset-slate-900"
                 } ${isActive ? "active" : ""}`}
-                onClick={() => markNavIntent(linkSection)}
+                onClick={() => handleNavClick(linkSection)}
               >
                 {link.label}
-              </a>
+              </Link>
             );
           })}
         </div>
 
-        <motion.a
-          href="#contact"
+        <MotionLink
+          to={getPartnerTo(location.pathname)}
           className="hidden rounded-full bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 md:inline-flex"
-          onClick={() => markNavIntent("contact")}
+          onClick={() => handleNavClick("contact")}
           whileHover={shouldReduceMotion ? undefined : buttonHover}
           whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
           transition={{ duration: 0.2, ease: "easeOut" }}
         >
           Partner With Us
-        </motion.a>
+        </MotionLink>
 
         <button
           type="button"
@@ -249,39 +295,33 @@ export default function Header() {
         <div className="relative z-50 border-t border-slate-200 bg-white px-5 py-4 shadow-lg md:hidden">
           <div className="flex flex-col gap-4">
             {navigationLinks.map((link) => {
-              const linkSection = link.href.replace("#", "");
-              const isActive = activeSection === linkSection;
+              const linkSection = getSectionId(link.href);
+              const isActive = isTeamRoute ? linkSection === "team" : activeSection === linkSection;
 
               return (
-                <a
+                <Link
                   key={link.href}
-                  href={link.href}
-                  aria-current={isActive ? "location" : undefined}
+                  to={getNavTo(link.href, location.pathname)}
+                  aria-current={isActive ? (isTeamRoute ? "page" : "location") : undefined}
                   className={`nav-link rounded-xl px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/60 focus-visible:ring-offset-2 ${
                     isActive ? "active" : ""
                   }`}
-                  onClick={() => {
-                    closeMenu();
-                    markNavIntent(linkSection);
-                  }}
+                  onClick={() => handleNavClick(linkSection)}
                 >
                   {link.label}
-                </a>
+                </Link>
               );
             })}
-            <motion.a
-              href="#contact"
+            <MotionLink
+              to={getPartnerTo(location.pathname)}
               className="rounded-full bg-blue-600 px-5 py-3 text-center text-sm font-semibold text-white"
-              onClick={() => {
-                closeMenu();
-                markNavIntent("contact");
-              }}
+              onClick={() => handleNavClick("contact")}
               whileHover={shouldReduceMotion ? undefined : buttonHover}
               whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
               transition={{ duration: 0.2, ease: "easeOut" }}
             >
               Partner With Us
-            </motion.a>
+            </MotionLink>
           </div>
         </div>
       )}

@@ -15,7 +15,9 @@ export default function SectionHeading({ eyebrow, title, description, align = "l
       >
         {title}
       </h2>
-      <p className="mt-5 text-base leading-[1.7] text-muted sm:text-lg">{description}</p>
+      {description ? (
+        <p className="mt-5 text-base leading-[1.7] text-muted sm:text-lg">{description}</p>
+      ) : null}
     </div>
   );
 }
