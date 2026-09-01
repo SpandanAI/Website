@@ -165,7 +165,7 @@ export default function Contact() {
                 required
                 autoComplete="name"
                 placeholder="Your name"
-                className="mt-2 w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-ink outline-none transition placeholder:text-slate-400 focus:border-blue-600 focus:ring-4 focus:ring-blue-100"
+                className="mt-2 w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-ink outline-none transition placeholder:text-slate-500 focus:border-blue-600 focus:ring-4 focus:ring-blue-100"
               />
             </label>
             <label className="text-sm font-medium text-ink">
@@ -176,7 +176,7 @@ export default function Contact() {
                 required
                 autoComplete="email"
                 placeholder="you@example.com"
-                className="mt-2 w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-ink outline-none transition placeholder:text-slate-400 focus:border-blue-600 focus:ring-4 focus:ring-blue-100"
+                className="mt-2 w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-ink outline-none transition placeholder:text-slate-500 focus:border-blue-600 focus:ring-4 focus:ring-blue-100"
               />
             </label>
           </div>
@@ -188,7 +188,7 @@ export default function Contact() {
               name="organization"
               autoComplete="organization"
               placeholder="Your organization"
-              className="mt-2 w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-ink outline-none transition placeholder:text-slate-400 focus:border-blue-600 focus:ring-4 focus:ring-blue-100"
+              className="mt-2 w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-ink outline-none transition placeholder:text-slate-500 focus:border-blue-600 focus:ring-4 focus:ring-blue-100"
             />
           </label>
 
@@ -199,7 +199,7 @@ export default function Contact() {
               required
               rows="6"
               placeholder="Tell us about your partnership or investment interest"
-              className="mt-2 w-full resize-none rounded-2xl border border-slate-300 bg-white px-4 py-3 text-ink outline-none transition placeholder:text-slate-400 focus:border-blue-600 focus:ring-4 focus:ring-blue-100"
+              className="mt-2 w-full resize-none rounded-2xl border border-slate-300 bg-white px-4 py-3 text-ink outline-none transition placeholder:text-slate-500 focus:border-blue-600 focus:ring-4 focus:ring-blue-100"
             />
           </label>
 

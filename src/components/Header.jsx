@@ -36,8 +36,17 @@ export default function Header() {
   const shouldReduceMotion = useReducedMotion();
   const pendingNavSectionRef = useRef(null);
   const intersectionRatiosRef = useRef({});
+  const menuButtonRef = useRef(null);
+  const mobileNavRef = useRef(null);
+  const firstMobileLinkRef = useRef(null);
+  const restoreMenuFocusRef = useRef(false);
 
   const closeMenu = () => setIsOpen(false);
+
+  const closeMenuAndRestoreFocus = useCallback(() => {
+    restoreMenuFocusRef.current = true;
+    setIsOpen(false);
+  }, []);
 
   const markNavIntent = useCallback((id) => {
     pendingNavSectionRef.current = id;
@@ -112,6 +121,58 @@ export default function Header() {
     window.addEventListener(SET_ACTIVE_NAV_EVENT, onSetActiveNav);
     return () => window.removeEventListener(SET_ACTIVE_NAV_EVENT, onSetActiveNav);
   }, []);
+
+  useEffect(() => {
+    if (isOpen || !restoreMenuFocusRef.current) return;
+    restoreMenuFocusRef.current = false;
+    menuButtonRef.current?.focus();
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (!isOpen) return undefined;
+
+    firstMobileLinkRef.current?.focus({ preventScroll: true });
+
+    const getFocusCycle = () => {
+      const button = menuButtonRef.current;
+      const panel = mobileNavRef.current;
+      const items = panel ? [...panel.querySelectorAll("a")] : [];
+      return [button, ...items].filter(Boolean);
+    };
+
+    const onKeyDown = (event) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        closeMenuAndRestoreFocus();
+        return;
+      }
+
+      if (event.key !== "Tab") return;
+
+      const cycle = getFocusCycle();
+      if (cycle.length === 0) return;
+
+      const first = cycle[0];
+      const last = cycle[cycle.length - 1];
+      const active = document.activeElement;
+
+      if (event.shiftKey) {
+        if (active === first || !cycle.includes(active)) {
+          event.preventDefault();
+          last.focus();
+        }
+        return;
+      }
+
+      if (active === last || !cycle.includes(active)) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [closeMenuAndRestoreFocus, isOpen]);
 
   useEffect(() => {
     if (location.pathname !== "/") {
@@ -212,14 +273,11 @@ export default function Header() {
         <div
           className="fixed inset-0 z-40 bg-black/20 md:hidden"
           aria-hidden="true"
-          onClick={closeMenu}
+          onClick={closeMenuAndRestoreFocus}
         />
       )}
-      {/* Sticky navigation mirrors the reference-style single-page landing pattern. */}
-      <nav
-        className="relative z-50 mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-6 lg:px-8"
-        aria-label="Primary navigation"
-      >
+      {/* Sticky header row. Landmark nav is the desktop link list or the open mobile panel, not this wrapper. */}
+      <div className="relative z-50 mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-6 lg:px-8">
         <Link
           to={getLogoTo(location.pathname)}
           className="flex items-center gap-3"
@@ -227,7 +285,7 @@ export default function Header() {
         >
           <img
             src="/images/logo-light.webp"
-            alt="SpandanAI"
+            alt=""
             className="logo"
             loading="eager"
             decoding="async"
@@ -239,7 +297,10 @@ export default function Header() {
           </span>
         </Link>
 
-        <div className="hidden items-center gap-7 md:flex lg:gap-8">
+        <nav
+          className="desktop-primary-nav hidden items-center gap-7 md:flex lg:gap-8"
+          aria-label="Primary navigation"
+        >
           {navigationLinks.map((link) => {
             const linkSection = getSectionId(link.href);
             const isActive = isTeamRoute ? linkSection === "team" : activeSection === linkSection;
@@ -260,7 +321,7 @@ export default function Header() {
               </Link>
             );
           })}
-        </div>
+        </nav>
 
         <MotionLink
           to={getPartnerTo(location.pathname)}
@@ -274,33 +335,40 @@ export default function Header() {
         </MotionLink>
 
         <button
+          ref={menuButtonRef}
           type="button"
-          className={`inline-flex h-10 w-10 items-center justify-center rounded-full border transition-[transform,filter] duration-200 ease-out hover:-translate-y-[2px] hover:brightness-110 md:hidden ${
+          className={`inline-flex h-11 w-11 items-center justify-center rounded-full border transition-[transform,filter] duration-200 ease-out hover:-translate-y-[2px] hover:brightness-110 md:hidden ${
             isScrolled ? "border-slate-200 text-ink" : "border-white/40 text-white"
           }`}
-          aria-label="Toggle navigation menu"
+          aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
           aria-expanded={isOpen}
+          aria-controls="mobile-navigation"
           onClick={() => setIsOpen((current) => !current)}
         >
-          <span className="sr-only">Menu</span>
-          <span className="space-y-1.5">
+          <span className="space-y-1.5" aria-hidden="true">
             <span className="block h-0.5 w-5 bg-current" />
             <span className="block h-0.5 w-5 bg-current" />
             <span className="block h-0.5 w-5 bg-current" />
           </span>
         </button>
-      </nav>
+      </div>
 
       {isOpen && (
-        <div className="relative z-50 border-t border-slate-200 bg-white px-5 py-4 shadow-lg md:hidden">
+        <nav
+          id="mobile-navigation"
+          ref={mobileNavRef}
+          aria-label="Primary navigation"
+          className="relative z-50 border-t border-slate-200 bg-white px-5 py-4 shadow-lg md:hidden"
+        >
           <div className="flex flex-col gap-4">
-            {navigationLinks.map((link) => {
+            {navigationLinks.map((link, index) => {
               const linkSection = getSectionId(link.href);
               const isActive = isTeamRoute ? linkSection === "team" : activeSection === linkSection;
 
               return (
                 <Link
                   key={link.href}
+                  ref={index === 0 ? firstMobileLinkRef : undefined}
                   to={getNavTo(link.href, location.pathname)}
                   aria-current={isActive ? (isTeamRoute ? "page" : "location") : undefined}
                   className={`nav-link rounded-xl px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/60 focus-visible:ring-offset-2 ${
@@ -323,7 +391,7 @@ export default function Header() {
               Partner With Us
             </MotionLink>
           </div>
-        </div>
+        </nav>
       )}
     </header>
   );

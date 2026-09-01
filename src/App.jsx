@@ -10,9 +10,31 @@ import HomePage from "./pages/HomePage";
 import NotFoundPage from "./pages/NotFoundPage";
 import TeamPage from "./pages/TeamPage";
 
+function SkipToMainContent() {
+  const handleClick = (event) => {
+    event.preventDefault();
+    const main = document.getElementById("main-content");
+    if (!main) return;
+
+    main.focus({ preventScroll: true });
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    main.scrollIntoView({
+      block: "start",
+      behavior: prefersReducedMotion ? "auto" : "smooth"
+    });
+  };
+
+  return (
+    <a href="#main-content" className="skip-link" onClick={handleClick}>
+      Skip to main content
+    </a>
+  );
+}
+
 export default function App() {
   return (
     <div className="min-h-screen bg-white">
+      <SkipToMainContent />
       <RouteScrollManager />
       <ScrollProgressBar />
       <Header />

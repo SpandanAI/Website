@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 export default function ScrollToTopButton() {
   const [isVisible, setIsVisible] = useState(false);
+  const buttonRef = useRef(null);
 
   useEffect(() => {
     const updateVisibility = () => {
@@ -18,6 +19,12 @@ export default function ScrollToTopButton() {
     };
   }, []);
 
+  useEffect(() => {
+    if (!isVisible && buttonRef.current === document.activeElement) {
+      buttonRef.current.blur();
+    }
+  }, [isVisible]);
+
   const scrollToTop = () => {
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     window.scrollTo({
@@ -28,8 +35,12 @@ export default function ScrollToTopButton() {
 
   return (
     <button
+      ref={buttonRef}
       type="button"
       aria-label="Back to top"
+      aria-hidden={isVisible ? undefined : true}
+      tabIndex={isVisible ? 0 : -1}
+      inert={!isVisible}
       onClick={scrollToTop}
       className={`scroll-top-button md:hidden ${isVisible ? "visible" : ""}`}
     >

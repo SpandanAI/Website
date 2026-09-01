@@ -7,7 +7,7 @@ export default function NotFoundPage() {
   }, []);
 
   return (
-    <main className="mx-auto max-w-7xl px-5 py-24 sm:px-6 lg:px-8">
+    <main id="main-content" tabIndex={-1} className="mx-auto max-w-7xl px-5 py-24 outline-none sm:px-6 lg:px-8">
       <h1 className="text-3xl font-semibold tracking-[-0.02em] text-ink">This page is not available.</h1>
       <p className="mt-4 text-base leading-[1.7] text-muted">Return to the SpandanAI homepage.</p>
       <Link

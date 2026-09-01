@@ -15,7 +15,7 @@ export default function TeamPage() {
   }, []);
 
   return (
-    <main>
+    <main id="main-content" tabIndex={-1} className="outline-none">
       <section className="team-intro relative isolate -mt-[var(--navbar-height)] pt-[var(--navbar-height)]" aria-labelledby="team-page-heading">
         <div className="mx-auto max-w-7xl px-5 py-16 sm:px-6 sm:py-20 lg:px-8">
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-blue-400">Team</p>
