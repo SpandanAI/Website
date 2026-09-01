@@ -1,7 +1,9 @@
 # SpandanAI — Requirements
 
 **Date recorded:** 31 August 2026  
-**Status:** Recorded only. **Nothing in this file has been implemented in this phase.**
+**Status:** Stakeholder requirements log. Later phases have implemented some items; missing content is **not** marked complete.
+
+Phase 3 shipped the Cryo-CMOS use case (GitHub, not production-deployed). Phase 5.5 shipped the dedicated `/team` page architecture (GitHub, not production-deployed) without additional people, LinkedIn URLs, or a group photo.
 
 This document keeps stakeholder requests separate from auditor suggestions.
 
@@ -24,10 +26,9 @@ Addressing the tight power budget in cryogenic refrigerators requires unique IC 
 ### Current state
 
 - Use Cases section exists on the homepage (`#use-cases`).
-- Four cards, data-driven from `applicationTabs` in `src/data/siteContent.js`.
-- Cards are text-only (uppercase label + description). No icons, no images, no hover animation.
-- Desktop: 4-column grid. Tablet: 2-column. Mobile: 1-column.
-- The Cryo-CMOS item is **not** in the data.
+- **Five** cards, data-driven from `applicationTabs` in `src/data/siteContent.js` (Phase 3, on GitHub `main`; production not redeployed).
+- Fifth card wording matches the stakeholder title and description below.
+- Desktop: 3+2. Tablet: 2+2+1. Mobile: 1-column.
 
 ### Relevant files
 
@@ -123,10 +124,10 @@ Addressing the tight power budget in cryogenic refrigerators requires unique IC 
 
 ### Current state
 
-- Four members in `src/components/Founders.jsx`.
-- Photos, names, roles. **No bios. No LinkedIn URLs. Cards are not links.**
-- `whileHover` lift exists on the card; it is visual only.
-- No `target="_blank"` anywhere in `src/`.
+- Four members in `src/data/teamContent.js` (`leadershipMembers`), rendered via `TeamMemberCard`.
+- Photos, names, roles. **No bios. `linkedin` is `null` on every member. Cards are not links.**
+- Same four people appear on the homepage and on `/team`.
+- **Blocked** until real LinkedIn URLs exist. No URLs were invented.
 
 ### Team as stored today
 
@@ -247,9 +248,19 @@ See the hero section of `SPANDANAI_PROJECT_AUDIT.md`. Short version: keep Canvas
 
 ### Current state
 
-- Homepage Team section with four individual cards only.
-- **No group photo asset in `public/`.**
-- No `/team` route. The site is a hash-based SPA.
+- Homepage Leadership section still shows **only the current four** members, plus a Meet the Team CTA.
+- A dedicated `/team` page is **implemented** (React Router; on GitHub `main`; not production-deployed). It currently shows the same four leaders. Additional `teamMembers` count is **0**. No fabricated people.
+- **No group photo asset in `public/`.** `teamGroupPhoto` is `null`; the page does not render an empty photo box.
+- LinkedIn URLs are still pending.
+- Group photo is still pending.
+
+### Phase 5.5 status
+
+- Dedicated Team page: **implemented**
+- Homepage wider-team restriction: **implemented**
+- Additional real members: **pending data**
+- LinkedIn: **pending real URLs**
+- Group photo: **pending asset**
 
 ### Relevant files
 
@@ -322,7 +333,7 @@ They are expanded and prioritized in `SPANDANAI_PROJECT_AUDIT.md`.
 
 - Form backend instead of `mailto:`.
 - Schema `ContactPoint`.
-- Dedicated `/team` page (only if content grows).
+- Dedicated `/team` page (only if content grows). **Phase 5.5 implemented the `/team` architecture**; additional people/photos still pending.
 - Code-splitting / lazy-loading the canvas chunk.
 - LICENSE file.
 - Rename package from `neutral-ai-landing-page`.
@@ -330,7 +341,7 @@ They are expanded and prioritized in `SPANDANAI_PROJECT_AUDIT.md`.
 ## AVOID FOR NOW (suggested)
 
 - Redesign / visual rebrand.
-- Introducing Next.js, React Router, or Three.js without a clear need.
+- Introducing Next.js or Three.js without a clear need. (React Router was added in Phase 5.5 because `/team` is a real second page.)
 - Adding many new pages.
 - Rewriting Framer Motion usage globally.
 - Inventing LinkedIn URLs or technical claims not provided by the company.

@@ -1,6 +1,6 @@
 # SpandanAI — Project State Snapshot
 
-**Snapshot date:** 1 September 2026 (updated after Phase 3 GitHub landing)  
+**Snapshot date:** 1 September 2026 (updated after Phase 5.5 GitHub landing)  
 **Production URL:** https://spandanai.com/  
 **Workspace:** local website source directory (absolute filesystem path omitted for the public GitHub repository)  
 **Scope:** Factual state of the repository *today*. No recommendations.
@@ -12,6 +12,8 @@ Phase 0 documented the product. Phase 1 connected this workspace to the official
 Phase 2A messaging/SEO proposal completed; no application changes implemented. See `docs/PHASE_2A_MESSAGING_SEO_PROPOSAL.md`. Proposed copy is **not** live.
 
 **Phase 2B** remains paused (visible positioning language needs stakeholder confirmation).
+
+**Phase 5.5:** APPROVED. Feature commit `c12e926` (`feat: add dedicated team page and routing`). GitHub: **PUSHED** to `origin/main`. Production: **NOT DEPLOYED.** Route `/team` implemented. Homepage still shows only the current four leadership members plus Meet the Team. `teamMembers`: **0**. LinkedIn: **pending real URLs**. Group photo: **pending real asset**. See `docs/PHASE_5_5_TEAM_PAGE_PROTOTYPE.md`, `docs/PHASE_5_5_COMPLETION_REPORT.md`, and `docs/TEAM_CONTENT_GUIDE.md`.
 
 **Phase 3:** APPROVED. Feature commit `410d66e` (`feat: add Cryo-CMOS use case and responsive card layout`). GitHub: **PUSHED** to `origin/main`. Production: **NOT DEPLOYED.** Cryo-CMOS fifth Use Case, 3+2 / 2+2+1 / 1-column layout, 16px descriptions, mobile-only Back-to-Top (`md:hidden`, threshold `1.1 × innerHeight`). See `docs/PHASE_3_CRYO_CMOS_PROTOTYPE.md` and `docs/PHASE_3_COMPLETION_REPORT.md`.
 
@@ -33,7 +35,7 @@ Phase 2A messaging/SEO proposal completed; no application changes implemented. S
 | CSS | Tailwind CSS **3.4.19** + `src/index.css` |
 | PostCSS | `postcss.config.cjs` — Tailwind only; no Autoprefixer |
 | Animation | Framer Motion **12.38.0** + custom Canvas 2D hero |
-| Routing | **None.** No React Router. One HTML document. In-page hash anchors only. |
+| Routing | **React Router** `react-router-dom` **7.18.3**. Pages: `/` and `/team`. Homepage hash anchors remain. |
 | Backend | **None.** No API, no serverless functions, no database |
 | Analytics | **None** |
 | Fonts | **Manrope Variable**: `@fontsource-variable/manrope` **5.3.0**, Latin WOFF2 self-hosted via `@font-face` in `src/index.css`. No Google Fonts CDN. |
@@ -47,21 +49,21 @@ Phase 2A messaging/SEO proposal completed; no application changes implemented. S
 ## Architecture
 
 ```
-index.html → src/main.jsx → src/App.jsx
+index.html → src/main.jsx (BrowserRouter) → src/App.jsx
+                              ├── RouteScrollManager
                               ├── ScrollProgressBar
                               ├── Header
                               ├── ScrollToTopButton
-                              ├── <main>
-                              │     ├── Hero (+ NeuralNetworkBackground)
-                              │     ├── Applications (Use Cases)
-                              │     ├── Founders (Team)
-                              │     └── Contact
+                              ├── Routes
+                              │     ├── /       → HomePage (Hero, Applications, Founders, Contact)
+                              │     └── /team   → TeamPage
                               ├── Footer
                               └── ElectricalCursorOverlay (Phase 6 site-wide sparks)
 ```
 
 - Content for nav + use cases: `src/data/siteContent.js`
-- Team data: hard-coded inside `src/components/Founders.jsx` (not in `siteContent.js`)
+- Team data: `src/data/teamContent.js` (`leadershipMembers`, empty `teamMembers`, `teamGroupPhoto: null`)
+- Shared member card: `src/components/TeamMemberCard.jsx`
 - Shared motion variants: `src/lib/animations.js`
 - Active-nav custom event: `src/lib/activeNavEvent.js`
 - Hero electrical-effect helpers: `src/lib/neuralEffects.js` (Phase 6)
@@ -74,13 +76,14 @@ index.html → src/main.jsx → src/App.jsx
 
 | URL | What it is |
 |-----|------------|
-| `/` | The entire website |
+| `/` | Homepage |
 | `#home` | Hero |
 | `#use-cases` | Use Cases |
-| `#team` | Leadership Team |
+| `#team` | Homepage Leadership Team |
 | `#contact` | Contact |
+| `/team` | Dedicated Team page (on GitHub `main`; **not** production-deployed) |
 
-There is **no** `/about`, `/technology`, `/products`, `/team` page, `/blog`, or legal page.
+There is **no** `/about`, `/technology`, `/products`, `/blog`, or legal page.
 
 ---
 
@@ -89,13 +92,14 @@ There is **no** `/about`, `/technology`, `/products`, `/team` page, `/blog`, or 
 1. Sticky header / primary nav
 2. Hero / landing (`#home`)
 3. Use Cases (`#use-cases`) — **5 cards** including Cryo-CMOS (on GitHub `main`; production still has 4 until the next Vercel deploy)
-4. Leadership Team (`#team`) — 4 people
+4. Leadership Team (`#team`) — 4 people + Meet the Team CTA (opens `/team`)
 5. Contact (`#contact`) — mailto form
 6. Footer
 7. Scroll progress bar (top)
 8. Scroll-to-top button
+9. Team page `/team` — same 4 leaders; no extra fabricated members
 
-**Not present:** About, Technology, Products, Careers, Research, News, Team group photo, social icon row.
+**Not present:** About, Technology, Products, Careers, Research, News, Team group photo, social icon row, LinkedIn links.
 
 ---
 
@@ -130,12 +134,12 @@ No group/team photograph exists in the repository.
 | Item | Value |
 |------|--------|
 | Platform | Vercel (confirmed live: `server: Vercel`, `x-vercel-cache: HIT`, region `bom1`) |
-| Config | `vercel.json` — `buildCommand: npm run build`, `outputDirectory: dist`, security headers |
+| Config | `vercel.json` — `buildCommand: npm run build`, `outputDirectory: dist`, security headers, exact rewrite `/team` → `/index.html` (**not deployed**) |
 | Linked project | `.vercel/project.json` — `projectName: spandanai` (gitignored) |
 | Custom domain | `https://spandanai.com/` is live and serving this codebase (same JS hash `index-DKRU34Cm.js`) |
 | Env vars | **None required.** No `.env` files |
 | Framework | Vite static output |
-| Rewrites / redirects | **None** in `vercel.json` |
+| Rewrites / redirects | Exact `/team` → `/index.html` in `vercel.json` (**not production-deployed**) |
 
 Live response for `/` is HTTP 200 with the security headers from `vercel.json` applied.
 
@@ -155,14 +159,15 @@ Live response for `/` is HTTP 200 with the security headers from `vercel.json` a
 | Phase 2A documentation commit | `c040b66` — `docs: propose Phase 2 messaging and SEO` |
 | Phase 6 feature commit | `5b8bf35` — `feat: add interactive electrical experience and UI polish` |
 | Phase 3 feature commit | `410d66e` — `feat: add Cryo-CMOS use case and responsive card layout` |
-| Remote push | **SUCCESS** (Phase 3 feature: normal fast-forward `6808462` → `410d66e`; no force). GitHub is **not** automatically connected to Vercel. |
-| Working tree | **Clean after the Phase 3 documentation commit.** Phase 3 is on GitHub `main`. **Not production-deployed.** |
+| Phase 5.5 feature commit | `c12e926` — `feat: add dedicated team page and routing` |
+| Remote push | **SUCCESS** (Phase 5.5 feature: normal fast-forward `cbb56de` → `c12e926`; no force). GitHub is **not** automatically connected to Vercel. |
+| Working tree | **Clean after the Phase 5.5 documentation commit.** Phase 5.5 is on GitHub `main`. **Not production-deployed.** |
 | `.gitignore` | Safe baseline (`node_modules/`, `dist/`, `.vercel/`, `.env*`, logs, OS/editor junk) |
 | LICENSE | **Absent** (intentionally not added; company decision pending) |
 | README | Professional project README (`README.md`) |
 | Package | `spandanai-website` |
-| Dependencies | Pinned / reproducible (no Phase 3 dependency additions) |
-| Build | `npm run build` **pass** (Phase 3 hashes: `index-t7tdd00u.js` 352.81 kB, `index-qxWK6X7a.css` 18.17 kB, Manrope WOFF2 `manrope-latin-wght-normal-DHIcAJRg.woff2` 24.83 kB) |
+| Dependencies | Pinned / reproducible. Phase 5.5 added only `react-router-dom` **7.18.3**. |
+| Build | `npm run build` **pass** (Phase 5.5: `index-BD4RNRl7.js` 400.26 kB, `index-DrMLXFnk.css` 18.83 kB, Manrope WOFF2 `manrope-latin-wght-normal-DHIcAJRg.woff2` 24.83 kB) |
 
 ---
 
@@ -183,7 +188,7 @@ Live response for `/` is HTTP 200 with the security headers from `vercel.json` a
 - No tests / lint / typecheck.
 - Use-case hover variant `cardHover` is defined and unused.
 - Empty `src/assets/` directory.
-- Team data lives in the component, not in `siteContent.js`.
+- Team data for extra members lives in `src/data/teamContent.js` (`teamMembers` is currently empty). Leadership data was moved out of `Founders.jsx`.
 - Filenames with spaces (`K. Dharanidhar G.jpg`, etc.).
 
 ---
@@ -191,7 +196,7 @@ Live response for `/` is HTTP 200 with the security headers from `vercel.json` a
 ## Important constraints
 
 - **Do not treat this as a Next.js app.** It is a Vite + React SPA.
-- Adding extra URL routes requires new routing infrastructure (or extra HTML entries).
+- Adding extra URL routes now uses React Router (`/team`). Further routes still need matching Vercel rewrites for direct load.
 - Contact cannot store submissions without adding a backend/service.
 - Canvas hero is already the interaction surface; replacing it with WebGL/Three.js is not required for the neuron idea.
 - Prior July 2026 reports are partially stale (favicons, OG, robots, sitemap, headers, team photos, compressed logos are now present).

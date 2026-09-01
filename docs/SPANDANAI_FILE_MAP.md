@@ -11,8 +11,12 @@ Paths are relative to the repository root.
 | Feature | File(s) |
 |---------|---------|
 | HTML document, SEO meta, favicons, OG/Twitter tags, canonical | `index.html` |
-| React mount | `src/main.jsx` |
-| Page composition (section order) | `src/App.jsx` |
+| React mount | `src/main.jsx` (`BrowserRouter`) |
+| Shared application shell | `src/App.jsx` |
+| Homepage composition | `src/pages/HomePage.jsx` |
+| Team page composition (`/team`) | `src/pages/TeamPage.jsx` |
+| Client unmatched-route fallback | `src/pages/NotFoundPage.jsx` |
+| Route change scroll (top unless hash) | `src/components/RouteScrollManager.jsx` |
 | Global CSS, CSS variables, reduced-motion, header/scroll-button styles, Manrope `@font-face`, selection highlight, body `user-select: none` with form exceptions | `src/index.css` |
 | Tailwind theme (colors, shadow, Manrope `fontFamily.sans`) | `tailwind.config.js` |
 | PostCSS | `postcss.config.cjs` |
@@ -25,8 +29,9 @@ Paths are relative to the repository root.
 
 | Feature | File(s) |
 |---------|---------|
-| Sticky navbar, mobile drawer, active-section highlighting, “Partner With Us” | `src/components/Header.jsx` |
-| Nav link labels and hrefs (Home, Use Cases, Team, Contact) | `src/data/siteContent.js` (`navigationLinks`) |
+| Sticky navbar, mobile drawer, active-section highlighting, route-aware `/team` links, “Partner With Us” | `src/components/Header.jsx` |
+| Nav link labels and hash hrefs (Home, Use Cases, Team, Contact) | `src/data/siteContent.js` (`navigationLinks`) |
+| Resolve homepage vs `/team` destinations | `src/lib/navHrefs.js` |
 | Custom event that forces active nav after CTA click | `src/lib/activeNavEvent.js` |
 | Top scroll progress bar | `src/components/ScrollProgressBar.jsx` |
 | Floating scroll-to-top button (hamburger-mode only; `scrollY > innerHeight * 1.1`) | `src/components/ScrollToTopButton.jsx`, `.scroll-top-button` in `src/index.css` |
@@ -65,13 +70,18 @@ To add or edit a use case, the data change belongs in `src/data/siteContent.js`.
 
 | Feature | File(s) |
 |---------|---------|
-| Team section UI and **hard-coded member array** | `src/components/Founders.jsx` |
+| Homepage Leadership section + Meet the Team CTA | `src/components/Founders.jsx` |
+| Reusable member card | `src/components/TeamMemberCard.jsx` |
+| **Team data** (`leadershipMembers`, empty `teamMembers`, `teamGroupPhoto`) | `src/data/teamContent.js` |
+| Dedicated `/team` page | `src/pages/TeamPage.jsx` |
 | N.R. Rohan photo | `public/images/N.R. Rohan.jpg` |
 | K. Dharanidhar G photo | `public/images/K. Dharanidhar G.jpg` |
 | S. Aniruddhan photo | `public/images/S. Aniruddhan.jpg` |
 | V. S. Chakravarthy photo | `public/images/V. S. Chakravarthy.jpg` |
 
-There is **no** LinkedIn field, no clickable photo, and **no group photo file**.
+LinkedIn fields exist as `null` only. Cards are **not** clickable. **No group photo file.** Additional `teamMembers` count is **0**.
+
+How to add a real future member: `docs/TEAM_CONTENT_GUIDE.md`.
 
 ---
 
@@ -104,7 +114,7 @@ Destination address (hard-coded in both files): `spandanai.sard@gmail.com`
 
 | Feature | File(s) |
 |---------|---------|
-| Vercel build command, output dir, security headers | `vercel.json` |
+| Vercel build command, output dir, security headers, `/team` SPA rewrite | `vercel.json` |
 | Local Vercel project link (gitignored) | `.vercel/project.json` |
 | Production output | `dist/` (generated; do not treat as source) |
 
@@ -128,6 +138,9 @@ Destination address (hard-coded in both files): `spandanai.sard@gmail.com`
 | `docs/PHASE_6_COMPLETION_REPORT.md` | Phase 6 GitHub landing report (committed/pushed; not deployed) |
 | `docs/PHASE_3_CRYO_CMOS_PROTOTYPE.md` | Phase 3 Cryo-CMOS + five-card layout history and final acceptance |
 | `docs/PHASE_3_COMPLETION_REPORT.md` | Phase 3 GitHub landing report (committed/pushed; not deployed) |
+| `docs/PHASE_5_5_TEAM_PAGE_PROTOTYPE.md` | Phase 5.5 Team page + router history and final acceptance |
+| `docs/PHASE_5_5_COMPLETION_REPORT.md` | Phase 5.5 GitHub landing report (committed/pushed; not deployed) |
+| `docs/TEAM_CONTENT_GUIDE.md` | How to add real members / photos later |
 
 ---
 
@@ -149,6 +162,6 @@ Destination address (hard-coded in both files): `spandanai.sard@gmail.com`
 |-------------|---------------|
 | New Cryo-CMOS use case | `src/data/siteContent.js`, possibly `src/components/Applications.jsx` (grid) |
 | GitHub upload prep | `.gitignore`, `README.md`, new git repo (none exists), `package.json` |
-| Clickable LinkedIn photos | `src/components/Founders.jsx`, ideally also `src/data/siteContent.js` |
+| Clickable LinkedIn photos | `src/data/teamContent.js` (`linkedin`), `src/components/TeamMemberCard.jsx` (blocked until real URLs) |
 | Neuron-firing hero | `src/components/NeuralNetworkBackground.jsx`, `src/lib/neuralEffects.js` (Phase 6 electrical network shipped on GitHub; not a full biological neuron model) |
-| Team group photo | New asset under `public/images/`, `src/components/Founders.jsx` and/or `src/App.jsx` |
+| Team group photo | `src/data/teamContent.js` (`teamGroupPhoto`), `src/pages/TeamPage.jsx` (renders only when a real asset is set) |
