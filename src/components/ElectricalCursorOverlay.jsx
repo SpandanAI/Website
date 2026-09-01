@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import {
   clamp,
   dischargeEnvelope,
+  generateClickDischarge,
   generateMicroSparkBranches,
   randomInRange
 } from "../lib/neuralEffects";
@@ -19,15 +20,21 @@ const GLOBAL_SPARK_JITTER = 2.6;
 const GLOBAL_SPARK_OFFSET_PX = 8;
 const GLOBAL_FLASH_ONLY_CHANCE = 0.11;
 const GLOBAL_SPARK_INTENSITY = 0.55;
-const GLOBAL_CLICK_INTENSITY = 0.72;
-const GLOBAL_TAP_INTENSITY = 0.6;
-const GLOBAL_CLICK_RADIUS_SCALE = 1.15;
-const GLOBAL_CLICK_DURATION_MIN_MS = 160;
-const GLOBAL_CLICK_DURATION_MAX_MS = 240;
-const GLOBAL_TAP_RADIUS_MIN = 14;
-const GLOBAL_TAP_RADIUS_MAX = 28;
-const GLOBAL_TAP_DURATION_MIN_MS = 140;
+const GLOBAL_CLICK_INTENSITY = 0.86;
+const GLOBAL_TAP_INTENSITY = 0.76;
+const GLOBAL_CLICK_DURATION_MIN_MS = 180;
+const GLOBAL_CLICK_DURATION_MAX_MS = 250;
+const GLOBAL_TAP_DURATION_MIN_MS = 160;
 const GLOBAL_TAP_DURATION_MAX_MS = 220;
+const GLOBAL_CLICK_FLASH_MIN_MS = 55;
+const GLOBAL_CLICK_FLASH_MAX_MS = 95;
+const GLOBAL_CLICK_FLASH_RADIUS_MIN = 3.5;
+const GLOBAL_CLICK_FLASH_RADIUS_MAX = 7.5;
+const GLOBAL_CLICK_OUTER_ALPHA = 0.4;
+const GLOBAL_CLICK_MAIN_ALPHA = 0.94;
+const GLOBAL_CLICK_CORE_ALPHA = 0.52;
+const GLOBAL_CLICK_ORIGIN_JITTER = 2;
+const GLOBAL_TAP_ORIGIN_JITTER = 1.6;
 const GLOBAL_SPARK_OUTER_ALPHA = 0.34;
 const GLOBAL_SPARK_CORE_ALPHA = 0.88;
 const GLOBAL_SPARK_FLASH_ALPHA = 0.3;
@@ -144,30 +151,68 @@ export default function ElectricalCursorOverlay() {
       for (let index = 0; index < activeSparks.length; index += 1) {
         const spark = activeSparks[index];
         const progress = clamp((now - spark.createdAt) / spark.duration, 0, 1);
+        const isManual = spark.source === "click" || spark.source === "tap";
         const envelope = dischargeEnvelope(progress) * (spark.intensity ?? GLOBAL_SPARK_INTENSITY);
-        if (envelope <= 0) continue;
+        if (!isManual && envelope <= 0) continue;
+        const flashLife = spark.flashDuration || spark.duration;
+        const flashProgress = clamp((now - spark.createdAt) / flashLife, 0, 1);
+        let flashEnvelope = envelope;
+        if (isManual) {
+          if (flashProgress >= 1) flashEnvelope = 0;
+          else if (flashProgress < 0.48) flashEnvelope = 1;
+          else flashEnvelope = (1 - (flashProgress - 0.48) / 0.52) ** 1.7;
+        }
 
-        const flashRadius = spark.flashRadius * (0.75 + progress * 0.5);
-        const flash = context.createRadialGradient(
-          spark.x,
-          spark.y,
-          0,
-          spark.x,
-          spark.y,
-          flashRadius
-        );
-        flash.addColorStop(0, `rgba(37, 99, 235, ${GLOBAL_SPARK_FLASH_ALPHA * envelope})`);
-        flash.addColorStop(0.4, `rgba(8, 110, 140, ${0.16 * envelope})`);
-        flash.addColorStop(1, "rgba(37, 99, 235, 0)");
-        context.fillStyle = flash;
-        context.beginPath();
-        context.arc(spark.x, spark.y, flashRadius, 0, Math.PI * 2);
-        context.fill();
+        if (flashEnvelope > 0) {
+          const flashRadius = isManual
+            ? spark.flashRadius
+            : spark.flashRadius * (0.75 + progress * 0.5);
+          const flash = context.createRadialGradient(spark.x, spark.y, 0, spark.x, spark.y, flashRadius);
+          flash.addColorStop(0, `rgba(37, 99, 235, ${(isManual ? 0.55 : GLOBAL_SPARK_FLASH_ALPHA) * flashEnvelope})`);
+          flash.addColorStop(0.45, `rgba(8, 110, 140, ${(isManual ? 0.22 : 0.16) * flashEnvelope})`);
+          flash.addColorStop(1, "rgba(37, 99, 235, 0)");
+          context.fillStyle = flash;
+          context.beginPath();
+          context.arc(spark.x, spark.y, flashRadius, 0, Math.PI * 2);
+          context.fill();
+        }
 
-        for (let branchIndex = 0; branchIndex < spark.branches.length; branchIndex += 1) {
-          const points = spark.branches[branchIndex];
-          drawPolyline(points, `rgba(37, 99, 235, ${GLOBAL_SPARK_OUTER_ALPHA * envelope})`, 2.35);
-          drawPolyline(points, `rgba(8, 110, 140, ${GLOBAL_SPARK_CORE_ALPHA * envelope})`, 1.05);
+        const polylines = spark.branches;
+        for (let branchIndex = 0; branchIndex < polylines.length; branchIndex += 1) {
+          const points = polylines[branchIndex];
+          const life = spark.branchLives?.[branchIndex] ?? 1;
+          if (progress > life) continue;
+          const localProgress = life >= 0.999 ? progress : clamp(progress / life, 0, 1);
+          const branchEnvelope = dischargeEnvelope(localProgress) * (spark.intensity ?? GLOBAL_SPARK_INTENSITY);
+          if (branchEnvelope <= 0) continue;
+          if (isManual) {
+            const level = spark.branchLevels?.[branchIndex] ?? (branchIndex === 0 ? "primary" : "secondary");
+            const weight = spark.branchWeights?.[branchIndex] ?? 1;
+            const widthScale = level === "primary" ? 1 : weight;
+            const alphaScale = level === "primary" ? 1 : 0.55 + weight * 0.35;
+            const outerW = (spark.energy ? 4.05 : 3.45) * widthScale;
+            const mainW = (spark.energy ? 2.05 : 1.72) * widthScale;
+            const coreW = 0.72 * (level === "primary" ? 1 : Math.max(0.45, widthScale * 0.7));
+            drawPolyline(points, `rgba(37, 99, 235, ${GLOBAL_CLICK_OUTER_ALPHA * branchEnvelope * alphaScale})`, outerW);
+            drawPolyline(points, `rgba(8, 110, 140, ${GLOBAL_CLICK_MAIN_ALPHA * branchEnvelope * alphaScale})`, mainW);
+            drawPolyline(points, `rgba(186, 230, 253, ${GLOBAL_CLICK_CORE_ALPHA * branchEnvelope * alphaScale})`, coreW);
+          } else {
+            drawPolyline(points, `rgba(37, 99, 235, ${GLOBAL_SPARK_OUTER_ALPHA * branchEnvelope})`, 2.35);
+            drawPolyline(points, `rgba(8, 110, 140, ${GLOBAL_SPARK_CORE_ALPHA * branchEnvelope})`, 1.05);
+          }
+        }
+
+        if (isManual && spark.fragments?.length) {
+          for (let fragmentIndex = 0; fragmentIndex < spark.fragments.length; fragmentIndex += 1) {
+            const life = spark.fragmentLives?.[fragmentIndex] ?? 0.7;
+            if (progress > life) continue;
+            const fragmentEnvelope =
+              dischargeEnvelope(clamp(progress / life, 0, 1)) ** 2 * (spark.intensity ?? GLOBAL_SPARK_INTENSITY);
+            if (fragmentEnvelope <= 0) continue;
+            const points = spark.fragments[fragmentIndex];
+            drawPolyline(points, `rgba(37, 99, 235, ${0.32 * fragmentEnvelope})`, 2.1);
+            drawPolyline(points, `rgba(8, 110, 140, ${0.8 * fragmentEnvelope})`, 0.95);
+          }
         }
       }
     };
@@ -218,28 +263,43 @@ export default function ElectricalCursorOverlay() {
 
       if (isClick) {
         intensity = GLOBAL_CLICK_INTENSITY;
-        radiusMin = GLOBAL_SPARK_RADIUS_MIN * GLOBAL_CLICK_RADIUS_SCALE;
-        radiusMax = GLOBAL_SPARK_RADIUS_MAX * GLOBAL_CLICK_RADIUS_SCALE;
         durationMin = GLOBAL_CLICK_DURATION_MIN_MS;
         durationMax = GLOBAL_CLICK_DURATION_MAX_MS;
-        branchMin = 2;
-        branchMax = 3;
-        flashOnlyChance = 0;
-        originJitter = 4;
+        originJitter = GLOBAL_CLICK_ORIGIN_JITTER;
       } else if (isTap) {
         intensity = GLOBAL_TAP_INTENSITY;
-        radiusMin = GLOBAL_TAP_RADIUS_MIN;
-        radiusMax = GLOBAL_TAP_RADIUS_MAX;
         durationMin = GLOBAL_TAP_DURATION_MIN_MS;
         durationMax = GLOBAL_TAP_DURATION_MAX_MS;
-        branchMin = 1;
-        branchMax = 2;
-        flashOnlyChance = 0;
-        originJitter = 3;
+        originJitter = GLOBAL_TAP_ORIGIN_JITTER;
       }
 
       const originX = clamp(pointer.x + (Math.random() - 0.5) * 2 * originJitter, 0, width);
       const originY = clamp(pointer.y + (Math.random() - 0.5) * 2 * originJitter, 0, height);
+
+      if (isClick || isTap) {
+        const discharge = generateClickDischarge(originX, originY, width, height, { compact: isTap });
+        const energy = discharge.variant === "energy";
+        activeSparks.push({
+          x: originX,
+          y: originY,
+          createdAt: now,
+          duration: randomInRange(durationMin, durationMax),
+          flashDuration: randomInRange(GLOBAL_CLICK_FLASH_MIN_MS, GLOBAL_CLICK_FLASH_MAX_MS),
+          flashRadius: randomInRange(GLOBAL_CLICK_FLASH_RADIUS_MIN, GLOBAL_CLICK_FLASH_RADIUS_MAX) * (energy ? 1.15 : 1),
+          intensity: intensity * (energy ? 1.12 : 1),
+          source,
+          energy,
+          branches: discharge.branches,
+          fragments: discharge.fragments,
+          branchLives: discharge.branchLives,
+          fragmentLives: discharge.fragmentLives,
+          branchLevels: discharge.branchLevels,
+          branchWeights: discharge.branchWeights
+        });
+        startLoop();
+        return;
+      }
+
       const radius = randomInRange(radiusMin, radiusMax);
       const flashOnly = Math.random() < flashOnlyChance;
       const maxBranches = flashOnly ? 0 : Math.round(randomInRange(branchMin, branchMax));
