@@ -29,3 +29,9 @@ Thumbs.db
 *.swp
 *.swo
 *~
+
+# Playwright artifacts (keep source tests and playwright.config.js)
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
