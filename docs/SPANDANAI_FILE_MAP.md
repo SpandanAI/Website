@@ -153,6 +153,8 @@ Destination address (hard-coded in both files): `spandanai.sard@gmail.com`
 | `docs/PHASE_7D_COMPLETION_REPORT.md` | Phase 7D GitHub landing report (committed/pushed; not deployed) |
 | `docs/PHASE_7D_1_TEAM_CARD_HOVER_POLISH_PROTOTYPE.md` | Phase 7D.1 card hover timing prototype history |
 | `docs/PHASE_7D_1_COMPLETION_REPORT.md` | Phase 7D.1 GitHub landing report (committed/pushed; not deployed) |
+| `docs/PHASE_7E_DEAD_CODE_ASSET_CLEANUP_PROTOTYPE.md` | Phase 7E dead code/asset cleanup prototype history |
+| `docs/PHASE_7E_COMPLETION_REPORT.md` | Phase 7E GitHub landing report (committed/pushed; not deployed) |
 
 ---
 
@@ -160,11 +162,7 @@ Destination address (hard-coded in both files): `spandanai.sard@gmail.com`
 
 | Path | Notes |
 |------|--------|
-| `src/assets/` | Empty directory |
-| `public/images/logo-dark.webp` | Not referenced by any component |
-| `public/images/logo-dark.png` | Not referenced |
-| `public/images/logo-light.png` | Not referenced (WebP is used instead) |
-| `src/lib/animations.js` → `cardHover` | Exported, never imported |
+| `src/assets/` | Empty directory (not Git-tracked) |
 
 ---
 

@@ -1,6 +1,6 @@
 # SpandanAI — Project State Snapshot
 
-**Snapshot date:** 6 September 2026 (updated after Phase 7D.1 GitHub landing; production remains undeployed)  
+**Snapshot date:** 6 September 2026 (updated after Phase 7E completion; production remains undeployed)  
 **Production URL:** https://spandanai.com/  
 **Workspace:** local website source directory (absolute filesystem path omitted for the public GitHub repository)  
 **Scope:** Factual state of the repository *today*. No recommendations.
@@ -32,6 +32,10 @@ Phase 2A messaging/SEO proposal completed; no application changes implemented. S
 **Phase 7D:** COMPLETE / HUMAN APPROVED. Feature commit `09d7cac` (`perf: optimize leadership images`). GitHub: **PUSHED** to `origin/main`. Production: **NOT DEPLOYED.** Leadership JPEG downscale/recompress, homepage `loading="lazy"`, intrinsic `width`/`height` on cards and logo. Wave, OG, unused logos, and electrical files not changed. See `docs/PHASE_7D_IMAGE_PERFORMANCE_PROTOTYPE.md` and `docs/PHASE_7D_COMPLETION_REPORT.md`.
 
 **Phase 7D.1:** COMPLETE / HUMAN APPROVED. Feature commit `cf23a2a` (`feat: refine team card hover interaction`). GitHub: **PUSHED** to `origin/main`. Production: **NOT DEPLOYED.** Leadership card hover: −4px / 150ms tween `[0.22, 1, 0.36, 1]`; no 7D.2. See `docs/PHASE_7D_1_TEAM_CARD_HOVER_POLISH_PROTOTYPE.md` and `docs/PHASE_7D_1_COMPLETION_REPORT.md`.
+
+**Phase 7E:** COMPLETE / HUMAN APPROVED. Feature commit `c131a30` (`chore: remove unused code and assets`). GitHub: **PUSHED** to `origin/main`. Production: **NOT DEPLOYED.** Unused `cardHover` / `sectionTransition` removed; unused `logo-light.png` / `logo-dark.webp` / `logo-dark.png` deleted (**63,686** bytes). JS/CSS bundle hashes unchanged vs 7D.1 (already tree-shaken). See `docs/PHASE_7E_DEAD_CODE_ASSET_CLEANUP_PROTOTYPE.md` and `docs/PHASE_7E_COMPLETION_REPORT.md`.
+
+**Phase 7F:** NOT STARTED. Next objective: lightweight automated smoke testing. Production: **NOT DEPLOYED.**
 
 **Phase 1A attribution correction:** Cursor Agent appeared as a GitHub contributor because Phase 1 commits included a `Co-authored-by: Cursor` trailer. Those post-stakeholder commits were recreated with identical trees for `Korak Das` / `korakdas1` only. The stakeholder `Initial commit` (`e81f2ba`) was not rewritten. `git push --force-with-lease` was used after verifying the remote tip had not changed. No application source or behavior changed.
 
@@ -124,9 +128,6 @@ All under `public/` (copied to `dist/` on build):
 | Path | Size | Dimensions | Referenced? |
 |------|------|------------|-------------|
 | `public/images/logo-light.webp` | 12 KB | 320×213 | Yes — Header, Footer |
-| `public/images/logo-light.png` | 24 KB | 320×213 | No (dead asset) |
-| `public/images/logo-dark.webp` | 4.9 KB | 280×201 | No (dead asset) |
-| `public/images/logo-dark.png` | 34 KB | 280×201 | No (dead asset) |
 | `public/images/wave-background.png` | 55 KB | 1024×442 | Yes — Hero CSS background |
 | `public/images/og-image.png` | 84 KB | 1200×630 | Yes — Open Graph / Twitter |
 | `public/images/N.R. Rohan.jpg` | 19,906 | 507×389 | Yes — Team |
@@ -182,8 +183,10 @@ Live response for `/` is HTTP 200 with the security headers from `vercel.json` a
 | Phase 7D documentation commit | `docs: record Phase 7D completion` |
 | Phase 7D.1 feature commit | `cf23a2a` — `feat: refine team card hover interaction` |
 | Phase 7D.1 documentation commit | `docs: record Phase 7D.1 completion` |
-| Remote push | **SUCCESS** (Phase 7D.1: normal fast-forward; no force). GitHub is **not** automatically connected to Vercel. |
-| Working tree | **Clean after the Phase 7D.1 documentation commit.** Phase 7D.1 is on GitHub `main`. **Not production-deployed.** |
+| Phase 7E feature commit | `c131a30` — `chore: remove unused code and assets` |
+| Phase 7E documentation commit | `docs: record Phase 7E completion` |
+| Remote push | **SUCCESS** (Phase 7E: normal fast-forward; no force). GitHub is **not** automatically connected to Vercel. |
+| Working tree | **Clean after Phase 7E push** (at the 7E completion snapshot). **Not production-deployed.** |
 | `.gitignore` | Safe baseline (`node_modules/`, `dist/`, `.vercel/`, `.env*`, logs, OS/editor junk) |
 | LICENSE | **Absent** (intentionally not added; company decision pending) |
 | README | Professional project README (`README.md`) |
@@ -208,12 +211,11 @@ Live response for `/` is HTTP 200 with the security headers from `vercel.json` a
 - Brand name **SpandanAI** appears in the title, H1, header text, and footer text. The header logo image is decorative (`alt=""`). The footer logo image still uses `alt="SpandanAI"`.
 - React/Vite are now pinned; do not treat `"latest"` as current.
 - No tests / lint / typecheck.
-- Use-case hover variant `cardHover` is defined and unused.
 - Empty `src/assets/` directory.
 - Team data for extra members lives in `src/data/teamContent.js` (`teamMembers` is currently empty). Leadership data was moved out of `Founders.jsx`.
 - Filenames with spaces (`K. Dharanidhar G.jpg`, etc.).
 
-**Pending engineering (not defects of this landing):** Phase 7E dead assets, Phase 7F tests, Phase 7G technical SEO, A11Y-07 footer focus.
+**Pending engineering (not defects of this landing):** Phase 7F tests, Phase 7G technical SEO, A11Y-07 footer focus.
 
 **Pending stakeholder input:** LinkedIn URLs, extra team members, group photo, Phase 2B wording.
 
