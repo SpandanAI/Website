@@ -2,7 +2,7 @@
 
 Derived from `docs/PHASE_7A_ENGINEERING_QUALITY_AUDIT.md`.
 
-**Status:** Phase 7B COMPLETE / HUMAN APPROVED / PUSHED (`bc97490`). Phase 6B COMPLETE / HUMAN APPROVED / PUSHED (`7e13358`). Phase 7C COMPLETE / HUMAN APPROVED / PUSHED (`59c7e8a`). Phase 7D COMPLETE / HUMAN APPROVED / PUSHED (`09d7cac`). Phase 7D.1 COMPLETE / HUMAN APPROVED / PUSHED (`cf23a2a`). Phase 7E COMPLETE / HUMAN APPROVED / PUSHED (`c131a30`). Phase 7F is **NOT STARTED**.  
+**Status:** Phase 7B COMPLETE / HUMAN APPROVED / PUSHED (`bc97490`). Phase 6B COMPLETE / HUMAN APPROVED / PUSHED (`7e13358`). Phase 7C COMPLETE / HUMAN APPROVED / PUSHED (`59c7e8a`). Phase 7D COMPLETE / HUMAN APPROVED / PUSHED (`09d7cac`). Phase 7D.1 COMPLETE / HUMAN APPROVED / PUSHED (`cf23a2a`). Phase 7E COMPLETE / HUMAN APPROVED / PUSHED (`c131a30`). Phase 7F COMPLETE / HUMAN APPROVED / PUSHED (`4545cde`). Phase 7G is **NOT STARTED**.  
 **Production:** NOT DEPLOYED.
 
 This is a small semiconductor marketing SPA. Do not migrate to Next.js, Redux, Three.js, a design-system package, or a large E2E estate unless a later audit shows a concrete need.
@@ -16,6 +16,7 @@ This is a small semiconductor marketing SPA. Do not migrate to Next.js, Redux, T
 - Phase 7D image performance is complete and pushed. Do not reopen it unless a regression appears.
 - Phase 7D.1 card hover is complete and pushed. Do not retune it.
 - Phase 7E dead-code/asset cleanup is complete and pushed. Do not restore the deleted unused logos or unused animation exports.
+- Phase 7F Playwright smoke tests are complete and pushed. Do not add ESLint, Vitest, or CI unless a later phase explicitly decides to.
 - Implement remaining phases one at a time. Re-run `npm run build` after product changes.
 - Do not mix stakeholder-blocked content (LinkedIn, extra members, group photo, Phase 2B copy) into these engineering phases.
 - Production remains an older Vercel deploy until a human explicitly deploys.
@@ -183,6 +184,8 @@ Do not mix with image, SEO, or responsive work unless explicitly requested. Hero
 
 ## Phase 7F — Lightweight testing / tooling
 
+**Status:** COMPLETE / HUMAN APPROVED. **PUSHED.** Production: **NOT DEPLOYED.** See `docs/PHASE_7F_COMPLETION_REPORT.md`.
+
 **Objective:** Add a **small** safety net proportional to a marketing SPA. Not a full test pyramid.
 
 **Findings addressed:** TOOL-01.
@@ -199,13 +202,15 @@ Do not mix with image, SEO, or responsive work unless explicitly requested. Hero
 
 **Do not add:** TypeScript migration, huge E2E coverage, visual regression SaaS, CI matrix of browsers, unless the team later wants it.
 
-**Expected files:** `package.json` scripts, Playwright config, 1–2 spec files, optional ESLint config.
+**This prototype:** Playwright smokes only. **ESLint = DEFERRED / OPTIONAL.** No Vitest/Jest. No GitHub Actions.
+
+**Expected files:** `package.json` scripts, `playwright.config.js`, `tests/*.spec.js`.
 
 **Risk:** Medium (new deps — only in this phase, with human approval). Keep versions pinned.
 
 **Cursor autonomy:** **75% Cursor / 25% human** (choose runner, review scripts).
 
-**Human testing required:** YES — confirm `npm test` / `npx playwright test` locally.
+**Human testing required:** YES — run `npm run test:e2e` / `npm run test:e2e:headed` locally.
 
 **Stakeholder involvement:** NO
 

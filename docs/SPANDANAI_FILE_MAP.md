@@ -21,8 +21,10 @@ Paths are relative to the repository root.
 | Global CSS, CSS variables, reduced-motion, header/scroll-button styles, Manrope `@font-face`, selection highlight, body `user-select: none` with form exceptions; `--navbar-height` compact token uses `@media not all and (min-width: 768px)` (Tailwind `md` inverse); short-viewport Hero spacing (`.hero-section` / `.hero-copy` / `.hero-lede` / `.hero-cta-row`) | `src/index.css` |
 | Tailwind theme (colors, shadow, Manrope `fontFamily.sans`) | `tailwind.config.js` |
 | PostCSS | `postcss.config.cjs` |
-| npm scripts and dependencies | `package.json` |
+| npm scripts and dependencies | `package.json` (`dev`, `build`, `preview`; Phase 7F prototype also `test:e2e`, `test:e2e:headed`, `test:e2e:ui`) |
 | Locked versions | `package-lock.json` |
+| Playwright smoke config (Phase 7F prototype) | `playwright.config.js` |
+| Playwright smoke tests (Phase 7F prototype) | `tests/*.spec.js`, `tests/helpers.js` |
 
 ---
 
@@ -155,6 +157,8 @@ Destination address (hard-coded in both files): `spandanai.sard@gmail.com`
 | `docs/PHASE_7D_1_COMPLETION_REPORT.md` | Phase 7D.1 GitHub landing report (committed/pushed; not deployed) |
 | `docs/PHASE_7E_DEAD_CODE_ASSET_CLEANUP_PROTOTYPE.md` | Phase 7E dead code/asset cleanup prototype history |
 | `docs/PHASE_7E_COMPLETION_REPORT.md` | Phase 7E GitHub landing report (committed/pushed; not deployed) |
+| `docs/PHASE_7F_AUTOMATED_TESTING_PROTOTYPE.md` | Phase 7F Playwright smoke-test prototype history |
+| `docs/PHASE_7F_COMPLETION_REPORT.md` | Phase 7F GitHub landing report (committed/pushed; not deployed) |
 
 ---
 
