@@ -57,16 +57,6 @@ export const viewportOnce = {
   amount: 0.2
 };
 
-export const sectionTransition = {
-  duration: 0.6,
-  ease: [0.4, 0, 0.2, 1]
-};
-
 export const buttonHover = {
   scale: 1.03
-};
-
-export const cardHover = {
-  y: -6,
-  boxShadow: "0 24px 80px rgba(15, 23, 42, 0.16)"
 };
