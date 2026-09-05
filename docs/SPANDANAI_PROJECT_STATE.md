@@ -1,6 +1,6 @@
 # SpandanAI — Project State Snapshot
 
-**Snapshot date:** 6 September 2026 (updated after Phase 7D GitHub landing; production remains undeployed)  
+**Snapshot date:** 6 September 2026 (updated after Phase 7D.1 GitHub landing; production remains undeployed)  
 **Production URL:** https://spandanai.com/  
 **Workspace:** local website source directory (absolute filesystem path omitted for the public GitHub repository)  
 **Scope:** Factual state of the repository *today*. No recommendations.
@@ -31,7 +31,7 @@ Phase 2A messaging/SEO proposal completed; no application changes implemented. S
 
 **Phase 7D:** COMPLETE / HUMAN APPROVED. Feature commit `09d7cac` (`perf: optimize leadership images`). GitHub: **PUSHED** to `origin/main`. Production: **NOT DEPLOYED.** Leadership JPEG downscale/recompress, homepage `loading="lazy"`, intrinsic `width`/`height` on cards and logo. Wave, OG, unused logos, and electrical files not changed. See `docs/PHASE_7D_IMAGE_PERFORMANCE_PROTOTYPE.md` and `docs/PHASE_7D_COMPLETION_REPORT.md`.
 
-**Phase 7D.1:** NOT STARTED (team card hover micro-polish).
+**Phase 7D.1:** COMPLETE / HUMAN APPROVED. Feature commit `cf23a2a` (`feat: refine team card hover interaction`). GitHub: **PUSHED** to `origin/main`. Production: **NOT DEPLOYED.** Leadership card hover: −4px / 150ms tween `[0.22, 1, 0.36, 1]`; no 7D.2. See `docs/PHASE_7D_1_TEAM_CARD_HOVER_POLISH_PROTOTYPE.md` and `docs/PHASE_7D_1_COMPLETION_REPORT.md`.
 
 **Phase 1A attribution correction:** Cursor Agent appeared as a GitHub contributor because Phase 1 commits included a `Co-authored-by: Cursor` trailer. Those post-stakeholder commits were recreated with identical trees for `Korak Das` / `korakdas1` only. The stakeholder `Initial commit` (`e81f2ba`) was not rewritten. `git push --force-with-lease` was used after verifying the remote tip had not changed. No application source or behavior changed.
 
@@ -180,14 +180,16 @@ Live response for `/` is HTTP 200 with the security headers from `vercel.json` a
 | Phase 7C documentation commit | `docs: record Phase 7C completion` |
 | Phase 7D feature commit | `09d7cac` — `perf: optimize leadership images` |
 | Phase 7D documentation commit | `docs: record Phase 7D completion` |
-| Remote push | **SUCCESS** (Phase 7D: normal fast-forward; no force). GitHub is **not** automatically connected to Vercel. |
-| Working tree | **Clean after the Phase 7D documentation commit.** Phase 7D is on GitHub `main`. **Not production-deployed.** |
+| Phase 7D.1 feature commit | `cf23a2a` — `feat: refine team card hover interaction` |
+| Phase 7D.1 documentation commit | `docs: record Phase 7D.1 completion` |
+| Remote push | **SUCCESS** (Phase 7D.1: normal fast-forward; no force). GitHub is **not** automatically connected to Vercel. |
+| Working tree | **Clean after the Phase 7D.1 documentation commit.** Phase 7D.1 is on GitHub `main`. **Not production-deployed.** |
 | `.gitignore` | Safe baseline (`node_modules/`, `dist/`, `.vercel/`, `.env*`, logs, OS/editor junk) |
 | LICENSE | **Absent** (intentionally not added; company decision pending) |
 | README | Professional project README (`README.md`) |
 | Package | `spandanai-website` |
 | Dependencies | Pinned / reproducible. Phase 5.5 added only `react-router-dom` **7.18.3**. |
-| Build | `npm run build` **pass** (Phase 7D: `index-pLTBtr_j.js` 407.93 kB gzip 130.46 kB, `index-D5ihWw1E.css` 19.85 kB gzip 5.30 kB, Manrope WOFF2 24.83 kB). |
+| Build | `npm run build` **pass** (Phase 7D.1: `index-DCdKucgy.js` 407.96 kB gzip 130.48 kB, `index-D5ihWw1E.css` 19.85 kB gzip 5.30 kB, Manrope WOFF2 24.83 kB). |
 
 ---
 
@@ -211,7 +213,7 @@ Live response for `/` is HTTP 200 with the security headers from `vercel.json` a
 - Team data for extra members lives in `src/data/teamContent.js` (`teamMembers` is currently empty). Leadership data was moved out of `Founders.jsx`.
 - Filenames with spaces (`K. Dharanidhar G.jpg`, etc.).
 
-**Pending engineering (not defects of this landing):** Phase 7D.1 team card hover micro-polish, Phase 7E dead assets, Phase 7F tests, Phase 7G technical SEO, A11Y-07 footer focus.
+**Pending engineering (not defects of this landing):** Phase 7E dead assets, Phase 7F tests, Phase 7G technical SEO, A11Y-07 footer focus.
 
 **Pending stakeholder input:** LinkedIn URLs, extra team members, group photo, Phase 2B wording.
 

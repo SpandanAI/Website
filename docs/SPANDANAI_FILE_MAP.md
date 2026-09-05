@@ -72,7 +72,7 @@ To add or edit a use case, the data change belongs in `src/data/siteContent.js`.
 | Feature | File(s) |
 |---------|---------|
 | Homepage Leadership section + Meet the Team CTA; homepage leadership photos use `loading="lazy"` | `src/components/Founders.jsx` |
-| Reusable member card (`width`/`height` 176, `decoding="async"`, loading from caller) | `src/components/TeamMemberCard.jsx` |
+| Reusable member card (`width`/`height` 176, `decoding="async"`, loading from caller; hover −4px / 150ms tween) | `src/components/TeamMemberCard.jsx` |
 | **Team data** (`leadershipMembers`, empty `teamMembers`, `teamGroupPhoto`) | `src/data/teamContent.js` |
 | Dedicated `/team` page | `src/pages/TeamPage.jsx` |
 | N.R. Rohan photo | `public/images/N.R. Rohan.jpg` |
@@ -151,6 +151,8 @@ Destination address (hard-coded in both files): `spandanai.sard@gmail.com`
 | `docs/PHASE_7C_COMPLETION_REPORT.md` | Phase 7C GitHub landing report (committed/pushed; not deployed) |
 | `docs/PHASE_7D_IMAGE_PERFORMANCE_PROTOTYPE.md` | Phase 7D image/asset performance prototype history |
 | `docs/PHASE_7D_COMPLETION_REPORT.md` | Phase 7D GitHub landing report (committed/pushed; not deployed) |
+| `docs/PHASE_7D_1_TEAM_CARD_HOVER_POLISH_PROTOTYPE.md` | Phase 7D.1 card hover timing prototype history |
+| `docs/PHASE_7D_1_COMPLETION_REPORT.md` | Phase 7D.1 GitHub landing report (committed/pushed; not deployed) |
 
 ---
 
