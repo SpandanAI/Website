@@ -55,7 +55,7 @@ export default function Hero() {
   return (
     <motion.section
       id="home"
-      className="relative isolate -mt-[var(--navbar-height)] min-h-[110vh] overflow-hidden pt-[var(--navbar-height)]"
+      className="hero-section relative isolate -mt-[var(--navbar-height)] min-h-[110vh] overflow-hidden pt-[var(--navbar-height)]"
       variants={heroFadeIn}
       initial="hidden"
       animate="visible"
@@ -106,7 +106,7 @@ export default function Hero() {
         }}
       />
       <motion.div
-        className="pointer-events-none relative z-[1] mx-auto flex min-h-screen max-w-7xl items-center px-5 py-20 sm:px-6 lg:px-8 lg:py-24"
+        className="hero-copy pointer-events-none relative z-[1] mx-auto flex min-h-screen max-w-7xl items-center px-5 py-20 sm:px-6 lg:px-8 lg:py-24"
         variants={staggerContainer}
       >
         <motion.div className="pointer-events-auto" variants={staggerItem}>
@@ -119,11 +119,11 @@ export default function Hero() {
             SpandanAI
           </h1>
           <p
-            className="mt-6 max-w-2xl text-lg leading-[1.7] text-[rgba(255,255,255,0.92)]"
+            className="hero-lede mt-6 max-w-2xl text-lg leading-[1.7] text-[rgba(255,255,255,0.92)]"
           >
             Analog-native AI silicon for edge inference and wireless systems.
           </p>
-          <div className="mt-10 flex flex-col gap-4 sm:flex-row">
+          <div className="hero-cta-row mt-10 flex flex-col gap-4 sm:flex-row">
             <motion.a
               href="#use-cases"
               className="rounded-full bg-blue-600 px-7 py-4 text-center text-sm font-semibold text-white transition hover:bg-blue-700"
