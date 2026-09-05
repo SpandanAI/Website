@@ -18,7 +18,7 @@ Paths are relative to the repository root.
 | Team page composition (`/team`) | `src/pages/TeamPage.jsx` (`#main-content` skip target) |
 | Client unmatched-route fallback | `src/pages/NotFoundPage.jsx` (`#main-content` skip target) |
 | Route change scroll (top unless hash) | `src/components/RouteScrollManager.jsx` |
-| Global CSS, CSS variables, reduced-motion, header/scroll-button styles, Manrope `@font-face`, selection highlight, body `user-select: none` with form exceptions | `src/index.css` |
+| Global CSS, CSS variables, reduced-motion, header/scroll-button styles, Manrope `@font-face`, selection highlight, body `user-select: none` with form exceptions; `--navbar-height` compact token uses `@media not all and (min-width: 768px)` (Tailwind `md` inverse); short-viewport Hero spacing (`.hero-section` / `.hero-copy` / `.hero-lede` / `.hero-cta-row`) | `src/index.css` |
 | Tailwind theme (colors, shadow, Manrope `fontFamily.sans`) | `tailwind.config.js` |
 | PostCSS | `postcss.config.cjs` |
 | npm scripts and dependencies | `package.json` |
@@ -46,7 +46,7 @@ Paths are relative to the repository root.
 
 | Feature | File(s) |
 |---------|---------|
-| Hero layout, H1, badge, subtitle, “Explore Use Cases” CTA, parallax layer, overlays | `src/components/Hero.jsx` |
+| Hero layout, H1, badge, subtitle, “Explore Use Cases” CTA, parallax layer, overlays; class hooks for short-viewport CSS (`hero-section`, `hero-copy`, `hero-lede`, `hero-cta-row`) | `src/components/Hero.jsx` |
 | Interactive node-network canvas (landing animation, including Phase 6 cursor discharge) | `src/components/NeuralNetworkBackground.jsx` |
 | Electrical-arc / targeting / micro-spark helpers used by the hero canvas and global overlay; Phase 6B `generateClickDischarge` with 6B.1 jagged geometry and 6B.2 branch levels/weights | `src/lib/neuralEffects.js` |
 | Site-wide electrical overlay (Phase 6 random sparks; Phase 6B approved click/tap discharge with visual hierarchy) | `src/components/ElectricalCursorOverlay.jsx` |
@@ -147,6 +147,8 @@ Destination address (hard-coded in both files): `spandanai.sard@gmail.com`
 | `docs/PHASE_7B_ACCESSIBILITY_PROTOTYPE.md` | Phase 7B accessibility prototype history |
 | `docs/PHASE_7B_COMPLETION_REPORT.md` | Phase 7B GitHub landing report (committed/pushed; not deployed) |
 | `docs/PHASE_6B_GLOBAL_ELECTRICAL_POLISH_PROTOTYPE.md` | Phase 6B / 6B.1 / 6B.2 global click/tap discharge history and final approval (committed/pushed; not deployed) |
+| `docs/PHASE_7C_RESPONSIVE_HARDENING_PROTOTYPE.md` | Phase 7C RESP-01/RESP-02 prototype history |
+| `docs/PHASE_7C_COMPLETION_REPORT.md` | Phase 7C GitHub landing report (committed/pushed; not deployed) |
 
 ---
 

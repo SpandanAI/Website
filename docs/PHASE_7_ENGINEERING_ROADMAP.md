@@ -2,7 +2,7 @@
 
 Derived from `docs/PHASE_7A_ENGINEERING_QUALITY_AUDIT.md`.
 
-**Status:** Phase 7B COMPLETE / HUMAN APPROVED / PUSHED (`bc97490`). Phase 6B COMPLETE / HUMAN APPROVED / PUSHED (`7e13358`). Phases 7C–7G are not started.  
+**Status:** Phase 7B COMPLETE / HUMAN APPROVED / PUSHED (`bc97490`). Phase 6B COMPLETE / HUMAN APPROVED / PUSHED (`7e13358`). Phase 7C COMPLETE / HUMAN APPROVED / PUSHED (`59c7e8a`). Phase 7D is **NEXT / NOT STARTED**. Phases 7E–7G are not started.  
 **Production:** NOT DEPLOYED.
 
 This is a small semiconductor marketing SPA. Do not migrate to Next.js, Redux, Three.js, a design-system package, or a large E2E estate unless a later audit shows a concrete need.
@@ -12,6 +12,8 @@ This is a small semiconductor marketing SPA. Do not migrate to Next.js, Redux, T
 ## How to use this roadmap
 
 - Phase 7B accessibility is complete and pushed. Do not reopen it unless a regression appears.
+- Phase 7C responsive hardening is complete and pushed. Do not reopen it unless a regression appears.
+- Next engineering phase is **7D** (images). Do not start it from this document automatically.
 - Implement remaining phases one at a time. Re-run `npm run build` after product changes.
 - Do not mix stakeholder-blocked content (LinkedIn, extra members, group photo, Phase 2B copy) into these engineering phases.
 - Production remains an older Vercel deploy until a human explicitly deploys.
@@ -85,20 +87,22 @@ Do not mix with image, SEO, or responsive work unless explicitly requested. Hero
 
 ## Phase 7C — Responsive / short-viewport hardening
 
+**Status:** COMPLETE / HUMAN APPROVED / PUSHED (`59c7e8a`, `feat: harden responsive layout`). Production: **NOT DEPLOYED.**
+
 **Objective:** Close the 768px navbar-token overlap and make the Hero CTA reachable on short landscape phones without retuning the approved desktop Hero.
 
 **Findings addressed:** RESP-01, RESP-02.
 
-**Expected files:**
+**Implemented files:**
 
-- `src/index.css` (`max-width: 768px` → align with Tailwind `md`, i.e. `< 768`)
-- `src/components/Hero.jsx` and/or Hero CSS (short-height padding / `min-h` only)
+- `src/index.css` (`@media not all and (min-width: 768px)` for `--navbar-height`; `max-height: 540px` / `340px` Hero spacing)
+- `src/components/Hero.jsx` (class hooks only; copy unchanged)
 
 **Risk:** Medium. Exact-768 layouts, Use Case grid, Team grid, and sticky offset must be re-checked at 767 / 768 / 820.
 
 **Cursor autonomy:** **80% Cursor / 20% human visual verification**
 
-**Human testing required:** YES — 390, 667×375 landscape, 768, 820, 1024.
+**Human testing required:** YES — 390, 667×375 landscape, 768, 820, 1024. See `docs/PHASE_7C_RESPONSIVE_HARDENING_PROTOTYPE.md`.
 
 **Stakeholder involvement:** NO
 
@@ -107,6 +111,8 @@ Do not mix with image, SEO, or responsive work unless explicitly requested. Hero
 ---
 
 ## Phase 7D — Image and load performance
+
+**Status:** NEXT / NOT STARTED.
 
 **Objective:** Cut download cost of photos that are displayed at 176×176. Do not retune canvas or add a bundle analyzer unless a later profile demands it.
 
@@ -241,8 +247,8 @@ Do not mix with image, SEO, or responsive work unless explicitly requested. Hero
 ## Suggested order after Phase 7B
 
 1. **6B** — Global electrical click polish outside the Hero (**COMPLETE** / pushed `7e13358`; not production-deployed).
-2. **7D** — photos (highest remaining performance win, very safe).
-3. **7C** — 768 / landscape (visual).
+2. **7C** — 768 / landscape (**COMPLETE** / HUMAN APPROVED / pushed; not production-deployed).
+3. **7D** — photos (**NEXT / NOT STARTED**; highest remaining performance win, very safe).
 4. **7E** — cleanup.
 5. **7G** — when a production deploy of `/team` is imminent.
 6. **7F** — after remaining UX work settles.
@@ -255,7 +261,7 @@ Do not mix with image, SEO, or responsive work unless explicitly requested. Hero
 |-------|--------|-------|--------|
 | 7B Accessibility | 85% | 15% keyboard/visual | Visual check of nav color — **done** |
 | 6B Global click polish | Implemented | Motion review **PASS** | Yes — **done** |
-| 7C Responsive | 80% | 20% visual | Only if Hero looks wrong |
+| 7C Responsive | 80% | 20% visual — **done / PASS** | Only if Hero looks wrong |
 | 7D Images | 90% | 10% photo QA | No |
 | 7E Dead assets | 95% | 5% smoke | No |
 | 7F Tests | 75% | 25% script/review | If ESLint policy |

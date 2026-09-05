@@ -1,6 +1,6 @@
 # SpandanAI — Project State Snapshot
 
-**Snapshot date:** 1 September 2026 (updated after Phase 6B GitHub landing; production remains undeployed)  
+**Snapshot date:** 6 September 2026 (updated after Phase 7C GitHub landing; production remains undeployed)  
 **Production URL:** https://spandanai.com/  
 **Workspace:** local website source directory (absolute filesystem path omitted for the public GitHub repository)  
 **Scope:** Factual state of the repository *today*. No recommendations.
@@ -26,6 +26,8 @@ Phase 2A messaging/SEO proposal completed; no application changes implemented. S
 **Phase 7B / 7B.1:** COMPLETE / HUMAN APPROVED. Feature commit `bc97490` (`feat: improve website accessibility`). GitHub: **PUSHED** to `origin/main`. Production: **NOT DEPLOYED.** Skip link, Back-to-Top keyboard hiding, dark-header active-nav `#60a5fa`, mobile menu Escape/focus, placeholder contrast, header logo `alt=""`, 44×44 hamburger, mobile `<nav id="mobile-navigation">` landmark. A11Y-07 deferred. See `docs/PHASE_7B_ACCESSIBILITY_PROTOTYPE.md` and `docs/PHASE_7B_COMPLETION_REPORT.md`.
 
 **Phase 6B / 6B.1 / 6B.2:** COMPLETE / HUMAN MOTION REVIEW PASS. Feature commit `7e13358` (`feat: polish global electrical interactions`). GitHub: **PUSHED** to `origin/main`. Production: **NOT DEPLOYED.** Dedicated non-Hero click/tap discharge, jagged/asymmetric geometry, primary/secondary/tertiary visual hierarchy. Hero canvas and ambient random sparks unchanged. No 6B.3. See `docs/PHASE_6B_GLOBAL_ELECTRICAL_POLISH_PROTOTYPE.md`.
+
+**Phase 7C:** COMPLETE / HUMAN APPROVED. Feature commit `59c7e8a` (`feat: harden responsive layout`). GitHub: **PUSHED** to `origin/main`. Production: **NOT DEPLOYED.** RESP-01 (`--navbar-height` aligned to Tailwind `md`) and RESP-02 (short-viewport Hero spacing). Electrical source files not edited. See `docs/PHASE_7C_RESPONSIVE_HARDENING_PROTOTYPE.md` and `docs/PHASE_7C_COMPLETION_REPORT.md`.
 
 **Phase 1A attribution correction:** Cursor Agent appeared as a GitHub contributor because Phase 1 commits included a `Co-authored-by: Cursor` trailer. Those post-stakeholder commits were recreated with identical trees for `Korak Das` / `korakdas1` only. The stakeholder `Initial commit` (`e81f2ba`) was not rewritten. `git push --force-with-lease` was used after verifying the remote tip had not changed. No application source or behavior changed.
 
@@ -170,14 +172,16 @@ Live response for `/` is HTTP 200 with the security headers from `vercel.json` a
 | Phase 5.5 feature commit | `c12e926` — `feat: add dedicated team page and routing` |
 | Phase 7B feature commit | `bc97490` — `feat: improve website accessibility` |
 | Phase 6B feature commit | `7e13358` — `feat: polish global electrical interactions` |
-| Remote push | **SUCCESS** (Phase 6B: normal fast-forward from `8a4e4b8`; no force). GitHub is **not** automatically connected to Vercel. |
-| Working tree | **Clean after the Phase 6B documentation commit.** Phase 6B is on GitHub `main`. **Not production-deployed.** |
+| Phase 7C feature commit | `59c7e8a` — `feat: harden responsive layout` |
+| Phase 7C documentation commit | `docs: record Phase 7C completion` |
+| Remote push | **SUCCESS** (Phase 7C: normal fast-forward; no force). GitHub is **not** automatically connected to Vercel. |
+| Working tree | **Clean after the Phase 7C documentation commit.** Phase 7C is on GitHub `main`. **Not production-deployed.** |
 | `.gitignore` | Safe baseline (`node_modules/`, `dist/`, `.vercel/`, `.env*`, logs, OS/editor junk) |
 | LICENSE | **Absent** (intentionally not added; company decision pending) |
 | README | Professional project README (`README.md`) |
 | Package | `spandanai-website` |
 | Dependencies | Pinned / reproducible. Phase 5.5 added only `react-router-dom` **7.18.3**. |
-| Build | `npm run build` **pass** (Phase 6B: `index-Uk72Fn2K.js` 407.82 kB gzip 130.41 kB, `index-DwcHyqYN.css` 19.43 kB, Manrope WOFF2 `manrope-latin-wght-normal-DHIcAJRg.woff2` 24.83 kB). |
+| Build | `npm run build` **pass** (Phase 7C: `index-DbxJXInE.js` 407.87 kB gzip 130.43 kB, `index-D5ihWw1E.css` 19.85 kB gzip 5.30 kB, Manrope WOFF2 `manrope-latin-wght-normal-DHIcAJRg.woff2` 24.83 kB). |
 
 ---
 
@@ -201,7 +205,7 @@ Live response for `/` is HTTP 200 with the security headers from `vercel.json` a
 - Team data for extra members lives in `src/data/teamContent.js` (`teamMembers` is currently empty). Leadership data was moved out of `Founders.jsx`.
 - Filenames with spaces (`K. Dharanidhar G.jpg`, etc.).
 
-**Pending engineering (not defects of this landing):** Phase 7C responsive, Phase 7D images, Phase 7E dead assets, Phase 7F tests, Phase 7G technical SEO, A11Y-07 footer focus.
+**Pending engineering (not defects of this landing):** Phase 7D images, Phase 7E dead assets, Phase 7F tests, Phase 7G technical SEO, A11Y-07 footer focus.
 
 **Pending stakeholder input:** LinkedIn URLs, extra team members, group photo, Phase 2B wording.
 
