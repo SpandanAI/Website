@@ -71,8 +71,8 @@ To add or edit a use case, the data change belongs in `src/data/siteContent.js`.
 
 | Feature | File(s) |
 |---------|---------|
-| Homepage Leadership section + Meet the Team CTA | `src/components/Founders.jsx` |
-| Reusable member card | `src/components/TeamMemberCard.jsx` |
+| Homepage Leadership section + Meet the Team CTA; homepage leadership photos use `loading="lazy"` | `src/components/Founders.jsx` |
+| Reusable member card (`width`/`height` 176, `decoding="async"`, loading from caller) | `src/components/TeamMemberCard.jsx` |
 | **Team data** (`leadershipMembers`, empty `teamMembers`, `teamGroupPhoto`) | `src/data/teamContent.js` |
 | Dedicated `/team` page | `src/pages/TeamPage.jsx` |
 | N.R. Rohan photo | `public/images/N.R. Rohan.jpg` |
@@ -149,6 +149,8 @@ Destination address (hard-coded in both files): `spandanai.sard@gmail.com`
 | `docs/PHASE_6B_GLOBAL_ELECTRICAL_POLISH_PROTOTYPE.md` | Phase 6B / 6B.1 / 6B.2 global click/tap discharge history and final approval (committed/pushed; not deployed) |
 | `docs/PHASE_7C_RESPONSIVE_HARDENING_PROTOTYPE.md` | Phase 7C RESP-01/RESP-02 prototype history |
 | `docs/PHASE_7C_COMPLETION_REPORT.md` | Phase 7C GitHub landing report (committed/pushed; not deployed) |
+| `docs/PHASE_7D_IMAGE_PERFORMANCE_PROTOTYPE.md` | Phase 7D image/asset performance prototype history |
+| `docs/PHASE_7D_COMPLETION_REPORT.md` | Phase 7D GitHub landing report (committed/pushed; not deployed) |
 
 ---
 

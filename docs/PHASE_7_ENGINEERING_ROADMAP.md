@@ -2,7 +2,7 @@
 
 Derived from `docs/PHASE_7A_ENGINEERING_QUALITY_AUDIT.md`.
 
-**Status:** Phase 7B COMPLETE / HUMAN APPROVED / PUSHED (`bc97490`). Phase 6B COMPLETE / HUMAN APPROVED / PUSHED (`7e13358`). Phase 7C COMPLETE / HUMAN APPROVED / PUSHED (`59c7e8a`). Phase 7D is **NEXT / NOT STARTED**. Phases 7E–7G are not started.  
+**Status:** Phase 7B COMPLETE / HUMAN APPROVED / PUSHED (`bc97490`). Phase 6B COMPLETE / HUMAN APPROVED / PUSHED (`7e13358`). Phase 7C COMPLETE / HUMAN APPROVED / PUSHED (`59c7e8a`). Phase 7D COMPLETE / HUMAN APPROVED / PUSHED (`09d7cac`). Phase 7D.1 is **NEXT / NOT STARTED**. Phase 7E is **NOT STARTED**.  
 **Production:** NOT DEPLOYED.
 
 This is a small semiconductor marketing SPA. Do not migrate to Next.js, Redux, Three.js, a design-system package, or a large E2E estate unless a later audit shows a concrete need.
@@ -13,7 +13,8 @@ This is a small semiconductor marketing SPA. Do not migrate to Next.js, Redux, T
 
 - Phase 7B accessibility is complete and pushed. Do not reopen it unless a regression appears.
 - Phase 7C responsive hardening is complete and pushed. Do not reopen it unless a regression appears.
-- Next engineering phase is **7D** (images). Do not start it from this document automatically.
+- Phase 7D image performance is complete and pushed. Do not reopen it unless a regression appears.
+- Next is **7D.1** (card hover timing). Do not start 7E until 7D.1 is reviewed if that micro-polish is in progress.
 - Implement remaining phases one at a time. Re-run `npm run build` after product changes.
 - Do not mix stakeholder-blocked content (LinkedIn, extra members, group photo, Phase 2B copy) into these engineering phases.
 - Production remains an older Vercel deploy until a human explicitly deploys.
@@ -112,7 +113,7 @@ Do not mix with image, SEO, or responsive work unless explicitly requested. Hero
 
 ## Phase 7D — Image and load performance
 
-**Status:** NEXT / NOT STARTED.
+**Status:** COMPLETE / HUMAN APPROVED / PUSHED (`09d7cac`, `perf: optimize leadership images`). Production: **NOT DEPLOYED.**
 
 **Objective:** Cut download cost of photos that are displayed at 176×176. Do not retune canvas or add a bundle analyzer unless a later profile demands it.
 
@@ -137,6 +138,18 @@ Do not mix with image, SEO, or responsive work unless explicitly requested. Hero
 **Stakeholder involvement:** NO (same photos, smaller files).
 
 **Senior required:** NO
+
+---
+
+## Phase 7D.1 — Team card hover micro-polish
+
+**Status:** NEXT / NOT STARTED.
+
+**Objective:** Keep the approved −4px lift and shadow, but make hover timing crisper (~150ms ease-out) instead of floaty/slow.
+
+**Human testing required:** YES — homepage and `/team` pointer hover, rapid card-to-card, reduced motion.
+
+**Stakeholder involvement:** NO
 
 ---
 
@@ -248,10 +261,11 @@ Do not mix with image, SEO, or responsive work unless explicitly requested. Hero
 
 1. **6B** — Global electrical click polish outside the Hero (**COMPLETE** / pushed `7e13358`; not production-deployed).
 2. **7C** — 768 / landscape (**COMPLETE** / HUMAN APPROVED / pushed; not production-deployed).
-3. **7D** — photos (**NEXT / NOT STARTED**; highest remaining performance win, very safe).
-4. **7E** — cleanup.
-5. **7G** — when a production deploy of `/team` is imminent.
-6. **7F** — after remaining UX work settles.
+3. **7D** — photos (**COMPLETE** / HUMAN APPROVED / pushed; not production-deployed).
+4. **7D.1** — team card hover timing (**NEXT / NOT STARTED**).
+5. **7E** — cleanup.
+6. **7G** — when a production deploy of `/team` is imminent.
+7. **7F** — after remaining UX work settles.
 
 ---
 
@@ -262,7 +276,8 @@ Do not mix with image, SEO, or responsive work unless explicitly requested. Hero
 | 7B Accessibility | 85% | 15% keyboard/visual | Visual check of nav color — **done** |
 | 6B Global click polish | Implemented | Motion review **PASS** | Yes — **done** |
 | 7C Responsive | 80% | 20% visual — **done / PASS** | Only if Hero looks wrong |
-| 7D Images | 90% | 10% photo QA | No |
+| 7D Images | 90% | 10% photo QA — **done / PASS** | No |
+| 7D.1 Card hover | 90% | 10% motion feel | No |
 | 7E Dead assets | 95% | 5% smoke | No |
 | 7F Tests | 75% | 25% script/review | If ESLint policy |
 | 7G Technical SEO | 80% | 20% | Canonical/index choice |

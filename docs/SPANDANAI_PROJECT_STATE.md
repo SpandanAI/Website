@@ -1,6 +1,6 @@
 # SpandanAI — Project State Snapshot
 
-**Snapshot date:** 6 September 2026 (updated after Phase 7C GitHub landing; production remains undeployed)  
+**Snapshot date:** 6 September 2026 (updated after Phase 7D GitHub landing; production remains undeployed)  
 **Production URL:** https://spandanai.com/  
 **Workspace:** local website source directory (absolute filesystem path omitted for the public GitHub repository)  
 **Scope:** Factual state of the repository *today*. No recommendations.
@@ -28,6 +28,10 @@ Phase 2A messaging/SEO proposal completed; no application changes implemented. S
 **Phase 6B / 6B.1 / 6B.2:** COMPLETE / HUMAN MOTION REVIEW PASS. Feature commit `7e13358` (`feat: polish global electrical interactions`). GitHub: **PUSHED** to `origin/main`. Production: **NOT DEPLOYED.** Dedicated non-Hero click/tap discharge, jagged/asymmetric geometry, primary/secondary/tertiary visual hierarchy. Hero canvas and ambient random sparks unchanged. No 6B.3. See `docs/PHASE_6B_GLOBAL_ELECTRICAL_POLISH_PROTOTYPE.md`.
 
 **Phase 7C:** COMPLETE / HUMAN APPROVED. Feature commit `59c7e8a` (`feat: harden responsive layout`). GitHub: **PUSHED** to `origin/main`. Production: **NOT DEPLOYED.** RESP-01 (`--navbar-height` aligned to Tailwind `md`) and RESP-02 (short-viewport Hero spacing). Electrical source files not edited. See `docs/PHASE_7C_RESPONSIVE_HARDENING_PROTOTYPE.md` and `docs/PHASE_7C_COMPLETION_REPORT.md`.
+
+**Phase 7D:** COMPLETE / HUMAN APPROVED. Feature commit `09d7cac` (`perf: optimize leadership images`). GitHub: **PUSHED** to `origin/main`. Production: **NOT DEPLOYED.** Leadership JPEG downscale/recompress, homepage `loading="lazy"`, intrinsic `width`/`height` on cards and logo. Wave, OG, unused logos, and electrical files not changed. See `docs/PHASE_7D_IMAGE_PERFORMANCE_PROTOTYPE.md` and `docs/PHASE_7D_COMPLETION_REPORT.md`.
+
+**Phase 7D.1:** NOT STARTED (team card hover micro-polish).
 
 **Phase 1A attribution correction:** Cursor Agent appeared as a GitHub contributor because Phase 1 commits included a `Co-authored-by: Cursor` trailer. Those post-stakeholder commits were recreated with identical trees for `Korak Das` / `korakdas1` only. The stakeholder `Initial commit` (`e81f2ba`) was not rewritten. `git push --force-with-lease` was used after verifying the remote tip had not changed. No application source or behavior changed.
 
@@ -125,10 +129,10 @@ All under `public/` (copied to `dist/` on build):
 | `public/images/logo-dark.png` | 34 KB | 280×201 | No (dead asset) |
 | `public/images/wave-background.png` | 55 KB | 1024×442 | Yes — Hero CSS background |
 | `public/images/og-image.png` | 84 KB | 1200×630 | Yes — Open Graph / Twitter |
-| `public/images/N.R. Rohan.jpg` | 20 KB | 507×389 | Yes — Team |
-| `public/images/K. Dharanidhar G.jpg` | 156 KB | 1520×1600 | Yes — Team |
-| `public/images/S. Aniruddhan.jpg` | 52 KB | 391×422 | Yes — Team |
-| `public/images/V. S. Chakravarthy.jpg` | 265 KB | 1439×1600 | Yes — Team |
+| `public/images/N.R. Rohan.jpg` | 19,906 | 507×389 | Yes — Team |
+| `public/images/K. Dharanidhar G.jpg` | 65,990 | 760×800 | Yes — Team |
+| `public/images/S. Aniruddhan.jpg` | 30,038 | 391×422 | Yes — Team |
+| `public/images/V. S. Chakravarthy.jpg` | 53,557 | 720×800 | Yes — Team |
 | `public/favicon.ico` | 562 B | 16×16 | Yes |
 | `public/favicon-32x32.png` | 1.3 KB | 32×32 | Yes |
 | `public/apple-touch-icon.png` | 17 KB | 180×180 | Yes |
@@ -174,14 +178,16 @@ Live response for `/` is HTTP 200 with the security headers from `vercel.json` a
 | Phase 6B feature commit | `7e13358` — `feat: polish global electrical interactions` |
 | Phase 7C feature commit | `59c7e8a` — `feat: harden responsive layout` |
 | Phase 7C documentation commit | `docs: record Phase 7C completion` |
-| Remote push | **SUCCESS** (Phase 7C: normal fast-forward; no force). GitHub is **not** automatically connected to Vercel. |
-| Working tree | **Clean after the Phase 7C documentation commit.** Phase 7C is on GitHub `main`. **Not production-deployed.** |
+| Phase 7D feature commit | `09d7cac` — `perf: optimize leadership images` |
+| Phase 7D documentation commit | `docs: record Phase 7D completion` |
+| Remote push | **SUCCESS** (Phase 7D: normal fast-forward; no force). GitHub is **not** automatically connected to Vercel. |
+| Working tree | **Clean after the Phase 7D documentation commit.** Phase 7D is on GitHub `main`. **Not production-deployed.** |
 | `.gitignore` | Safe baseline (`node_modules/`, `dist/`, `.vercel/`, `.env*`, logs, OS/editor junk) |
 | LICENSE | **Absent** (intentionally not added; company decision pending) |
 | README | Professional project README (`README.md`) |
 | Package | `spandanai-website` |
 | Dependencies | Pinned / reproducible. Phase 5.5 added only `react-router-dom` **7.18.3**. |
-| Build | `npm run build` **pass** (Phase 7C: `index-DbxJXInE.js` 407.87 kB gzip 130.43 kB, `index-D5ihWw1E.css` 19.85 kB gzip 5.30 kB, Manrope WOFF2 `manrope-latin-wght-normal-DHIcAJRg.woff2` 24.83 kB). |
+| Build | `npm run build` **pass** (Phase 7D: `index-pLTBtr_j.js` 407.93 kB gzip 130.46 kB, `index-D5ihWw1E.css` 19.85 kB gzip 5.30 kB, Manrope WOFF2 24.83 kB). |
 
 ---
 
@@ -205,7 +211,7 @@ Live response for `/` is HTTP 200 with the security headers from `vercel.json` a
 - Team data for extra members lives in `src/data/teamContent.js` (`teamMembers` is currently empty). Leadership data was moved out of `Founders.jsx`.
 - Filenames with spaces (`K. Dharanidhar G.jpg`, etc.).
 
-**Pending engineering (not defects of this landing):** Phase 7D images, Phase 7E dead assets, Phase 7F tests, Phase 7G technical SEO, A11Y-07 footer focus.
+**Pending engineering (not defects of this landing):** Phase 7D.1 team card hover micro-polish, Phase 7E dead assets, Phase 7F tests, Phase 7G technical SEO, A11Y-07 footer focus.
 
 **Pending stakeholder input:** LinkedIn URLs, extra team members, group photo, Phase 2B wording.
 
