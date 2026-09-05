@@ -23,22 +23,24 @@ export default function TeamMemberCard({ member, imageLoading = "eager" }) {
   const [imageFailed, setImageFailed] = useState(false);
   const showImage = Boolean(member.image) && !imageFailed;
   const initials = getInitials(member.name);
+  const hoverTransition = { type: "tween", duration: 0.15, ease: [0.22, 1, 0.36, 1] };
 
   return (
     <motion.article
       className="rounded-[2rem] border border-slate-200 bg-white p-6 text-center shadow-sm"
       style={{
-        boxShadow: "0 10px 25px rgba(0, 0, 0, 0.08)",
-        transition: "transform 0.2s ease, box-shadow 0.2s ease"
+        boxShadow: "0 10px 25px rgba(0, 0, 0, 0.08)"
       }}
       whileHover={
         shouldReduceMotion
           ? undefined
           : {
               y: -4,
-              boxShadow: "0 18px 40px rgba(0, 0, 0, 0.12)"
+              boxShadow: "0 18px 40px rgba(0, 0, 0, 0.12)",
+              transition: hoverTransition
             }
       }
+      transition={shouldReduceMotion ? { duration: 0 } : hoverTransition}
       variants={staggerItem}
     >
       {showImage ? (
