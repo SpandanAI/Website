@@ -30,7 +30,7 @@ export default function Founders() {
 
         <motion.div className="mx-auto mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4" variants={staggerContainer}>
           {leadershipMembers.map((member) => (
-            <TeamMemberCard key={member.id} member={member} imageLoading="eager" />
+            <TeamMemberCard key={member.id} member={member} imageLoading="lazy" />
           ))}
         </motion.div>
 

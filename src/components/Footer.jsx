@@ -19,6 +19,8 @@ export default function Footer() {
         <motion.img
           src="/images/logo-light.webp"
           alt="SpandanAI"
+          width={320}
+          height={213}
           className="logo mx-auto"
           loading="lazy"
           decoding="async"

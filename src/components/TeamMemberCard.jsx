@@ -45,6 +45,8 @@ export default function TeamMemberCard({ member, imageLoading = "eager" }) {
         <img
           src={member.image}
           alt={member.name}
+          width={176}
+          height={176}
           className="mx-auto h-44 w-44 rounded-3xl object-cover"
           loading={imageLoading}
           decoding="async"

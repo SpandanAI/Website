@@ -286,6 +286,8 @@ export default function Header() {
           <img
             src="/images/logo-light.webp"
             alt=""
+            width={320}
+            height={213}
             className="logo"
             loading="eager"
             decoding="async"
