@@ -10,7 +10,8 @@ Paths are relative to the repository root.
 
 | Feature | File(s) |
 |---------|---------|
-| HTML document, SEO meta, favicons, OG/Twitter tags, canonical | `index.html` |
+| HTML document, SEO meta, favicons, OG/Twitter tags, homepage canonical, Organization JSON-LD | `index.html` |
+| Route-aware document title, description, canonical | `src/components/DocumentMeta.jsx` |
 | React mount | `src/main.jsx` (`BrowserRouter`) |
 | Shared application shell | `src/App.jsx` |
 | Skip to main content (shared) | `src/App.jsx` (`.skip-link` in `src/index.css`) |
@@ -23,8 +24,9 @@ Paths are relative to the repository root.
 | PostCSS | `postcss.config.cjs` |
 | npm scripts and dependencies | `package.json` (`dev`, `build`, `preview`; Phase 7F prototype also `test:e2e`, `test:e2e:headed`, `test:e2e:ui`) |
 | Locked versions | `package-lock.json` |
-| Playwright smoke config (Phase 7F prototype) | `playwright.config.js` |
-| Playwright smoke tests (Phase 7F prototype) | `tests/*.spec.js`, `tests/helpers.js` |
+| Playwright smoke config | `playwright.config.js` |
+| Playwright smoke tests | `tests/*.spec.js`, `tests/helpers.js` |
+| GitHub Actions CI (Phase 7G prototype) | `.github/workflows/ci.yml` |
 
 ---
 
@@ -103,12 +105,13 @@ Destination address (hard-coded in both files): `spandanai.sard@gmail.com`
 
 | Feature | File(s) |
 |---------|---------|
-| `<title>`, meta description, canonical, OG, Twitter, favicon links | `index.html` |
+| `<title>`, meta description, homepage canonical, OG, Twitter, favicon links, Organization JSON-LD | `index.html` |
+| Route-aware title / description / canonical after JS | `src/components/DocumentMeta.jsx` |
 | robots.txt | `public/robots.txt` |
-| sitemap.xml | `public/sitemap.xml` |
+| sitemap.xml (`/` and `/team`) | `public/sitemap.xml` |
 | Open Graph image | `public/images/og-image.png` |
 | Favicon | `public/favicon.ico`, `public/favicon-32x32.png`, `public/apple-touch-icon.png` |
-| Schema.org JSON-LD | **Not present** |
+| Schema.org JSON-LD | `index.html` (Organization: name, url, logo only) |
 | Web app manifest | **Not present** |
 
 ---
@@ -159,6 +162,8 @@ Destination address (hard-coded in both files): `spandanai.sard@gmail.com`
 | `docs/PHASE_7E_COMPLETION_REPORT.md` | Phase 7E GitHub landing report (committed/pushed; not deployed) |
 | `docs/PHASE_7F_AUTOMATED_TESTING_PROTOTYPE.md` | Phase 7F Playwright smoke-test prototype history |
 | `docs/PHASE_7F_COMPLETION_REPORT.md` | Phase 7F GitHub landing report (committed/pushed; not deployed) |
+| `docs/PHASE_7G_FINAL_ENGINEERING_PROTOTYPE.md` | Phase 7G SEO/security/CI prototype history |
+| `docs/PHASE_7G_COMPLETION_REPORT.md` | Phase 7G GitHub landing report (committed/pushed; not deployed) |
 
 ---
 

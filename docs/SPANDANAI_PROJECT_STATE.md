@@ -1,6 +1,6 @@
 # SpandanAI — Project State Snapshot
 
-**Snapshot date:** 6 September 2026 (updated after Phase 7F completion; production remains undeployed)  
+**Snapshot date:** 6 September 2026 (updated after Phase 7G completion; production remains undeployed)  
 **Production URL:** https://spandanai.com/  
 **Workspace:** local website source directory (absolute filesystem path omitted for the public GitHub repository)  
 **Scope:** Factual state of the repository *today*. No recommendations.
@@ -35,9 +35,13 @@ Phase 2A messaging/SEO proposal completed; no application changes implemented. S
 
 **Phase 7E:** COMPLETE / HUMAN APPROVED / PUSHED. Feature commit `c131a30` (`chore: remove unused code and assets`). GitHub: **PUSHED** to `origin/main`. Production: **NOT DEPLOYED.** Unused `cardHover` / `sectionTransition` removed; unused `logo-light.png` / `logo-dark.webp` / `logo-dark.png` deleted (**63,686** bytes). JS/CSS bundle hashes unchanged vs 7D.1 (already tree-shaken). See `docs/PHASE_7E_DEAD_CODE_ASSET_CLEANUP_PROTOTYPE.md` and `docs/PHASE_7E_COMPLETION_REPORT.md`.
 
-**Phase 7F:** COMPLETE / HUMAN APPROVED. Feature commit `4545cde` (`test: add Playwright smoke coverage`). GitHub: **PUSHED** to `origin/main`. Production: **NOT DEPLOYED.** Playwright Chromium smoke suite (`@playwright/test` **1.63.0**, 11 tests). ESLint deferred. No unit framework. No CI. See `docs/PHASE_7F_AUTOMATED_TESTING_PROTOTYPE.md` and `docs/PHASE_7F_COMPLETION_REPORT.md`.
+**Phase 7F:** COMPLETE / HUMAN APPROVED / PUSHED. Feature commit `4545cde` (`test: add Playwright smoke coverage`). GitHub: **PUSHED** to `origin/main`. Production: **NOT DEPLOYED.** Playwright Chromium smoke suite (`@playwright/test` **1.63.0**, 11 tests at 7F landing). ESLint deferred. See `docs/PHASE_7F_AUTOMATED_TESTING_PROTOTYPE.md` and `docs/PHASE_7F_COMPLETION_REPORT.md`.
 
-**Phase 7G:** NOT STARTED. Next objective: Final Engineering / SEO / Security Hardening. Production: **NOT DEPLOYED.**
+**Phase 7G:** COMPLETE / HUMAN APPROVED. Feature commit `28a3356` (`feat: finalize SEO and release hardening`). GitHub: **PUSHED** to `origin/main`. Production: **NOT DEPLOYED.** Technical SEO, Vite 8.0.16, npm audit 0, Organization JSON-LD, `/team` sitemap + canonical, minimal GitHub Actions CI. See `docs/PHASE_7G_FINAL_ENGINEERING_PROTOTYPE.md` and `docs/PHASE_7G_COMPLETION_REPORT.md`.
+
+**Engineering status:** CORE ENGINEERING COMPLETE.
+
+**Next:** PUBLIC REPOSITORY HYGIENE + RELEASE CANDIDATE PREPARATION. Production: **NOT DEPLOYED.** Stakeholder LinkedIn / extra members / group photo / Phase 2B wording are not engineering blockers.
 
 **Phase 1A attribution correction:** Cursor Agent appeared as a GitHub contributor because Phase 1 commits included a `Co-authored-by: Cursor` trailer. Those post-stakeholder commits were recreated with identical trees for `Korak Das` / `korakdas1` only. The stakeholder `Initial commit` (`e81f2ba`) was not rewritten. `git push --force-with-lease` was used after verifying the remote tip had not changed. No application source or behavior changed.
 
@@ -50,7 +54,7 @@ Phase 2A messaging/SEO proposal completed; no application changes implemented. S
 | Site type | Client-rendered single-page app (SPA) |
 | UI library | React **19.2.5** (pinned in `package.json` and lockfile) |
 | Language | JavaScript / JSX — **not TypeScript** |
-| Build tool | Vite **8.0.10** (pinned in `package.json` and lockfile) |
+| Build tool | Vite **8.0.16** |
 | Package manager | npm (`package-lock.json` present) |
 | CSS | Tailwind CSS **3.4.19** + `src/index.css` |
 | PostCSS | `postcss.config.cjs` — Tailwind only; no Autoprefixer |
@@ -189,14 +193,16 @@ Live response for `/` is HTTP 200 with the security headers from `vercel.json` a
 | Phase 7E documentation commit | `docs: record Phase 7E completion` |
 | Phase 7F feature commit | `4545cde` — `test: add Playwright smoke coverage` |
 | Phase 7F documentation commit | `docs: record Phase 7F completion` |
-| Remote push | **SUCCESS** (Phase 7F: normal fast-forward; no force). GitHub is **not** automatically connected to Vercel. |
-| Working tree | **Clean after Phase 7F push** (at the 7F completion snapshot). **Not production-deployed.** |
+| Phase 7G feature commit | `28a3356` — `feat: finalize SEO and release hardening` |
+| Phase 7G documentation commit | `docs: record Phase 7G completion` |
+| Remote push | **SUCCESS** (Phase 7G: normal fast-forward; no force). GitHub is **not** automatically connected to Vercel. |
+| Working tree | **Clean after Phase 7G push** (at the 7G completion snapshot). **Not production-deployed.** |
 | `.gitignore` | Safe baseline plus Playwright artifacts (`test-results/`, `playwright-report/`, `blob-report/`, `playwright/.cache/`) in the 7F prototype |
 | LICENSE | **Absent** (intentionally not added; company decision pending) |
 | README | Professional project README (`README.md`) |
 | Package | `spandanai-website` |
-| Dependencies | Pinned / reproducible. Phase 7F adds **dev-only** `@playwright/test` **1.63.0**. Runtime dependencies unchanged. |
-| Build | `npm run build` **pass** (Phase 7D.1: `index-DCdKucgy.js` 407.96 kB gzip 130.48 kB, `index-D5ihWw1E.css` 19.85 kB gzip 5.30 kB, Manrope WOFF2 24.83 kB). |
+| Dependencies | Pinned / reproducible. Phase 7F added **dev-only** `@playwright/test` **1.63.0**. Phase 7G updates **dev** `vite` **8.0.16**. Runtime dependencies unchanged. |
+| Build | `npm run build` **pass** (Phase 7G prototype: `index-DLcZJEDz.js` 408.71 kB gzip 130.77 kB, `index-D5ihWw1E.css` 19.85 kB gzip 5.30 kB, Manrope WOFF2 24.83 kB). |
 
 ---
 
@@ -209,17 +215,16 @@ Live response for `/` is HTTP 200 with the security headers from `vercel.json` a
 - Hero canvas Phase 6 pauses off-screen / in hidden tabs and freezes under reduced motion; electrical arcs, pulses, and random firing are disabled when `prefers-reduced-motion: reduce`.
 - Touch: no fake cursor; a hero tap may fire one localized discharge; lower-page taps may fire a localized micro-spark. Scroll/drag does not spark.
 - Contact uses provider-neutral `mailto:spandanai.sard@gmail.com` (Email Us + form submit + Copy). No Gmail-only action.
-- Page `<title>` is `SpandanAI` on the homepage; `/team` sets `Team | SpandanAI` in JavaScript. Canonical/OG remain homepage-global.
-- No Schema.org JSON-LD, no web app manifest.
+- Page `<title>` is `SpandanAI` on the homepage; `/team` uses `Meet the Team | SpandanAI` via `DocumentMeta`. Canonical is route-aware after JS. OG/Twitter remain homepage-static in `index.html` (SPA crawler limitation). Organization JSON-LD is present (name/url/logo only).
 - Phrase **"Innovating AI with Semiconductors" does not exist in this repository or on the live homepage HTML/JS.**
 - Brand name **SpandanAI** appears in the title, H1, header text, and footer text. The header logo image is decorative (`alt=""`). The footer logo image still uses `alt="SpandanAI"`.
 - React/Vite are now pinned; do not treat `"latest"` as current.
-- Playwright Chromium smoke tests: `npm run test:e2e`. ESLint and unit tests are still not present.
+- Playwright Chromium smoke tests: `npm run test:e2e` (13 tests). ESLint and unit tests are still not present. Minimal GitHub Actions CI is present.
 - Empty `src/assets/` directory.
 - Team data for extra members lives in `src/data/teamContent.js` (`teamMembers` is currently empty). Leadership data was moved out of `Founders.jsx`.
 - Filenames with spaces (`K. Dharanidhar G.jpg`, etc.).
 
-**Pending engineering (not defects of this landing):** Phase 7G final engineering / SEO / security, A11Y-07 footer focus.
+**Pending engineering (not defects of this landing):** public repository hygiene / release candidate; A11Y-07 footer focus remains deferred.
 
 **Pending stakeholder input:** LinkedIn URLs, extra team members, group photo, Phase 2B wording.
 

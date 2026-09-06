@@ -2,7 +2,7 @@
 
 Derived from `docs/PHASE_7A_ENGINEERING_QUALITY_AUDIT.md`.
 
-**Status:** Phase 7B COMPLETE / HUMAN APPROVED / PUSHED (`bc97490`). Phase 6B COMPLETE / HUMAN APPROVED / PUSHED (`7e13358`). Phase 7C COMPLETE / HUMAN APPROVED / PUSHED (`59c7e8a`). Phase 7D COMPLETE / HUMAN APPROVED / PUSHED (`09d7cac`). Phase 7D.1 COMPLETE / HUMAN APPROVED / PUSHED (`cf23a2a`). Phase 7E COMPLETE / HUMAN APPROVED / PUSHED (`c131a30`). Phase 7F COMPLETE / HUMAN APPROVED / PUSHED (`4545cde`). Phase 7G is **NOT STARTED**.  
+**Status:** Phase 7B COMPLETE / HUMAN APPROVED / PUSHED (`bc97490`). Phase 6B COMPLETE / HUMAN APPROVED / PUSHED (`7e13358`). Phase 7C COMPLETE / HUMAN APPROVED / PUSHED (`59c7e8a`). Phase 7D COMPLETE / HUMAN APPROVED / PUSHED (`09d7cac`). Phase 7D.1 COMPLETE / HUMAN APPROVED / PUSHED (`cf23a2a`). Phase 7E COMPLETE / HUMAN APPROVED / PUSHED (`c131a30`). Phase 7F COMPLETE / HUMAN APPROVED / PUSHED (`4545cde`). Phase 7G COMPLETE / HUMAN APPROVED / PUSHED (`28a3356`). **CORE ENGINEERING COMPLETE.** Next: **PUBLIC REPOSITORY HYGIENE + RELEASE CANDIDATE PREPARATION**.  
 **Production:** NOT DEPLOYED.
 
 This is a small semiconductor marketing SPA. Do not migrate to Next.js, Redux, Three.js, a design-system package, or a large E2E estate unless a later audit shows a concrete need.
@@ -16,7 +16,8 @@ This is a small semiconductor marketing SPA. Do not migrate to Next.js, Redux, T
 - Phase 7D image performance is complete and pushed. Do not reopen it unless a regression appears.
 - Phase 7D.1 card hover is complete and pushed. Do not retune it.
 - Phase 7E dead-code/asset cleanup is complete and pushed. Do not restore the deleted unused logos or unused animation exports.
-- Phase 7F Playwright smoke tests are complete and pushed. Do not add ESLint, Vitest, or CI unless a later phase explicitly decides to.
+- Phase 7F Playwright smoke tests are complete and pushed.
+- Phase 7G SEO/security/CI is complete and pushed. Next is public repository hygiene + release candidate, not additional engineering phases.
 - Implement remaining phases one at a time. Re-run `npm run build` after product changes.
 - Do not mix stakeholder-blocked content (LinkedIn, extra members, group photo, Phase 2B copy) into these engineering phases.
 - Production remains an older Vercel deploy until a human explicitly deploys.
@@ -226,7 +227,9 @@ Do not mix with image, SEO, or responsive work unless explicitly requested. Hero
 
 ---
 
-## Phase 7G — Technical SEO readiness
+## Phase 7G — Technical SEO / security / final engineering
+
+**Status:** COMPLETE / HUMAN APPROVED. **PUSHED.** Production: **NOT DEPLOYED.** See `docs/PHASE_7G_COMPLETION_REPORT.md`.
 
 **Objective:** Make `/team` discoverable and shareable without changing Phase 2B stakeholder wording.
 
