@@ -22,19 +22,19 @@ const GLOBAL_SPARK_OFFSET_PX = 8;
 const GLOBAL_FLASH_ONLY_CHANCE = 0.11;
 const GLOBAL_SPARK_INTENSITY = 0.55;
 const GLOBAL_CLICK_INTENSITY = 0.92;
-const GLOBAL_TAP_INTENSITY = 0.76;
+const GLOBAL_TAP_INTENSITY = 0.84;
 const GLOBAL_CLICK_DURATION_MIN_MS = 150;
 const GLOBAL_CLICK_DURATION_MAX_MS = 210;
-const GLOBAL_TAP_DURATION_MIN_MS = 160;
-const GLOBAL_TAP_DURATION_MAX_MS = 220;
+const GLOBAL_TAP_DURATION_MIN_MS = 145;
+const GLOBAL_TAP_DURATION_MAX_MS = 195;
 const GLOBAL_CLICK_FLASH_MIN_MS = 42;
 const GLOBAL_CLICK_FLASH_MAX_MS = 72;
 const GLOBAL_CLICK_FLASH_RADIUS_MIN = 2.8;
 const GLOBAL_CLICK_FLASH_RADIUS_MAX = 5.4;
-const GLOBAL_TAP_FLASH_MIN_MS = 55;
-const GLOBAL_TAP_FLASH_MAX_MS = 95;
-const GLOBAL_TAP_FLASH_RADIUS_MIN = 3.5;
-const GLOBAL_TAP_FLASH_RADIUS_MAX = 7.5;
+const GLOBAL_TAP_FLASH_MIN_MS = 40;
+const GLOBAL_TAP_FLASH_MAX_MS = 68;
+const GLOBAL_TAP_FLASH_RADIUS_MIN = 2.6;
+const GLOBAL_TAP_FLASH_RADIUS_MAX = 4.6;
 const GLOBAL_CLICK_OUTER_ALPHA = 0.4;
 const GLOBAL_CLICK_MAIN_ALPHA = 0.94;
 const GLOBAL_CLICK_CORE_ALPHA = 0.52;
@@ -44,6 +44,12 @@ const DESKTOP_CLICK_CORE_WIDTH = 0.4;
 const DESKTOP_CLICK_OUTER_ALPHA = 0.2;
 const DESKTOP_CLICK_MAIN_ALPHA = 0.7;
 const DESKTOP_CLICK_CORE_ALPHA = 0.88;
+const MOBILE_TAP_OUTER_WIDTH = 2.05;
+const MOBILE_TAP_MAIN_WIDTH = 1.12;
+const MOBILE_TAP_CORE_WIDTH = 0.46;
+const MOBILE_TAP_OUTER_ALPHA = 0.22;
+const MOBILE_TAP_MAIN_ALPHA = 0.74;
+const MOBILE_TAP_CORE_ALPHA = 0.86;
 const GLOBAL_CLICK_ORIGIN_JITTER = 2;
 const GLOBAL_TAP_ORIGIN_JITTER = 1.6;
 const GLOBAL_SPARK_OUTER_ALPHA = 0.34;
@@ -62,7 +68,7 @@ const WAKE_SPEED_CLAMP = 2.2;
 const WAKE_HERO_SCALE = 0.42;
 const WAKE_INTERACTIVE_SCALE = 0.52;
 const WAKE_CURSOR_INTENSITY = 0.36;
-const CLICK_DISCHARGE_COOLDOWN_MS = 300;
+const CLICK_DISCHARGE_COOLDOWN_MS = 60;
 const TAP_MAX_MOVE_PX = 10;
 const TAP_MAX_DURATION_MS = 600;
 const INTERACTIVE_SELECTOR = "a, button, input, textarea, select, label";
@@ -197,16 +203,16 @@ export default function ElectricalCursorOverlay() {
           else flashEnvelope = (1 - (flashProgress - 0.34) / 0.66) ** 2.1;
         } else if (isTap) {
           if (flashProgress >= 1) flashEnvelope = 0;
-          else if (flashProgress < 0.48) flashEnvelope = 1;
-          else flashEnvelope = (1 - (flashProgress - 0.48) / 0.52) ** 1.7;
+          else if (flashProgress < 0.36) flashEnvelope = 1;
+          else flashEnvelope = (1 - (flashProgress - 0.36) / 0.64) ** 2;
         }
 
         if (flashEnvelope > 0) {
           const flashRadius = isManual
             ? spark.flashRadius
             : spark.flashRadius * (0.75 + progress * 0.5);
-          const originAlpha = isClick ? 0.7 : isTap ? 0.55 : GLOBAL_SPARK_FLASH_ALPHA;
-          const midAlpha = isClick ? 0.18 : isTap ? 0.22 : 0.16;
+          const originAlpha = isClick ? 0.7 : isTap ? 0.64 : GLOBAL_SPARK_FLASH_ALPHA;
+          const midAlpha = isClick ? 0.18 : isTap ? 0.16 : 0.16;
           const flash = context.createRadialGradient(spark.x, spark.y, 0, spark.x, spark.y, flashRadius);
           flash.addColorStop(0, `rgba(37, 99, 235, ${originAlpha * flashEnvelope})`);
           flash.addColorStop(0.45, `rgba(8, 110, 140, ${midAlpha * flashEnvelope})`);
@@ -223,7 +229,11 @@ export default function ElectricalCursorOverlay() {
           const life = spark.branchLives?.[branchIndex] ?? 1;
           if (progress > life) continue;
           const localProgress = life >= 0.999 ? progress : clamp(progress / life, 0, 1);
-          const fade = isClick ? dischargeEnvelope(localProgress) ** 1.28 : dischargeEnvelope(localProgress);
+          const fade = isClick
+            ? dischargeEnvelope(localProgress) ** 1.28
+            : isTap
+              ? dischargeEnvelope(localProgress) ** 1.2
+              : dischargeEnvelope(localProgress);
           const branchEnvelope = fade * (spark.intensity ?? GLOBAL_SPARK_INTENSITY);
           if (branchEnvelope <= 0) continue;
           if (isClick) {
@@ -241,15 +251,17 @@ export default function ElectricalCursorOverlay() {
             drawPolyline(points, `rgba(186, 230, 253, ${DESKTOP_CLICK_CORE_ALPHA * branchEnvelope * alphaScale})`, coreW);
           } else if (isTap) {
             const level = spark.branchLevels?.[branchIndex] ?? (branchIndex === 0 ? "primary" : "secondary");
-            const weight = spark.branchWeights?.[branchIndex] ?? 1;
-            const widthScale = level === "primary" ? 1 : weight;
-            const alphaScale = level === "primary" ? 1 : 0.55 + weight * 0.35;
-            const outerW = (spark.energy ? 4.05 : 3.45) * widthScale;
-            const mainW = (spark.energy ? 2.05 : 1.72) * widthScale;
-            const coreW = 0.72 * (level === "primary" ? 1 : Math.max(0.45, widthScale * 0.7));
-            drawPolyline(points, `rgba(37, 99, 235, ${GLOBAL_CLICK_OUTER_ALPHA * branchEnvelope * alphaScale})`, outerW);
-            drawPolyline(points, `rgba(8, 110, 140, ${GLOBAL_CLICK_MAIN_ALPHA * branchEnvelope * alphaScale})`, mainW);
-            drawPolyline(points, `rgba(186, 230, 253, ${GLOBAL_CLICK_CORE_ALPHA * branchEnvelope * alphaScale})`, coreW);
+            const isPrimary = level === "primary";
+            const isTertiary = level === "tertiary";
+            const leadSecondary = !isPrimary && !isTertiary && branchIndex === 1;
+            const widthScale = isPrimary ? 1 : isTertiary ? 0.34 : leadSecondary ? 0.6 : 0.46;
+            const alphaScale = isPrimary ? 1 : isTertiary ? 0.4 : leadSecondary ? 0.66 : 0.52;
+            const outerW = MOBILE_TAP_OUTER_WIDTH * widthScale;
+            const mainW = MOBILE_TAP_MAIN_WIDTH * widthScale;
+            const coreW = MOBILE_TAP_CORE_WIDTH * (isPrimary ? 1 : Math.max(0.55, widthScale));
+            drawPolyline(points, `rgba(37, 99, 235, ${MOBILE_TAP_OUTER_ALPHA * branchEnvelope * alphaScale})`, outerW);
+            drawPolyline(points, `rgba(8, 110, 140, ${MOBILE_TAP_MAIN_ALPHA * branchEnvelope * alphaScale})`, mainW);
+            drawPolyline(points, `rgba(186, 230, 253, ${MOBILE_TAP_CORE_ALPHA * branchEnvelope * alphaScale})`, coreW);
           } else {
             drawPolyline(points, `rgba(37, 99, 235, ${GLOBAL_SPARK_OUTER_ALPHA * branchEnvelope})`, 2.35);
             drawPolyline(points, `rgba(8, 110, 140, ${GLOBAL_SPARK_CORE_ALPHA * branchEnvelope})`, 1.05);
@@ -268,8 +280,8 @@ export default function ElectricalCursorOverlay() {
               drawPolyline(points, `rgba(37, 99, 235, ${0.16 * fragmentEnvelope})`, 0.85);
               drawPolyline(points, `rgba(186, 230, 253, ${0.42 * fragmentEnvelope})`, 0.32);
             } else {
-              drawPolyline(points, `rgba(37, 99, 235, ${0.32 * fragmentEnvelope})`, 2.1);
-              drawPolyline(points, `rgba(8, 110, 140, ${0.8 * fragmentEnvelope})`, 0.95);
+              drawPolyline(points, `rgba(37, 99, 235, ${0.18 * fragmentEnvelope})`, 0.95);
+              drawPolyline(points, `rgba(186, 230, 253, ${0.48 * fragmentEnvelope})`, 0.36);
             }
           }
         }
@@ -438,9 +450,13 @@ export default function ElectricalCursorOverlay() {
         const flashMax = isClick ? GLOBAL_CLICK_FLASH_MAX_MS : GLOBAL_TAP_FLASH_MAX_MS;
         const flashRadiusMin = isClick ? GLOBAL_CLICK_FLASH_RADIUS_MIN : GLOBAL_TAP_FLASH_RADIUS_MIN;
         const flashRadiusMax = isClick ? GLOBAL_CLICK_FLASH_RADIUS_MAX : GLOBAL_TAP_FLASH_RADIUS_MAX;
-        const energyIntensity = isClick ? (energy ? 1.1 : 1) : energy ? 1.12 : 1;
-        const energyFlash = isClick ? (energy ? 1.12 : 1) : energy ? 1.15 : 1;
-        const energyDuration = isClick && energy ? randomInRange(durationMin + 12, durationMax + 18) : randomInRange(durationMin, durationMax);
+        const energyIntensity = isClick ? (energy ? 1.1 : 1) : energy ? 1.08 : 1;
+        const energyFlash = isClick ? (energy ? 1.12 : 1) : energy ? 1.08 : 1;
+        const energyDuration = energy
+          ? isClick
+            ? randomInRange(durationMin + 12, durationMax + 18)
+            : randomInRange(durationMin + 8, durationMax + 12)
+          : randomInRange(durationMin, durationMax);
         activeSparks.push({
           x: originX,
           y: originY,

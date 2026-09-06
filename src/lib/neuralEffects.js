@@ -268,7 +268,7 @@ function generateJaggedPath(startX, startY, angle, length, options = {}) {
 function pickSecondaryCount(variant, compact) {
   if (variant === "directional") return Math.random() < 0.82 ? 1 : 2;
   if (variant === "crack") {
-    if (compact) return Math.random() < 0.68 ? 2 : 3;
+    if (compact) return Math.random() < 0.7 ? 1 : 2;
     return Math.random() < 0.7 ? 1 : 2;
   }
   if (variant === "energy") {
