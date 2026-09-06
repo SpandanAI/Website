@@ -1,11 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 
 export default function NotFoundPage() {
-  useEffect(() => {
-    document.title = "SpandanAI";
-  }, []);
-
   return (
     <main id="main-content" tabIndex={-1} className="mx-auto max-w-7xl px-5 py-24 outline-none sm:px-6 lg:px-8">
       <h1 className="text-3xl font-semibold tracking-[-0.02em] text-ink">This page is not available.</h1>

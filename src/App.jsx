@@ -1,5 +1,6 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
+import DocumentMeta from "./components/DocumentMeta";
 import ElectricalCursorOverlay from "./components/ElectricalCursorOverlay";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
@@ -34,6 +35,7 @@ function SkipToMainContent() {
 export default function App() {
   return (
     <div className="min-h-screen bg-white">
+      <DocumentMeta />
       <SkipToMainContent />
       <RouteScrollManager />
       <ScrollProgressBar />

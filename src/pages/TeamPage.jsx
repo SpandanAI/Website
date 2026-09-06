@@ -10,7 +10,6 @@ export default function TeamPage() {
   const shouldReduceMotion = useReducedMotion();
 
   useEffect(() => {
-    document.title = "Team | SpandanAI";
     headingRef.current?.focus({ preventScroll: true });
   }, []);
 

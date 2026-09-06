@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect } from "react";
+import React, { useLayoutEffect } from "react";
 import { useLocation } from "react-router-dom";
 import Applications from "../components/Applications";
 import Contact from "../components/Contact";
@@ -7,10 +7,6 @@ import Hero from "../components/Hero";
 
 export default function HomePage() {
   const { hash } = useLocation();
-
-  useEffect(() => {
-    document.title = "SpandanAI";
-  }, []);
 
   useLayoutEffect(() => {
     if (!hash) return;
