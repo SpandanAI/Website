@@ -62,7 +62,7 @@ test.describe("mobile navigation at 390x844", () => {
   });
 });
 
-test.describe("Phase 7C navbar breakpoint", () => {
+test.describe("navbar breakpoint", () => {
   test("767 is hamburger mode; 768 and 769 are desktop nav", async ({ page }) => {
     const faults = collectPageFaults(page);
     await page.goto("/");

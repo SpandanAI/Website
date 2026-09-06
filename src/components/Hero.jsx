@@ -60,7 +60,6 @@ export default function Hero() {
       initial="hidden"
       animate="visible"
     >
-      {/* Hero section: large statement, CTA pair, and abstract product visual. */}
       <div
         ref={backgroundLayerRef}
         className="absolute inset-0 z-0 bg-center bg-cover bg-no-repeat"

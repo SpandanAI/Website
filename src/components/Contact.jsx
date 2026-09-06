@@ -92,7 +92,6 @@ export default function Contact() {
       whileInView="visible"
       viewport={viewportOnce}
     >
-      {/* Contact section: accessible form layout with placeholder business details. */}
       <motion.div
         className="mx-auto grid max-w-7xl gap-10 px-5 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:px-8"
         variants={staggerContainer}

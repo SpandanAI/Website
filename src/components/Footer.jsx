@@ -11,7 +11,6 @@ export default function Footer() {
       whileInView="visible"
       viewport={viewportOnce}
     >
-      {/* Professional footer with key company contact details. */}
       <motion.div
         className="mx-auto max-w-7xl px-5 py-12 text-center sm:px-6 lg:px-8"
         variants={staggerContainer}
