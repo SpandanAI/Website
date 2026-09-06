@@ -25,6 +25,30 @@ export function generateElectricalArcPoints(startX, startY, endX, endY, segmentC
   return points;
 }
 
+export function generateWakeFilament(startX, startY, endX, endY, options = {}) {
+  const dx = endX - startX;
+  const dy = endY - startY;
+  const length = Math.hypot(dx, dy) || 1;
+  const jitter = options.jitter ?? Math.min(4.2, length * 0.2);
+  const segments = length < 20 ? 3 : 4;
+  const points = generateElectricalArcPoints(startX, startY, endX, endY, segments, jitter);
+  let branch = null;
+  if (options.allowBranch) {
+    const mid = points[Math.min(points.length - 2, Math.max(1, Math.floor(points.length * 0.55)))];
+    const heading = Math.atan2(dy, dx) + (Math.random() < 0.5 ? 1 : -1) * randomInRange(0.75, 1.3);
+    const branchLength = randomInRange(5, 10);
+    branch = generateElectricalArcPoints(
+      mid.x,
+      mid.y,
+      mid.x + Math.cos(heading) * branchLength,
+      mid.y + Math.sin(heading) * branchLength,
+      3,
+      2.1
+    );
+  }
+  return { points, branch };
+}
+
 export function generateLocalSparkPoints(originX, originY, radius) {
   const angle = Math.random() * Math.PI * 2;
   const distance = radius * (0.45 + Math.random() * 0.55);
@@ -245,19 +269,18 @@ function pickSecondaryCount(variant, compact) {
   if (variant === "directional") return Math.random() < 0.82 ? 1 : 2;
   if (variant === "crack") {
     if (compact) return Math.random() < 0.68 ? 2 : 3;
-    const roll = Math.random();
-    if (roll < 0.48) return 2;
-    if (roll < 0.9) return 3;
-    return 4;
+    return Math.random() < 0.7 ? 1 : 2;
   }
-  if (variant === "energy") return Math.random() < 0.72 ? 1 : 2;
+  if (variant === "energy") {
+    if (compact) return Math.random() < 0.72 ? 1 : 2;
+    return Math.random() < 0.58 ? 2 : 1;
+  }
 
   const roll = Math.random();
   if (roll < 0.08) return 0;
   if (roll < 0.68) return 1;
   if (compact) return Math.random() < 0.78 ? 1 : 2;
-  if (roll < 0.94) return 2;
-  return 3;
+  return 2;
 }
 
 function pickBranchAnchors(count) {

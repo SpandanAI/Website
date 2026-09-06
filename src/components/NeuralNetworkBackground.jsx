@@ -44,6 +44,14 @@ const NODE_EXCITATION_DECAY = 0.9;
 const EDGE_PULSE_DURATION_MS = 280;
 const AMBIENT_INTERVAL_MIN_MS = 4000;
 const AMBIENT_INTERVAL_MAX_MS = 7000;
+const MOBILE_AMBIENT_SHORT_MIN_MS = 2000;
+const MOBILE_AMBIENT_SHORT_MAX_MS = 3000;
+const MOBILE_AMBIENT_NORMAL_MIN_MS = 2500;
+const MOBILE_AMBIENT_NORMAL_MAX_MS = 5500;
+const MOBILE_AMBIENT_LONG_MIN_MS = 5000;
+const MOBILE_AMBIENT_LONG_MAX_MS = 7000;
+const MOBILE_AMBIENT_PAUSE_AFTER_TAP_MS = 2800;
+const MOBILE_AMBIENT_RARE_CHANCE = 0.14;
 const MAX_ACTIVE_DISCHARGES = 4;
 const MAX_ACTIVE_EDGE_PULSES = 8;
 const MAX_SIMULTANEOUS_EXCITED_NODES = 12;
@@ -72,6 +80,7 @@ export default function NeuralNetworkBackground() {
     let height = 0;
     let animationFrameId = 0;
     const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const hoverQuery = window.matchMedia("(hover: hover)");
     let prefersReducedMotion = motionQuery.matches;
     let isHeroVisible = true;
     let isPageVisible = document.visibilityState !== "hidden";
@@ -100,6 +109,7 @@ export default function NeuralNetworkBackground() {
     let isRippleActive = false;
     let wasCursorActive = false;
     let lastManualAt = 0;
+    let lastScrollAt = 0;
     let pendingTouch = null;
 
     const nodes = [];
@@ -192,6 +202,8 @@ export default function NeuralNetworkBackground() {
 
     const effectsAllowed = () =>
       !prefersReducedMotion && isHeroVisible && isPageVisible && Boolean(width && height);
+
+    const isTouchHeroMode = () => !hoverQuery.matches;
 
     const excitedNodeCount = () => {
       let count = 0;
@@ -302,7 +314,7 @@ export default function NeuralNetworkBackground() {
       fireTowardNodes(originX, originY, targetIds, now, choosePropagationDepth());
     };
 
-    const fireAmbientEvent = (now) => {
+    const fireDesktopAmbientEvent = (now) => {
       if (!effectsAllowed() || !nodes.length) return;
       const node = nodes[Math.floor(Math.random() * nodes.length)];
       exciteNode(node.id, 0.55);
@@ -313,6 +325,64 @@ export default function NeuralNetworkBackground() {
       }
     };
 
+    const fireMobileAmbientEvent = (now) => {
+      if (!effectsAllowed() || !nodes.length) return;
+      if (now - lastManualAt < MOBILE_AMBIENT_PAUSE_AFTER_TAP_MS) return;
+      if (now - lastScrollAt < 450) return;
+      if (activeDischarges.length >= 2 || activeEdgePulses.length >= 3) return;
+
+      const origin = nodes[Math.floor(Math.random() * nodes.length)];
+      const rare = Math.random() < MOBILE_AMBIENT_RARE_CHANCE;
+      exciteNode(origin.id, rare ? 0.5 : 0.4);
+      addFlash(origin.currentX, origin.currentY, now, rare ? 0.42 : 0.34);
+
+      const neighbors = findConnectedNeighborIds(nodes, origin.id, CONNECTION_DISTANCE);
+      if (!neighbors.length) {
+        fireLocalSpark(origin.currentX, origin.currentY, now);
+        return;
+      }
+
+      const neighborCount = rare
+        ? Math.min(neighbors.length, 3 + (Math.random() < 0.35 ? 1 : 0))
+        : Math.min(neighbors.length, 2 + (Math.random() < 0.55 ? 1 : 0));
+      const involved = neighbors.slice(0, Math.max(1, neighborCount));
+      const first = nodes[involved[0]];
+      if (first) {
+        addDischarge(
+          generateElectricalArcPoints(
+            origin.currentX,
+            origin.currentY,
+            first.currentX,
+            first.currentY,
+            4,
+            5
+          ),
+          now,
+          randomInRange(110, 170)
+        );
+      }
+
+      involved.forEach((id, index) => {
+        exciteNode(id, (rare ? 0.36 : 0.26) * (1 - index * 0.06));
+        addEdgePulse(origin.id, id, now, index === 0 && rare ? 1 : 0);
+      });
+    };
+
+    const fireAmbientEvent = (now) => {
+      if (isTouchHeroMode()) fireMobileAmbientEvent(now);
+      else fireDesktopAmbientEvent(now);
+    };
+
+    const nextAmbientDelay = () => {
+      if (!isTouchHeroMode()) {
+        return randomInRange(AMBIENT_INTERVAL_MIN_MS, AMBIENT_INTERVAL_MAX_MS);
+      }
+      const roll = Math.random();
+      if (roll < 0.16) return randomInRange(MOBILE_AMBIENT_SHORT_MIN_MS, MOBILE_AMBIENT_SHORT_MAX_MS);
+      if (roll < 0.84) return randomInRange(MOBILE_AMBIENT_NORMAL_MIN_MS, MOBILE_AMBIENT_NORMAL_MAX_MS);
+      return randomInRange(MOBILE_AMBIENT_LONG_MIN_MS, MOBILE_AMBIENT_LONG_MAX_MS);
+    };
+
     const firePointerStimulus = (clientX, clientY, pointerType) => {
       if (!effectsAllowed()) return;
       const rect = canvas.getBoundingClientRect();
@@ -321,15 +391,25 @@ export default function NeuralNetworkBackground() {
       if (x < 0 || y < 0 || x > rect.width || y > rect.height) return;
       const now = performance.now();
       const isFinePointer = pointerType !== "touch";
-      const targetCount = isFinePointer ? 1 + (Math.random() < 0.55 ? 1 : 0) : 1;
-      const searchRadius = isFinePointer ? CURSOR_RADIUS : CURSOR_RADIUS * 0.7;
+      const targetCount = isFinePointer
+        ? 1 + (Math.random() < 0.55 ? 1 : 0)
+        : 1 + (Math.random() < 0.7 ? 1 : 0);
+      const searchRadius = isFinePointer ? CURSOR_RADIUS : CURSOR_RADIUS * 0.78;
       const targetIds = pickNearbyNodeIds(nodes, x, y, searchRadius, targetCount);
-      const hopsRemaining = Math.random() < (isFinePointer ? 0.45 : 0.4) ? 1 : 0;
+      const hopsRemaining = Math.random() < (isFinePointer ? 0.45 : 0.72) ? 1 : 0;
       if (!targetIds.length) {
         fireLocalSpark(x, y, now);
         return;
       }
-      fireTowardNodes(x, y, targetIds, now, hopsRemaining, isFinePointer ? 0.95 : 0.9, isFinePointer ? 1.2 : 1);
+      fireTowardNodes(
+        x,
+        y,
+        targetIds,
+        now,
+        hopsRemaining,
+        isFinePointer ? 0.95 : 0.78,
+        isFinePointer ? 1.2 : 0.95
+      );
     };
 
     const clearDischargeTimer = () => {
@@ -353,10 +433,27 @@ export default function NeuralNetworkBackground() {
       window.clearTimeout(ambientTimeoutId);
       ambientTimeoutId = 0;
       if (!effectsAllowed()) return;
-      const delay = randomInRange(AMBIENT_INTERVAL_MIN_MS, AMBIENT_INTERVAL_MAX_MS);
+      let delay = nextAmbientDelay();
+      if (isTouchHeroMode()) {
+        delay += Math.max(0, MOBILE_AMBIENT_PAUSE_AFTER_TAP_MS - (performance.now() - lastManualAt));
+      }
       ambientTimeoutId = window.setTimeout(() => {
         ambientTimeoutId = 0;
         if (!effectsAllowed()) return;
+        if (isTouchHeroMode()) {
+          const tapWait = Math.max(0, MOBILE_AMBIENT_PAUSE_AFTER_TAP_MS - (performance.now() - lastManualAt));
+          const scrollWait = Math.max(0, 450 - (performance.now() - lastScrollAt));
+          const wait = Math.max(tapWait, scrollWait);
+          if (wait > 0) {
+            ambientTimeoutId = window.setTimeout(() => {
+              ambientTimeoutId = 0;
+              if (!effectsAllowed()) return;
+              fireAmbientEvent(performance.now());
+              scheduleAmbientFiring();
+            }, wait);
+            return;
+          }
+        }
         fireAmbientEvent(performance.now());
         scheduleAmbientFiring();
       }, delay);
@@ -838,8 +935,13 @@ export default function NeuralNetworkBackground() {
       syncRunState();
     };
 
+    const handleWindowScroll = () => {
+      lastScrollAt = performance.now();
+    };
+
     resizeCanvas();
     window.addEventListener("resize", resizeCanvas);
+    window.addEventListener("scroll", handleWindowScroll, { passive: true });
     window.addEventListener("pointermove", handlePointerMove, { passive: true });
     window.addEventListener("pointerdown", handlePointerDown, { passive: true });
     window.addEventListener("pointerup", handlePointerUp, { passive: true });
@@ -868,6 +970,7 @@ export default function NeuralNetworkBackground() {
       stopLoop();
       observer.disconnect();
       window.removeEventListener("resize", resizeCanvas);
+      window.removeEventListener("scroll", handleWindowScroll);
       window.removeEventListener("pointermove", handlePointerMove);
       window.removeEventListener("pointerdown", handlePointerDown);
       window.removeEventListener("pointerup", handlePointerUp);
