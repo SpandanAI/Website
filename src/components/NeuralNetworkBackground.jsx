@@ -58,6 +58,11 @@ const MAX_SIMULTANEOUS_EXCITED_NODES = 12;
 const MAX_ACTIVE_FLASHES = 4;
 const PROPAGATION_ONE_HOP_CHANCE = 0.25;
 const PROPAGATION_TWO_HOP_CHANCE = 0.05;
+const MANUAL_PROPAGATION_STAGES = 4;
+const MANUAL_HOP_DURATION_MIN_MS = 64;
+const MANUAL_HOP_DURATION_MAX_MS = 86;
+const MANUAL_STAGE_EXCITATION = [0.98, 0.82, 0.64, 0.45];
+const MANUAL_STAGE_FLASH_SCALE = [0, 0.62, 0.5, 0.38];
 const HERO_VISIBILITY_THRESHOLD = 0.12;
 const CLICK_DISCHARGE_COOLDOWN_MS = 300;
 const TAP_MAX_MOVE_PX = 10;
@@ -240,18 +245,45 @@ export default function NeuralNetworkBackground() {
       });
     };
 
-    const addEdgePulse = (fromId, toId, now, hopsRemaining) => {
+    const addEdgePulse = (fromId, toId, now, hopsRemaining, extras = {}) => {
       if (fromId === toId) return;
       if (activeEdgePulses.length >= MAX_ACTIVE_EDGE_PULSES) activeEdgePulses.shift();
       activeEdgePulses.push({
         fromId,
         toId,
         createdAt: now,
-        duration: EDGE_PULSE_DURATION_MS,
-        hopsRemaining
+        duration: extras.duration ?? EDGE_PULSE_DURATION_MS,
+        hopsRemaining,
+        excitation: extras.excitation,
+        flashScale: extras.flashScale,
+        remainingPath: extras.remainingPath,
+        visited: extras.visited,
+        hopDuration: extras.hopDuration,
+        nextExcitations: extras.nextExcitations,
+        nextFlashScales: extras.nextFlashScales,
+        withArc: extras.withArc
       });
       const key = fromId < toId ? `${fromId}:${toId}` : `${toId}:${fromId}`;
-      edgeHighlights.set(key, 0.55);
+      edgeHighlights.set(key, extras.highlight ?? 0.55);
+      if (extras.withArc) {
+        const from = nodes[fromId];
+        const to = nodes[toId];
+        if (from && to) {
+          const segments = Math.round(randomInRange(ARC_SEGMENTS_MIN, ARC_SEGMENTS_MAX));
+          addDischarge(
+            generateElectricalArcPoints(
+              from.currentX,
+              from.currentY,
+              to.currentX,
+              to.currentY,
+              segments,
+              ARC_JITTER_PX
+            ),
+            now,
+            (extras.duration ?? EDGE_PULSE_DURATION_MS) + 48
+          );
+        }
+      }
     };
 
     const choosePropagationDepth = () => {
@@ -259,6 +291,104 @@ export default function NeuralNetworkBackground() {
       if (roll < PROPAGATION_TWO_HOP_CHANCE) return 2;
       if (roll < PROPAGATION_TWO_HOP_CHANCE + PROPAGATION_ONE_HOP_CHANCE) return 1;
       return 0;
+    };
+
+    const nearestNodeIds = (originX, originY, radius, count) => {
+      const candidates = [];
+      for (let index = 0; index < nodes.length; index += 1) {
+        const node = nodes[index];
+        const distance = Math.hypot(node.currentX - originX, node.currentY - originY);
+        if (distance < 10 || distance > radius) continue;
+        candidates.push({ id: node.id, distance });
+      }
+      candidates.sort((left, right) => left.distance - right.distance);
+      return candidates.slice(0, count).map((item) => item.id);
+    };
+
+    const walkConnectedPath = (startId, maxNodes) => {
+      const path = [startId];
+      const visited = new Set([startId]);
+      while (path.length < maxNodes) {
+        const currentId = path[path.length - 1];
+        const neighbors = findConnectedNeighborIds(nodes, currentId, CONNECTION_DISTANCE).filter(
+          (id) => !visited.has(id)
+        );
+        if (!neighbors.length) break;
+        const poolSize = Math.min(3, neighbors.length);
+        const nextId = neighbors[Math.floor(Math.random() * poolSize)];
+        path.push(nextId);
+        visited.add(nextId);
+      }
+      return path;
+    };
+
+    const pickManualPropagationPath = (originX, originY, searchRadius) => {
+      const nearby = nearestNodeIds(originX, originY, searchRadius, 5);
+      if (!nearby.length) return [];
+      let chosenId = nearby[0];
+      let chosenPath = walkConnectedPath(chosenId, MANUAL_PROPAGATION_STAGES);
+      for (let index = 1; index < Math.min(3, nearby.length) && chosenPath.length < MANUAL_PROPAGATION_STAGES; index += 1) {
+        const trial = walkConnectedPath(nearby[index], MANUAL_PROPAGATION_STAGES);
+        if (trial.length > chosenPath.length) {
+          chosenId = nearby[index];
+          chosenPath = trial;
+        }
+      }
+      return chosenPath;
+    };
+
+    const fireManualHeroPropagation = (originX, originY, now, isFinePointer) => {
+      const searchRadius = isFinePointer ? CURSOR_RADIUS : CURSOR_RADIUS * 0.78;
+      const path = pickManualPropagationPath(originX, originY, searchRadius);
+      if (!path.length) {
+        fireLocalSpark(originX, originY, now);
+        return;
+      }
+
+      const excitations = isFinePointer
+        ? MANUAL_STAGE_EXCITATION
+        : MANUAL_STAGE_EXCITATION.map((value) => value * 0.92);
+      const first = nodes[path[0]];
+      if (!first) {
+        fireLocalSpark(originX, originY, now);
+        return;
+      }
+
+      const duration = randomInRange(DISCHARGE_DURATION_MIN_MS, DISCHARGE_DURATION_MAX_MS);
+      const segments = Math.round(randomInRange(ARC_SEGMENTS_MIN, ARC_SEGMENTS_MAX));
+      addDischarge(
+        generateElectricalArcPoints(originX, originY, first.currentX, first.currentY, segments, ARC_JITTER_PX),
+        now,
+        duration
+      );
+      exciteNode(path[0], excitations[0]);
+      addFlash(originX, originY, now, isFinePointer ? 1.2 : 0.95);
+
+      const sideNeighbors = findConnectedNeighborIds(nodes, path[0], CONNECTION_DISTANCE).filter(
+        (id) => id !== path[1]
+      );
+      if (sideNeighbors.length) {
+        const sideId = sideNeighbors[0];
+        const key = path[0] < sideId ? `${path[0]}:${sideId}` : `${sideId}:${path[0]}`;
+        edgeHighlights.set(key, 0.32);
+      }
+
+      if (path.length < 2) return;
+
+      const hopDuration = randomInRange(MANUAL_HOP_DURATION_MIN_MS, MANUAL_HOP_DURATION_MAX_MS);
+      const visited = new Set([path[0], path[1]]);
+      addEdgePulse(path[0], path[1], now, path.length - 2, {
+        duration: hopDuration,
+        excitation: excitations[1],
+        flashScale: (isFinePointer ? 1 : 0.88) * MANUAL_STAGE_FLASH_SCALE[1],
+        remainingPath: path.slice(2),
+        visited,
+        hopDuration,
+        nextExcitations: excitations.slice(2),
+        nextFlashScales: MANUAL_STAGE_FLASH_SCALE.slice(2).map((scale) => scale * (isFinePointer ? 1 : 0.88)),
+        withArc: true,
+        highlight: 0.6
+      });
     };
 
     const fireLocalSpark = (originX, originY, now) => {
@@ -390,26 +520,7 @@ export default function NeuralNetworkBackground() {
       const y = clientY - rect.top;
       if (x < 0 || y < 0 || x > rect.width || y > rect.height) return;
       const now = performance.now();
-      const isFinePointer = pointerType !== "touch";
-      const targetCount = isFinePointer
-        ? 1 + (Math.random() < 0.55 ? 1 : 0)
-        : 1 + (Math.random() < 0.7 ? 1 : 0);
-      const searchRadius = isFinePointer ? CURSOR_RADIUS : CURSOR_RADIUS * 0.78;
-      const targetIds = pickNearbyNodeIds(nodes, x, y, searchRadius, targetCount);
-      const hopsRemaining = Math.random() < (isFinePointer ? 0.45 : 0.72) ? 1 : 0;
-      if (!targetIds.length) {
-        fireLocalSpark(x, y, now);
-        return;
-      }
-      fireTowardNodes(
-        x,
-        y,
-        targetIds,
-        now,
-        hopsRemaining,
-        isFinePointer ? 0.95 : 0.78,
-        isFinePointer ? 1.2 : 0.95
-      );
+      fireManualHeroPropagation(x, y, now, pointerType !== "touch");
     };
 
     const clearDischargeTimer = () => {
@@ -595,8 +706,36 @@ export default function NeuralNetworkBackground() {
         const pulse = activeEdgePulses[index];
         const progress = (now - pulse.createdAt) / pulse.duration;
         if (progress >= 1) {
-          exciteNode(pulse.toId, 0.7);
-          if (pulse.hopsRemaining > 0) {
+          exciteNode(pulse.toId, pulse.excitation ?? 0.7);
+          if (pulse.flashScale) {
+            const dest = nodes[pulse.toId];
+            if (dest) addFlash(dest.currentX, dest.currentY, now, pulse.flashScale);
+          }
+          const remaining = pulse.remainingPath;
+          if (remaining && remaining.length) {
+            const neighbors = findConnectedNeighborIds(nodes, pulse.toId, CONNECTION_DISTANCE);
+            const plannedId = remaining[0];
+            const visited = pulse.visited ?? new Set([pulse.fromId, pulse.toId]);
+            const nextId = neighbors.includes(plannedId)
+              ? plannedId
+              : neighbors.find((id) => !visited.has(id));
+            if (nextId != null) {
+              const nextVisited = new Set(visited);
+              nextVisited.add(nextId);
+              addEdgePulse(pulse.toId, nextId, now, remaining.length - 1, {
+                duration: pulse.hopDuration ?? EDGE_PULSE_DURATION_MS,
+                excitation: pulse.nextExcitations?.[0] ?? 0.45,
+                flashScale: pulse.nextFlashScales?.[0] ?? 0.38,
+                remainingPath: nextId === plannedId ? remaining.slice(1) : remaining.filter((id) => id !== nextId),
+                visited: nextVisited,
+                hopDuration: pulse.hopDuration,
+                nextExcitations: pulse.nextExcitations?.slice(1),
+                nextFlashScales: pulse.nextFlashScales?.slice(1),
+                withArc: true,
+                highlight: 0.48
+              });
+            }
+          } else if (pulse.hopsRemaining > 0) {
             const neighbors = findConnectedNeighborIds(
               nodes,
               pulse.toId,
