@@ -31,4 +31,7 @@ export const leadershipMembers = [
 
 export const teamMembers = [];
 
-export const teamGroupPhoto = null;
+export const teamGroupPhoto = {
+  src: "/images/team/team-photo.webp",
+  alt: "SpandanAI team"
+};

@@ -1,8 +1,9 @@
 import React, { useEffect, useRef } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import SectionHeading from "../components/SectionHeading";
+import TeamGroupPhoto from "../components/TeamGroupPhoto";
 import TeamMemberCard from "../components/TeamMemberCard";
-import { leadershipMembers, teamGroupPhoto, teamMembers } from "../data/teamContent";
+import { leadershipMembers, teamMembers } from "../data/teamContent";
 import { fadeInOnScroll, staggerContainer, viewportOnce } from "../lib/animations";
 
 export default function TeamPage() {
@@ -33,14 +34,36 @@ export default function TeamPage() {
       </section>
 
       <motion.section
-        className="bg-surface py-20 sm:py-24"
+        className="bg-white pt-14 pb-10 sm:pt-16 sm:pb-12"
+        aria-labelledby="team-group-heading"
+        variants={fadeInOnScroll}
+        initial={shouldReduceMotion ? "visible" : "hidden"}
+        animate="visible"
+      >
+        <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
+          <SectionHeading
+            eyebrow="Team"
+            title="The SpandanAI Team"
+            description="The people building SpandanAI."
+            align="center"
+            headingId="team-group-heading"
+          />
+          <div className="mt-8 sm:mt-10">
+            <TeamGroupPhoto />
+          </div>
+        </div>
+      </motion.section>
+
+      <motion.section
+        className="bg-surface pt-12 pb-20 sm:pt-16 sm:pb-24"
         style={{
           backgroundImage:
             "linear-gradient(to bottom, rgba(56, 189, 248, 0.06), rgba(56, 189, 248, 0.0))"
         }}
         variants={fadeInOnScroll}
         initial={shouldReduceMotion ? "visible" : "hidden"}
-        animate="visible"
+        whileInView="visible"
+        viewport={viewportOnce}
       >
         <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
           <SectionHeading
@@ -81,20 +104,6 @@ export default function TeamPage() {
             </motion.div>
           </div>
         </motion.section>
-      ) : null}
-
-      {teamGroupPhoto?.src ? (
-        <section className="bg-surface py-20 sm:py-24">
-          <div className="mx-auto max-w-5xl px-5 sm:px-6 lg:px-8">
-            <img
-              src={teamGroupPhoto.src}
-              alt={teamGroupPhoto.alt || ""}
-              className="w-full rounded-3xl object-cover"
-              loading="lazy"
-              decoding="async"
-            />
-          </div>
-        </section>
       ) : null}
     </main>
   );

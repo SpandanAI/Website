@@ -15,7 +15,19 @@ test("homepage leadership shows four approved leaders and Meet the Team routes t
   }
   await expect(leadership.getByRole("article")).toHaveCount(4);
 
-  await page.getByRole("link", { name: "Meet the Team" }).click();
+  const meetTheTeam = leadership.getByRole("link", { name: "Meet the Team" });
+  await expect(meetTheTeam).toBeVisible();
+  const ctaAboveCards = await leadership.evaluate((section) => {
+    const cta = [...section.querySelectorAll("a")].find((link) => link.textContent.includes("Meet the Team"));
+    const card = section.querySelector("article");
+    if (!cta || !card) return false;
+    const ctaTop = cta.getBoundingClientRect().top + window.scrollY;
+    const cardTop = card.getBoundingClientRect().top + window.scrollY;
+    return ctaTop < cardTop;
+  });
+  expect(ctaAboveCards).toBe(true);
+
+  await meetTheTeam.click();
   await expect(page).toHaveURL(/\/team$/);
 
   faults.assertClean();
@@ -30,6 +42,7 @@ test("team page loads directly with four leadership cards and no extra members",
   const headings = page.getByRole("heading", { level: 1 });
   await expect(headings).toHaveCount(1);
   await expect(headings).toHaveText(/Meet the Team/);
+  await expect(page.getByRole("heading", { name: "The SpandanAI Team" })).toBeVisible();
 
   for (const name of LEADERSHIP_NAMES) {
     await expect(page.getByRole("heading", { name, exact: true })).toHaveCount(1);

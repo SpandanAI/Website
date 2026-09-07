@@ -47,6 +47,19 @@ section {
   box-shadow: 0 4px 12px rgba(15, 23, 42, 0.12);
 }
 
+/* Firefox UA :any-link/:visited still underlines <a> when Preflight only sets
+   text-decoration: inherit. Chromium inherits none and does not paint it. */
+a.meet-the-team-cta,
+a.meet-the-team-cta:any-link,
+a.meet-the-team-cta:link,
+a.meet-the-team-cta:visited,
+a.meet-the-team-cta:hover,
+a.meet-the-team-cta:active,
+a.meet-the-team-cta:focus,
+a.meet-the-team-cta:focus-visible {
+  text-decoration: none;
+}
+
 .skip-link:not(:focus):not(:focus-visible) {
   width: 1px;
   height: 1px;
@@ -124,6 +137,11 @@ section {
 .team-member-fallback {
   background: #e8eef6;
   color: #2563eb;
+}
+
+.team-photo-slot {
+  background:
+    linear-gradient(180deg, rgba(239, 246, 255, 0.95) 0%, rgba(241, 245, 249, 0.98) 100%);
 }
 
 .scroll-top-button {

@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function SectionHeading({ eyebrow, title, description, align = "left" }) {
+export default function SectionHeading({ eyebrow, title, description, align = "left", headingId }) {
   const isCentered = align === "center";
 
   return (
@@ -9,6 +9,7 @@ export default function SectionHeading({ eyebrow, title, description, align = "l
         {eyebrow}
       </p>
       <h2
+        id={headingId}
         className={`mt-4 text-3xl font-semibold leading-[1.2] tracking-[-0.02em] text-ink sm:text-4xl sm:leading-[1.2] lg:text-[2.65rem] lg:leading-[1.22] ${
           isCentered ? "mx-auto max-w-[36rem]" : ""
         }`}

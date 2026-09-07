@@ -28,21 +28,21 @@ export default function Founders() {
           align="center"
         />
 
-        <motion.div className="mx-auto mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4" variants={staggerContainer}>
-          {leadershipMembers.map((member) => (
-            <TeamMemberCard key={member.id} member={member} imageLoading="lazy" />
-          ))}
-        </motion.div>
-
-        <div className="mt-12 flex justify-center">
+        <div className="mt-8 flex justify-center">
           <Link
             to="/team"
-            className="inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-ink transition hover:border-blue-600 hover:text-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/60 focus-visible:ring-offset-2"
+            className="meet-the-team-cta inline-flex min-h-11 items-center justify-center gap-2 rounded-full border-2 border-blue-600 bg-blue-50/90 px-7 py-2.5 text-[0.95rem] font-semibold text-blue-700 no-underline shadow-sm transition-[color,background-color,border-color,transform,box-shadow] duration-200 ease-out hover:-translate-y-px hover:border-blue-700 hover:bg-blue-100 hover:text-blue-800 hover:no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/60 focus-visible:ring-offset-2 focus-visible:no-underline active:no-underline visited:no-underline"
           >
             Meet the Team
             <span aria-hidden="true">→</span>
           </Link>
         </div>
+
+        <motion.div className="mx-auto mt-10 grid gap-6 sm:mt-12 sm:grid-cols-2 lg:grid-cols-4" variants={staggerContainer}>
+          {leadershipMembers.map((member) => (
+            <TeamMemberCard key={member.id} member={member} imageLoading="lazy" />
+          ))}
+        </motion.div>
       </div>
     </motion.section>
   );
