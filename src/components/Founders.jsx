@@ -31,10 +31,23 @@ export default function Founders() {
         <div className="mt-8 flex justify-center">
           <Link
             to="/team"
-            className="meet-the-team-cta inline-flex min-h-11 items-center justify-center gap-2 rounded-full border-2 border-blue-600 bg-blue-50/90 px-7 py-2.5 text-[0.95rem] font-semibold text-blue-700 no-underline shadow-sm transition-[color,background-color,border-color,transform,box-shadow] duration-200 ease-out hover:-translate-y-px hover:border-blue-700 hover:bg-blue-100 hover:text-blue-800 hover:no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/60 focus-visible:ring-offset-2 focus-visible:no-underline active:no-underline visited:no-underline"
+            className="meet-the-team-cta inline-flex min-h-11 items-center justify-center gap-1.5 rounded-full border-2 border-blue-600 bg-blue-50/90 px-7 py-2.5 text-[0.95rem] font-semibold text-blue-700 no-underline shadow-sm transition-[color,background-color,border-color,transform,box-shadow] duration-200 ease-out hover:-translate-y-px hover:border-blue-700 hover:bg-blue-100 hover:text-blue-800 hover:no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/60 focus-visible:ring-offset-2 focus-visible:no-underline active:no-underline visited:no-underline"
           >
             Meet the Team
-            <span aria-hidden="true">→</span>
+            <svg
+              aria-hidden="true"
+              className="meet-the-team-cta-arrow h-4 w-4 shrink-0"
+              viewBox="0 0 16 16"
+              fill="none"
+            >
+              <path
+                d="M3 8h9.25M9.25 4.25 13.5 8l-4.25 3.75"
+                stroke="currentColor"
+                strokeWidth="1.85"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
           </Link>
         </div>
 

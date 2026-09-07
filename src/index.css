@@ -60,6 +60,20 @@ a.meet-the-team-cta:focus-visible {
   text-decoration: none;
 }
 
+.meet-the-team-cta-arrow {
+  display: block;
+}
+
+@media (hover: hover) {
+  .meet-the-team-cta-arrow {
+    transition: transform 0.2s ease-out;
+  }
+
+  a.meet-the-team-cta:hover .meet-the-team-cta-arrow {
+    transform: translateX(1.5px);
+  }
+}
+
 .skip-link:not(:focus):not(:focus-visible) {
   width: 1px;
   height: 1px;
