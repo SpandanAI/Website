@@ -31,6 +31,9 @@ export default function Footer() {
         <motion.p className="mt-4 text-sm leading-[1.65] text-muted" variants={staggerItem}>
           © 2026 SpandanAI. All rights reserved.
         </motion.p>
+        <motion.p className="mt-1.5 text-[13px] font-normal leading-snug text-slate-500" variants={staggerItem}>
+          Designed by Korak Das
+        </motion.p>
 
         <motion.p
           className="mt-5 text-sm font-semibold uppercase tracking-[0.18em] text-blue-600"

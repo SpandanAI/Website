@@ -1,7 +1,6 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import DocumentMeta from "./components/DocumentMeta";
-import ElectricalCursorOverlay from "./components/ElectricalCursorOverlay";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import RouteScrollManager from "./components/RouteScrollManager";
@@ -47,7 +46,6 @@ export default function App() {
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
       <Footer />
-      <ElectricalCursorOverlay />
     </div>
   );
 }

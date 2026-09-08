@@ -80,6 +80,9 @@ export default function ElectricalCursorOverlay() {
     const canvas = canvasRef.current;
     if (!canvas) return undefined;
 
+    const host = canvas.closest("#home");
+    if (!host) return undefined;
+
     const context = canvas.getContext("2d");
     if (!context) return undefined;
 
@@ -107,6 +110,8 @@ export default function ElectricalCursorOverlay() {
     const pointer = {
       x: 0,
       y: 0,
+      clientX: 0,
+      clientY: 0,
       insideWindow: false,
       insideHero: false,
       overHeader: false,
@@ -120,8 +125,8 @@ export default function ElectricalCursorOverlay() {
     const getDpr = () => Math.min(window.devicePixelRatio || 1, MAX_DPR);
 
     const resizeCanvas = () => {
-      const nextWidth = window.innerWidth;
-      const nextHeight = window.innerHeight;
+      const nextWidth = Math.max(1, Math.round(host.clientWidth));
+      const nextHeight = Math.max(1, Math.round(host.clientHeight));
       const dpr = getDpr();
       width = nextWidth;
       height = nextHeight;
@@ -135,15 +140,21 @@ export default function ElectricalCursorOverlay() {
     };
 
     const pointInHero = (clientX, clientY) => {
-      const hero = document.getElementById("home");
-      if (!hero) return false;
-      const rect = hero.getBoundingClientRect();
+      const rect = host.getBoundingClientRect();
       return (
         clientX >= rect.left &&
         clientX <= rect.right &&
         clientY >= rect.top &&
         clientY <= rect.bottom
       );
+    };
+
+    const toLocalPoint = (clientX, clientY) => {
+      const rect = host.getBoundingClientRect();
+      return {
+        x: clientX - rect.left,
+        y: clientY - rect.top
+      };
     };
 
     const isEligible = () =>
@@ -388,7 +399,7 @@ export default function ElectricalCursorOverlay() {
     };
 
     const sampleCursorWake = (now) => {
-      if (!hasFineHoverPointer || !wakeAllowed() || !pointer.insideWindow || pointer.overHeader) return;
+      if (!hasFineHoverPointer || !wakeAllowed() || !pointer.insideWindow || !pointer.insideHero || pointer.overHeader) return;
       const last = pathHistory[pathHistory.length - 1];
       if (!last) {
         pathHistory.push({ x: pointer.x, y: pointer.y, t: now });
@@ -522,91 +533,16 @@ export default function ElectricalCursorOverlay() {
 
     const updatePointerFromEvent = (event) => {
       if (event.pointerType === "touch") return;
-      pointer.x = event.clientX;
-      pointer.y = event.clientY;
+      const local = toLocalPoint(event.clientX, event.clientY);
+      pointer.clientX = event.clientX;
+      pointer.clientY = event.clientY;
+      pointer.x = local.x;
+      pointer.y = local.y;
       pointer.insideWindow = true;
       pointer.insideHero = pointInHero(event.clientX, event.clientY);
       const target = event.target;
       pointer.overHeader = Boolean(target?.closest?.("header"));
       pointer.overInteractive = Boolean(target?.closest?.(INTERACTIVE_SELECTOR));
-    };
-
-    const refreshPointerGeometry = () => {
-      if (!pointer.insideWindow) return;
-      pointer.insideHero = pointInHero(pointer.x, pointer.y);
-      const target = document.elementFromPoint(pointer.x, pointer.y);
-      pointer.overHeader = Boolean(target?.closest?.("header"));
-      pointer.overInteractive = Boolean(target?.closest?.(INTERACTIVE_SELECTOR));
-      syncScheduler();
-    };
-
-    const handlePointerMove = (event) => {
-      if (event.pointerType === "touch") {
-        if (pendingTouch && event.pointerId === pendingTouch.pointerId) {
-          const dist = Math.hypot(event.clientX - pendingTouch.x, event.clientY - pendingTouch.y);
-          if (dist > TAP_MAX_MOVE_PX) pendingTouch = null;
-        }
-        pointer.insideWindow = false;
-        syncScheduler();
-        return;
-      }
-      updatePointerFromEvent(event);
-      syncScheduler();
-      sampleCursorWake(performance.now());
-    };
-
-    const handlePointerDown = (event) => {
-      const overInteractive = Boolean(event.target?.closest?.(INTERACTIVE_SELECTOR));
-      const overHeader = Boolean(event.target?.closest?.("header"));
-      const insideHero = pointInHero(event.clientX, event.clientY);
-
-      if (event.pointerType === "touch") {
-        pendingTouch = {
-          x: event.clientX,
-          y: event.clientY,
-          t: performance.now(),
-          pointerId: event.pointerId,
-          overInteractive,
-          overHeader,
-          insideHero
-        };
-        return;
-      }
-
-      pointer.x = event.clientX;
-      pointer.y = event.clientY;
-      pointer.insideWindow = true;
-      pointer.insideHero = insideHero;
-      pointer.overHeader = overHeader;
-      pointer.overInteractive = overInteractive;
-      if (!isEligible()) return;
-      if (performance.now() - lastManualAt < CLICK_DISCHARGE_COOLDOWN_MS) return;
-      lastManualAt = performance.now();
-      fireSpark(performance.now(), { source: "click" });
-      wasEligible = true;
-      scheduleDischarge();
-    };
-
-    const handlePointerUp = (event) => {
-      if (event.pointerType !== "touch") return;
-      const start = pendingTouch;
-      pendingTouch = null;
-      if (!start || start.pointerId !== event.pointerId) return;
-      if (start.overInteractive || start.overHeader || start.insideHero) return;
-      const dist = Math.hypot(event.clientX - start.x, event.clientY - start.y);
-      const elapsed = performance.now() - start.t;
-      if (dist > TAP_MAX_MOVE_PX || elapsed > TAP_MAX_DURATION_MS) return;
-      if (event.target?.closest?.(INTERACTIVE_SELECTOR) || event.target?.closest?.("header")) return;
-      if (pointInHero(event.clientX, event.clientY)) return;
-      if (prefersReducedMotion || !isPageVisible) return;
-      if (performance.now() - lastManualAt < CLICK_DISCHARGE_COOLDOWN_MS) return;
-      lastManualAt = performance.now();
-      pointer.x = event.clientX;
-      pointer.y = event.clientY;
-      pointer.insideHero = false;
-      pointer.overHeader = false;
-      pointer.overInteractive = false;
-      fireSpark(performance.now(), { source: "tap" });
     };
 
     const clearPointer = () => {
@@ -624,6 +560,119 @@ export default function ElectricalCursorOverlay() {
       activeWakes.length = 0;
       pathHistory.length = 0;
       lastWakeSampleAt = 0;
+    };
+
+    const refreshPointerGeometry = () => {
+      if (!pointer.insideWindow) return;
+      if (!pointInHero(pointer.clientX, pointer.clientY)) {
+        clearPointer();
+        clearWakeState();
+        if (!hasActiveEffects()) {
+          stopLoop();
+          clearCanvas();
+        }
+        return;
+      }
+      const local = toLocalPoint(pointer.clientX, pointer.clientY);
+      pointer.x = local.x;
+      pointer.y = local.y;
+      pointer.insideHero = true;
+      const target = document.elementFromPoint(pointer.clientX, pointer.clientY);
+      pointer.overHeader = Boolean(target?.closest?.("header"));
+      pointer.overInteractive = Boolean(target?.closest?.(INTERACTIVE_SELECTOR));
+      syncScheduler();
+    };
+
+    const handlePointerMove = (event) => {
+      if (event.pointerType === "touch") {
+        if (pendingTouch && event.pointerId === pendingTouch.pointerId) {
+          const dist = Math.hypot(event.clientX - pendingTouch.x, event.clientY - pendingTouch.y);
+          if (dist > TAP_MAX_MOVE_PX) pendingTouch = null;
+        }
+        pointer.insideWindow = false;
+        syncScheduler();
+        return;
+      }
+      if (!pointInHero(event.clientX, event.clientY)) {
+        clearPointer();
+        clearWakeState();
+        if (!hasActiveEffects()) {
+          stopLoop();
+          clearCanvas();
+        }
+        return;
+      }
+      updatePointerFromEvent(event);
+      syncScheduler();
+      sampleCursorWake(performance.now());
+    };
+
+    const handlePointerDown = (event) => {
+      if (!pointInHero(event.clientX, event.clientY)) return;
+
+      const overInteractive = Boolean(event.target?.closest?.(INTERACTIVE_SELECTOR));
+      const overHeader = Boolean(event.target?.closest?.("header"));
+      const local = toLocalPoint(event.clientX, event.clientY);
+
+      if (event.pointerType === "touch") {
+        pendingTouch = {
+          x: event.clientX,
+          y: event.clientY,
+          t: performance.now(),
+          pointerId: event.pointerId,
+          overInteractive,
+          overHeader,
+          insideHero: true
+        };
+        return;
+      }
+
+      pointer.clientX = event.clientX;
+      pointer.clientY = event.clientY;
+      pointer.x = local.x;
+      pointer.y = local.y;
+      pointer.insideWindow = true;
+      pointer.insideHero = true;
+      pointer.overHeader = overHeader;
+      pointer.overInteractive = overInteractive;
+      if (!isEligible()) return;
+      if (performance.now() - lastManualAt < CLICK_DISCHARGE_COOLDOWN_MS) return;
+      lastManualAt = performance.now();
+      fireSpark(performance.now(), { source: "click" });
+      wasEligible = true;
+      scheduleDischarge();
+    };
+
+    const handlePointerUp = (event) => {
+      if (event.pointerType !== "touch") return;
+      const start = pendingTouch;
+      pendingTouch = null;
+      if (!start || start.pointerId !== event.pointerId) return;
+      if (start.overInteractive || start.overHeader || start.insideHero) return;
+      if (!pointInHero(event.clientX, event.clientY)) return;
+      const dist = Math.hypot(event.clientX - start.x, event.clientY - start.y);
+      const elapsed = performance.now() - start.t;
+      if (dist > TAP_MAX_MOVE_PX || elapsed > TAP_MAX_DURATION_MS) return;
+      if (event.target?.closest?.(INTERACTIVE_SELECTOR) || event.target?.closest?.("header")) return;
+      if (prefersReducedMotion || !isPageVisible) return;
+      if (performance.now() - lastManualAt < CLICK_DISCHARGE_COOLDOWN_MS) return;
+      lastManualAt = performance.now();
+      const local = toLocalPoint(event.clientX, event.clientY);
+      pointer.x = local.x;
+      pointer.y = local.y;
+      pointer.insideHero = true;
+      pointer.overHeader = false;
+      pointer.overInteractive = false;
+      fireSpark(performance.now(), { source: "tap" });
+    };
+
+    const handleHeroPointerLeave = () => {
+      clearPointer();
+      clearWakeState();
+      if (!hasActiveEffects()) {
+        stopLoop();
+        clearCanvas();
+      }
     };
 
     const handleVisibilityChange = () => {
@@ -650,14 +699,18 @@ export default function ElectricalCursorOverlay() {
     };
 
     resizeCanvas();
+    const resizeObserver = new ResizeObserver(() => {
+      resizeCanvas();
+    });
+    resizeObserver.observe(host);
     window.addEventListener("resize", resizeCanvas);
     window.addEventListener("scroll", refreshPointerGeometry, { passive: true });
-    window.addEventListener("pointermove", handlePointerMove, { passive: true });
-    window.addEventListener("pointerdown", handlePointerDown, { passive: true });
-    window.addEventListener("pointerup", handlePointerUp, { passive: true });
-    window.addEventListener("pointerleave", clearPointer);
-    window.addEventListener("pointercancel", clearPointer);
-    window.addEventListener("blur", clearPointer);
+    host.addEventListener("pointermove", handlePointerMove, { passive: true });
+    host.addEventListener("pointerdown", handlePointerDown, { passive: true });
+    host.addEventListener("pointerup", handlePointerUp, { passive: true });
+    host.addEventListener("pointerleave", handleHeroPointerLeave);
+    host.addEventListener("pointercancel", handleHeroPointerLeave);
+    window.addEventListener("blur", handleHeroPointerLeave);
     document.addEventListener("visibilitychange", handleVisibilityChange);
 
     const bindQuery = (query, handler) => {
@@ -678,14 +731,15 @@ export default function ElectricalCursorOverlay() {
     return () => {
       clearDischargeTimer();
       stopLoop();
+      resizeObserver.disconnect();
       window.removeEventListener("resize", resizeCanvas);
       window.removeEventListener("scroll", refreshPointerGeometry);
-      window.removeEventListener("pointermove", handlePointerMove);
-      window.removeEventListener("pointerdown", handlePointerDown);
-      window.removeEventListener("pointerup", handlePointerUp);
-      window.removeEventListener("pointerleave", clearPointer);
-      window.removeEventListener("pointercancel", clearPointer);
-      window.removeEventListener("blur", clearPointer);
+      host.removeEventListener("pointermove", handlePointerMove);
+      host.removeEventListener("pointerdown", handlePointerDown);
+      host.removeEventListener("pointerup", handlePointerUp);
+      host.removeEventListener("pointerleave", handleHeroPointerLeave);
+      host.removeEventListener("pointercancel", handleHeroPointerLeave);
+      window.removeEventListener("blur", handleHeroPointerLeave);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
       unbindQuery(motionQuery, syncCapability);
       unbindQuery(pointerQuery, syncCapability);
@@ -698,7 +752,8 @@ export default function ElectricalCursorOverlay() {
   return (
     <canvas
       ref={canvasRef}
-      className="pointer-events-none fixed inset-0 z-[45]"
+      data-electrical-overlay="hero"
+      className="pointer-events-none absolute inset-0 z-[2] h-full w-full"
       aria-hidden="true"
     />
   );

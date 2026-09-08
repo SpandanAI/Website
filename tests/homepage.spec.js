@@ -21,6 +21,7 @@ test("homepage smoke: renders header, H1, and primary CTA", async ({ page }) => 
 
   await expect(page.getByRole("link", { name: "Explore Use Cases" })).toBeVisible();
   await expect(page.locator("canvas")).toHaveCount(2);
+  await expect(page.getByRole("contentinfo")).toContainText("Designed by Korak Das");
 
   faults.assertClean();
 });

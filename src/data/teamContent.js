@@ -33,5 +33,7 @@ export const teamMembers = [];
 
 export const teamGroupPhoto = {
   src: "/images/team/team-photo.webp",
-  alt: "SpandanAI team"
+  alt: "SpandanAI team",
+  width: 2400,
+  height: 1233
 };

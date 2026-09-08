@@ -13,23 +13,25 @@ export default function TeamGroupPhoto() {
   return (
     <figure className="mx-auto w-full max-w-[72rem]">
       <div
-        className="overflow-hidden rounded-3xl border border-slate-200 bg-white"
-        style={{ boxShadow: "0 10px 25px rgba(0, 0, 0, 0.08)" }}
+        className="overflow-hidden rounded-2xl border border-slate-200 bg-white sm:rounded-3xl"
+        style={{ boxShadow: "0 10px 25px rgba(15, 23, 42, 0.08)" }}
       >
         {showImage ? (
           <img
             src={src}
             alt={alt}
-            width={1200}
-            height={675}
-            className="block h-auto w-full"
+            width={teamGroupPhoto.width}
+            height={teamGroupPhoto.height}
+            className="block h-auto w-full max-w-full"
             loading="eager"
+            fetchPriority="high"
             decoding="async"
             onError={() => setImageFailed(true)}
           />
         ) : (
           <div
-            className="team-photo-slot flex aspect-video w-full items-center justify-center"
+            className="team-photo-slot flex w-full items-center justify-center"
+            style={{ aspectRatio: `${teamGroupPhoto.width} / ${teamGroupPhoto.height}` }}
             role="img"
             aria-label="Team photo"
           >

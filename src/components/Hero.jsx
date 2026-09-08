@@ -3,6 +3,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { heroFadeIn, staggerContainer, staggerItem } from "../lib/animations";
 import { SET_ACTIVE_NAV_EVENT } from "../lib/activeNavEvent";
 import NeuralNetworkBackground from "./NeuralNetworkBackground";
+import ElectricalCursorOverlay from "./ElectricalCursorOverlay";
 
 export default function Hero() {
   const backgroundLayerRef = useRef(null);
@@ -77,6 +78,7 @@ export default function Hero() {
         }}
       />
       <NeuralNetworkBackground />
+      <ElectricalCursorOverlay />
       <div
         className="pointer-events-none absolute bottom-0 left-0 right-0 z-0 h-[180px]"
         style={{

@@ -44,6 +44,13 @@ test("team page loads directly with four leadership cards and no extra members",
   await expect(headings).toHaveText(/Meet the Team/);
   await expect(page.getByRole("heading", { name: "The SpandanAI Team" })).toBeVisible();
 
+  const groupPhoto = page.getByRole("img", { name: "SpandanAI team" });
+  await expect(groupPhoto).toBeVisible();
+  await expect(groupPhoto).toHaveAttribute("src", /\/images\/team\/team-photo\.webp$/);
+  await expect(groupPhoto).toHaveAttribute("loading", "eager");
+  await expect(page.getByText("Team photo", { exact: true })).toHaveCount(0);
+  await expect(page.locator("canvas")).toHaveCount(0);
+
   for (const name of LEADERSHIP_NAMES) {
     await expect(page.getByRole("heading", { name, exact: true })).toHaveCount(1);
   }
@@ -55,6 +62,7 @@ test("team page loads directly with four leadership cards and no extra members",
     "page"
   );
   await expect(page.getByRole("contentinfo")).toBeVisible();
+  await expect(page.getByRole("contentinfo")).toContainText("Designed by Korak Das");
 
   faults.assertClean();
 });
