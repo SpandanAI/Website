@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import DesignerSignature from "./DesignerSignature";
 import { fadeInOnScroll, staggerContainer, staggerItem, viewportOnce } from "../lib/animations";
 
 export default function Footer() {
@@ -31,9 +32,6 @@ export default function Footer() {
         <motion.p className="mt-4 text-sm leading-[1.65] text-muted" variants={staggerItem}>
           © 2026 SpandanAI. All rights reserved.
         </motion.p>
-        <motion.p className="mt-1.5 text-[13px] font-normal leading-snug text-slate-500" variants={staggerItem}>
-          Designed by Korak Das
-        </motion.p>
 
         <motion.p
           className="mt-5 text-sm font-semibold uppercase tracking-[0.18em] text-blue-600"
@@ -48,6 +46,10 @@ export default function Footer() {
         >
           spandanai.sard@gmail.com
         </motion.a>
+
+        <motion.div className="mt-8 flex justify-center" variants={staggerItem}>
+          <DesignerSignature />
+        </motion.div>
       </motion.div>
     </motion.footer>
   );

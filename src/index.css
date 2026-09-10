@@ -158,6 +158,130 @@ a.meet-the-team-cta:focus-visible {
     linear-gradient(180deg, rgba(239, 246, 255, 0.95) 0%, rgba(241, 245, 249, 0.98) 100%);
 }
 
+.designer-signature {
+  position: relative;
+  display: flex;
+  width: 226px;
+  height: 76px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+  isolation: isolate;
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.designer-signature-art {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.designer-signature-die,
+.designer-signature-trace {
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.designer-signature-die {
+  stroke-width: 0.8;
+  opacity: 0.48;
+}
+
+.designer-signature-trace {
+  stroke-width: 0.85;
+  opacity: 0.58;
+}
+
+.designer-signature-pad {
+  fill: #64748b;
+  opacity: 0.78;
+}
+
+.designer-signature-copy {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+}
+
+.designer-signature-label,
+.designer-signature-name,
+.designer-signature-mark {
+  margin: 0;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.designer-signature-label {
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  line-height: 1;
+  color: #64748b;
+}
+
+.designer-signature-name {
+  margin-top: 5px;
+  font-size: 13.5px;
+  font-weight: 680;
+  letter-spacing: 0.12em;
+  line-height: 1;
+  color: #334155;
+}
+
+.designer-signature-mark {
+  position: relative;
+  z-index: 1;
+  margin-top: 5px;
+  font-size: 7px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  line-height: 1;
+  color: #64748b;
+}
+
+@media (hover: hover) {
+  .designer-signature {
+    transform: translateY(0);
+  }
+
+  .designer-signature:hover {
+    transform: translateY(-1px);
+  }
+
+  .designer-signature:hover .designer-signature-die {
+    opacity: 0.68;
+  }
+
+  .designer-signature:hover .designer-signature-trace {
+    opacity: 0.82;
+  }
+
+  .designer-signature:hover .designer-signature-pad {
+    fill: #3b82f6;
+    opacity: 0.82;
+  }
+
+  .designer-signature:hover .designer-signature-label,
+  .designer-signature:hover .designer-signature-mark {
+    color: #475569;
+  }
+
+  .designer-signature:hover .designer-signature-name {
+    color: #1e293b;
+  }
+}
+
 .scroll-top-button {
   position: fixed;
   right: calc(1rem + env(safe-area-inset-right, 0px));
