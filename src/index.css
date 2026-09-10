@@ -74,6 +74,49 @@ a.meet-the-team-cta:focus-visible {
   }
 }
 
+a.leadership-linkedin,
+a.leadership-linkedin:any-link,
+a.leadership-linkedin:link,
+a.leadership-linkedin:visited,
+a.leadership-linkedin:hover,
+a.leadership-linkedin:active,
+a.leadership-linkedin:focus,
+a.leadership-linkedin:focus-visible {
+  text-decoration: none;
+}
+
+.leadership-linkedin {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin-top: 2px;
+  color: #64748b;
+  border-radius: 9999px;
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.leadership-linkedin-icon {
+  display: block;
+  width: 20px;
+  height: 20px;
+}
+
+.leadership-linkedin:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+@media (hover: hover) {
+  .leadership-linkedin:hover {
+    color: #2563eb;
+    transform: translateY(-1px);
+  }
+}
+
 .skip-link:not(:focus):not(:focus-visible) {
   width: 1px;
   height: 1px;

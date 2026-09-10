@@ -3,7 +3,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import SectionHeading from "../components/SectionHeading";
 import TeamGroupPhoto from "../components/TeamGroupPhoto";
 import TeamMemberCard from "../components/TeamMemberCard";
-import { leadershipMembers, teamMembers } from "../data/teamContent";
+import { leadershipMembers, teamGroupPhotoSecondary, teamMembers } from "../data/teamContent";
 import { fadeInOnScroll, staggerContainer, viewportOnce } from "../lib/animations";
 
 export default function TeamPage() {
@@ -49,7 +49,12 @@ export default function TeamPage() {
             headingId="team-group-heading"
           />
           <div className="mt-8 sm:mt-10">
-            <TeamGroupPhoto />
+            <TeamGroupPhoto fetchPriority="high" />
+            <TeamGroupPhoto
+              photo={teamGroupPhotoSecondary}
+              frameClassName="mx-auto mt-6 w-[92%] max-w-[66rem] sm:mt-8"
+              loading="lazy"
+            />
           </div>
         </div>
       </motion.section>
